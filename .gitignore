@@ -1,4 +1,6 @@
 ToolWorking/bin/Debug/**
 ToolWorking/obj/Debug/**
 ToolWorking/bin/Release/**
+ToolWorking/obj/Release/**/**
 .vs/ToolWorking/v16/.suo
+
