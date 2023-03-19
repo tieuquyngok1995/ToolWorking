@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon-logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,9 +101,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="icon-logo.ico" />
     <Content Include="Resources\icon-close.png" />
     <Content Include="Resources\icon-minisize.png" />
-    <Content Include="Resources\roud-img.jpg" />
+    <None Include="Resources\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
