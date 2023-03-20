@@ -171,7 +171,13 @@ namespace ToolWorking.Views
         {
             if (node.Text.ToUpper().Contains(txtSearchPG.Text.ToUpper()))
             {
-                dicResult.Add(node.Text, node.Tag.ToString());
+                string path = node.Tag.ToString();
+                FileAttributes attr = File.GetAttributes(path);
+                if ((attr & FileAttributes.Directory) != FileAttributes.Directory && !dicResult.ContainsKey(node.Text) && 
+                    (!path.Contains(".js") && !path.Contains(".map.js")))
+                {
+                    dicResult.Add(node.Text, path);
+                }
             }
 
             foreach (TreeNode actualNode in node.Nodes)
