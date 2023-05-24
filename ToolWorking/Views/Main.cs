@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ToolWorking.Utils;
 
@@ -18,11 +12,13 @@ namespace ToolWorking.Views
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         //Fields
         private Form activeForm;
 
+        // Const 
+        private const string titleFileFolder = "Get Link File and Folder";
         #region Event
         public Main()
         {
@@ -33,6 +29,7 @@ namespace ToolWorking.Views
         {
             panelSide.Height = btnLinkFolder.Height;
             panelSide.Top = btnLinkFolder.Top;
+            labelTitle.Text = titleFileFolder;
 
             OpenChildForm(new LinkFolder(), sender);
         }
@@ -57,6 +54,7 @@ namespace ToolWorking.Views
         {
             panelSide.Height = btnLinkFolder.Height;
             panelSide.Top = btnLinkFolder.Top;
+            labelTitle.Text = titleFileFolder;
 
             OpenChildForm(new LinkFolder(), sender);
         }
@@ -66,8 +64,9 @@ namespace ToolWorking.Views
 
         private void loadPanelColor()
         {
-            Color panelColor = CUtils.CreateColor();
+            Color panelColor = CUtils.createColor();
             panelTop.BackColor = panelColor;
+            panelTopDown.BackColor = panelColor;
             panelSide.BackColor = panelColor;
             panelBottom.BackColor = panelColor;
         }

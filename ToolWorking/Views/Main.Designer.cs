@@ -37,10 +37,12 @@ namespace ToolWorking.Views
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelLabel = new System.Windows.Forms.Panel();
-            this.btnClose = new ToolWorking.Extension.RJButton();
-            this.btnMini = new ToolWorking.Extension.RJButton();
+            this.labelTitle = new System.Windows.Forms.Label();
+            this.panelTopDown = new System.Windows.Forms.Panel();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelCenter = new System.Windows.Forms.Panel();
+            this.btnClose = new ToolWorking.Extension.RJButton();
+            this.btnMini = new ToolWorking.Extension.RJButton();
             this.panelLeft.SuspendLayout();
             this.panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -56,28 +58,28 @@ namespace ToolWorking.Views
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
             this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Size = new System.Drawing.Size(140, 500);
+            this.panelLeft.Size = new System.Drawing.Size(140, 462);
             this.panelLeft.TabIndex = 0;
             // 
             // panelSide
             // 
             this.panelSide.BackColor = System.Drawing.SystemColors.Control;
-            this.panelSide.Location = new System.Drawing.Point(0, 41);
+            this.panelSide.Location = new System.Drawing.Point(0, 38);
             this.panelSide.Name = "panelSide";
-            this.panelSide.Size = new System.Drawing.Size(10, 45);
+            this.panelSide.Size = new System.Drawing.Size(10, 42);
             this.panelSide.TabIndex = 1;
             // 
             // btnLinkFolder
             // 
             this.btnLinkFolder.FlatAppearance.BorderSize = 0;
             this.btnLinkFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLinkFolder.Font = new System.Drawing.Font("Cascadia Mono SemiBold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.btnLinkFolder.Font = new System.Drawing.Font("Lucida Console", 9F);
             this.btnLinkFolder.ForeColor = System.Drawing.Color.White;
             this.btnLinkFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnLinkFolder.Image")));
             this.btnLinkFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLinkFolder.Location = new System.Drawing.Point(10, 42);
+            this.btnLinkFolder.Location = new System.Drawing.Point(10, 39);
             this.btnLinkFolder.Name = "btnLinkFolder";
-            this.btnLinkFolder.Size = new System.Drawing.Size(130, 45);
+            this.btnLinkFolder.Size = new System.Drawing.Size(130, 42);
             this.btnLinkFolder.TabIndex = 2;
             this.btnLinkFolder.Text = "     Link Folder";
             this.btnLinkFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -90,16 +92,16 @@ namespace ToolWorking.Views
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogo.Location = new System.Drawing.Point(0, 0);
             this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Size = new System.Drawing.Size(140, 42);
+            this.panelLogo.Size = new System.Drawing.Size(140, 39);
             this.panelLogo.TabIndex = 2;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 9);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 8);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(140, 32);
+            this.pictureBox1.Size = new System.Drawing.Size(140, 30);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -109,19 +111,55 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(140, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 10);
+            this.panelTop.Size = new System.Drawing.Size(660, 9);
             this.panelTop.TabIndex = 1;
             this.panelTop.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseMove);
             // 
             // panelLabel
             // 
+            this.panelLabel.Controls.Add(this.labelTitle);
+            this.panelLabel.Controls.Add(this.panelTopDown);
             this.panelLabel.Controls.Add(this.btnClose);
             this.panelLabel.Controls.Add(this.btnMini);
             this.panelLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLabel.Location = new System.Drawing.Point(140, 10);
+            this.panelLabel.Location = new System.Drawing.Point(140, 9);
             this.panelLabel.Name = "panelLabel";
-            this.panelLabel.Size = new System.Drawing.Size(660, 35);
+            this.panelLabel.Size = new System.Drawing.Size(660, 37);
             this.panelLabel.TabIndex = 3;
+            // 
+            // labelTitle
+            // 
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Font = new System.Drawing.Font("Lucida Console", 20F);
+            this.labelTitle.Location = new System.Drawing.Point(6, 6);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(172, 27);
+            this.labelTitle.TabIndex = 3;
+            this.labelTitle.Text = "labelTitle";
+            // 
+            // panelTopDown
+            // 
+            this.panelTopDown.BackColor = System.Drawing.Color.DarkCyan;
+            this.panelTopDown.Location = new System.Drawing.Point(0, 36);
+            this.panelTopDown.Name = "panelTopDown";
+            this.panelTopDown.Size = new System.Drawing.Size(660, 1);
+            this.panelTopDown.TabIndex = 2;
+            // 
+            // panelBottom
+            // 
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(140, 453);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(660, 9);
+            this.panelBottom.TabIndex = 4;
+            // 
+            // panelCenter
+            // 
+            this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCenter.Location = new System.Drawing.Point(140, 46);
+            this.panelCenter.Name = "panelCenter";
+            this.panelCenter.Size = new System.Drawing.Size(660, 407);
+            this.panelCenter.TabIndex = 5;
             // 
             // btnClose
             // 
@@ -134,9 +172,9 @@ namespace ToolWorking.Views
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.ForeColor = System.Drawing.Color.White;
             this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.Location = new System.Drawing.Point(620, 0);
+            this.btnClose.Location = new System.Drawing.Point(620, 1);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(35, 35);
+            this.btnClose.Size = new System.Drawing.Size(35, 32);
             this.btnClose.TabIndex = 0;
             this.btnClose.TextColor = System.Drawing.Color.White;
             this.btnClose.UseVisualStyleBackColor = false;
@@ -153,35 +191,19 @@ namespace ToolWorking.Views
             this.btnMini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMini.ForeColor = System.Drawing.Color.White;
             this.btnMini.Image = ((System.Drawing.Image)(resources.GetObject("btnMini.Image")));
-            this.btnMini.Location = new System.Drawing.Point(580, 0);
+            this.btnMini.Location = new System.Drawing.Point(580, 1);
             this.btnMini.Name = "btnMini";
-            this.btnMini.Size = new System.Drawing.Size(35, 35);
+            this.btnMini.Size = new System.Drawing.Size(35, 32);
             this.btnMini.TabIndex = 2;
             this.btnMini.TextColor = System.Drawing.Color.White;
             this.btnMini.UseVisualStyleBackColor = false;
             this.btnMini.Click += new System.EventHandler(this.btnMini_Click);
             // 
-            // panelBottom
-            // 
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(140, 490);
-            this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 10);
-            this.panelBottom.TabIndex = 4;
-            // 
-            // panelCenter
-            // 
-            this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(140, 45);
-            this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 445);
-            this.panelCenter.TabIndex = 5;
-            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 500);
+            this.ClientSize = new System.Drawing.Size(800, 462);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelLabel);
@@ -196,6 +218,7 @@ namespace ToolWorking.Views
             this.panelLogo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelLabel.ResumeLayout(false);
+            this.panelLabel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -213,5 +236,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Panel panelCenter;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel panelTopDown;
+        private System.Windows.Forms.Label labelTitle;
     }
 }

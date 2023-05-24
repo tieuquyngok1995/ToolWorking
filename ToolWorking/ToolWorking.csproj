@@ -102,8 +102,16 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon-logo.ico" />
+    <Content Include="Resources\icon-clear-16x16.png" />
     <Content Include="Resources\icon-close.png" />
+    <Content Include="Resources\icon-copy-16x16.png" />
+    <Content Include="Resources\icon-file-16x16.png" />
+    <Content Include="Resources\icon-folder-16x16.png" />
+    <Content Include="Resources\icon-folder.png" />
+    <Content Include="Resources\icon-logo.ico" />
     <Content Include="Resources\icon-minisize.png" />
+    <Content Include="Resources\icon-reload-16x16.png" />
+    <Content Include="Resources\icon-search-16x16.png" />
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
