@@ -32,7 +32,7 @@ namespace ToolWorking.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PathFolder_Load(object sender, EventArgs e)
+        private void SearchFile_Load(object sender, EventArgs e)
         {
             try
             {

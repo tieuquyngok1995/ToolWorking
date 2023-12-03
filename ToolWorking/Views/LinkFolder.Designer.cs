@@ -92,7 +92,7 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(454, 8);
+            this.txtPGSearch.Location = new System.Drawing.Point(452, 8);
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 3;

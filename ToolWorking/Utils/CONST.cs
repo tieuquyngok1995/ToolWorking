@@ -2,6 +2,11 @@
 {
     public static class CONST
     {
+        #region String title
+        public static string TITLE_FILE_FOLDER = "Get Link File and Folder";
+        public static string TITLE_SEARCH_FILE = "Search Files in the Folder";
+        public static string TITLE_DATABASE = "Database Handling";
+        #endregion
 
         #region Type Script SQL
         public static string TYPE_00_RESET_DATA =       "00";

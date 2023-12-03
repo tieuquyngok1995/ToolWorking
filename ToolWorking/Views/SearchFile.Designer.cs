@@ -83,7 +83,7 @@ namespace ToolWorking.Views
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(626, 7);
+            this.btnSearchPG.Location = new System.Drawing.Point(626, 8);
             this.btnSearchPG.Name = "btnSearchPG";
             this.btnSearchPG.Size = new System.Drawing.Size(26, 26);
             this.btnSearchPG.TabIndex = 5;
@@ -93,7 +93,7 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(454, 8);
+            this.txtPGSearch.Location = new System.Drawing.Point(452, 8);
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 4;
@@ -112,7 +112,7 @@ namespace ToolWorking.Views
             // btnReloadFolder
             // 
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
-            this.btnReloadFolder.Location = new System.Drawing.Point(346, 9);
+            this.btnReloadFolder.Location = new System.Drawing.Point(346, 8);
             this.btnReloadFolder.Name = "btnReloadFolder";
             this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
             this.btnReloadFolder.TabIndex = 3;
@@ -132,7 +132,7 @@ namespace ToolWorking.Views
             // btnOpenFolder
             // 
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(316, 9);
+            this.btnOpenFolder.Location = new System.Drawing.Point(316, 8);
             this.btnOpenFolder.Name = "btnOpenFolder";
             this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
             this.btnOpenFolder.TabIndex = 2;
@@ -381,7 +381,7 @@ namespace ToolWorking.Views
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SearchFile";
             this.Text = "LinkFolder";
-            this.Load += new System.EventHandler(this.PathFolder_Load);
+            this.Load += new System.EventHandler(this.SearchFile_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelCenter.ResumeLayout(false);

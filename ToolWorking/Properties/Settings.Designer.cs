@@ -70,5 +70,53 @@ namespace ToolWorking.Properties {
                 this["pathFolderSearch"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string serverDatabse {
+            get {
+                return ((string)(this["serverDatabse"]));
+            }
+            set {
+                this["serverDatabse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string userDatabase {
+            get {
+                return ((string)(this["userDatabase"]));
+            }
+            set {
+                this["userDatabase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string passDatabase {
+            get {
+                return ((string)(this["passDatabase"]));
+            }
+            set {
+                this["passDatabase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string pathFolderDatabase {
+            get {
+                return ((string)(this["pathFolderDatabase"]));
+            }
+            set {
+                this["pathFolderDatabase"] = value;
+            }
+        }
     }
 }

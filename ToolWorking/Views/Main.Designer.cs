@@ -31,6 +31,7 @@ namespace ToolWorking.Views
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.panelLeft = new System.Windows.Forms.Panel();
+            this.btnDatabase = new System.Windows.Forms.Button();
             this.panelBotSide = new System.Windows.Forms.Panel();
             this.btnSearchFile = new System.Windows.Forms.Button();
             this.panelSide = new System.Windows.Forms.Panel();
@@ -41,10 +42,10 @@ namespace ToolWorking.Views
             this.panelLabel = new System.Windows.Forms.Panel();
             this.labelTitle = new System.Windows.Forms.Label();
             this.panelTopDown = new System.Windows.Forms.Panel();
-            this.btnClose = new ToolWorking.Extension.RJButton();
-            this.btnMini = new ToolWorking.Extension.RJButton();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.panelCenter = new System.Windows.Forms.Panel();
+            this.btnClose = new ToolWorking.Extension.RJButton();
+            this.btnMini = new ToolWorking.Extension.RJButton();
             this.panelLeft.SuspendLayout();
             this.panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -59,11 +60,29 @@ namespace ToolWorking.Views
             this.panelLeft.Controls.Add(this.panelSide);
             this.panelLeft.Controls.Add(this.btnLinkFolder);
             this.panelLeft.Controls.Add(this.panelLogo);
+            this.panelLeft.Controls.Add(this.btnDatabase);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
             this.panelLeft.Name = "panelLeft";
             this.panelLeft.Size = new System.Drawing.Size(140, 501);
             this.panelLeft.TabIndex = 0;
+            // 
+            // btnDatabase
+            // 
+            this.btnDatabase.FlatAppearance.BorderSize = 0;
+            this.btnDatabase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDatabase.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnDatabase.ForeColor = System.Drawing.Color.White;
+            this.btnDatabase.Image = ((System.Drawing.Image)(resources.GetObject("btnDatabase.Image")));
+            this.btnDatabase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDatabase.Location = new System.Drawing.Point(5, 134);
+            this.btnDatabase.Name = "btnDatabase";
+            this.btnDatabase.Size = new System.Drawing.Size(130, 46);
+            this.btnDatabase.TabIndex = 21;
+            this.btnDatabase.Text = "Database";
+            this.btnDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDatabase.UseVisualStyleBackColor = true;
+            this.btnDatabase.Click += new System.EventHandler(this.btnDatabase_Click);
             // 
             // panelBotSide
             // 
@@ -174,6 +193,22 @@ namespace ToolWorking.Views
             this.panelTopDown.Size = new System.Drawing.Size(660, 1);
             this.panelTopDown.TabIndex = 2;
             // 
+            // panelBottom
+            // 
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(140, 491);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(660, 10);
+            this.panelBottom.TabIndex = 4;
+            // 
+            // panelCenter
+            // 
+            this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCenter.Location = new System.Drawing.Point(140, 50);
+            this.panelCenter.Name = "panelCenter";
+            this.panelCenter.Size = new System.Drawing.Size(660, 441);
+            this.panelCenter.TabIndex = 5;
+            // 
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.White;
@@ -211,22 +246,6 @@ namespace ToolWorking.Views
             this.btnMini.TextColor = System.Drawing.Color.White;
             this.btnMini.UseVisualStyleBackColor = false;
             this.btnMini.Click += new System.EventHandler(this.btnMini_Click);
-            // 
-            // panelBottom
-            // 
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(140, 491);
-            this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 10);
-            this.panelBottom.TabIndex = 4;
-            // 
-            // panelCenter
-            // 
-            this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(140, 50);
-            this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 441);
-            this.panelCenter.TabIndex = 5;
             // 
             // Main
             // 
@@ -269,5 +288,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Button btnSearchFile;
         private System.Windows.Forms.Panel panelBotSide;
+        private System.Windows.Forms.Button btnDatabase;
     }
 }
