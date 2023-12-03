@@ -67,53 +67,53 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 62);
+            this.panelTop.Size = new System.Drawing.Size(660, 67);
             this.panelTop.TabIndex = 0;
             // 
             // txtPathRemove
             // 
-            this.txtPathRemove.Font = new System.Drawing.Font("Tempus Sans ITC", 8.5F);
-            this.txtPathRemove.Location = new System.Drawing.Point(123, 37);
+            this.txtPathRemove.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPathRemove.Location = new System.Drawing.Point(131, 37);
             this.txtPathRemove.Name = "txtPathRemove";
-            this.txtPathRemove.Size = new System.Drawing.Size(189, 22);
+            this.txtPathRemove.Size = new System.Drawing.Size(180, 24);
             this.txtPathRemove.TabIndex = 5;
             this.txtPathRemove.TextChanged += new System.EventHandler(this.txtPathRemove_TextChanged);
             // 
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(623, 8);
+            this.btnSearchPG.Location = new System.Drawing.Point(626, 8);
             this.btnSearchPG.Name = "btnSearchPG";
-            this.btnSearchPG.Size = new System.Drawing.Size(26, 24);
+            this.btnSearchPG.Size = new System.Drawing.Size(26, 26);
             this.btnSearchPG.TabIndex = 4;
             this.btnSearchPG.UseVisualStyleBackColor = true;
             this.btnSearchPG.Click += new System.EventHandler(this.btnSearchPG_Click);
             // 
             // txtPGSearch
             // 
-            this.txtPGSearch.Font = new System.Drawing.Font("Tempus Sans ITC", 8.5F);
-            this.txtPGSearch.Location = new System.Drawing.Point(449, 9);
+            this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPGSearch.Location = new System.Drawing.Point(454, 8);
             this.txtPGSearch.Name = "txtPGSearch";
-            this.txtPGSearch.Size = new System.Drawing.Size(169, 22);
+            this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 3;
             this.txtPGSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPGSearch_KeyDown);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tempus Sans ITC", 10F);
-            this.label2.Location = new System.Drawing.Point(381, 11);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.label2.Location = new System.Drawing.Point(378, 12);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 18);
+            this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "PG Search";
             // 
             // btnReloadFolder
             // 
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
-            this.btnReloadFolder.Location = new System.Drawing.Point(347, 8);
+            this.btnReloadFolder.Location = new System.Drawing.Point(346, 8);
             this.btnReloadFolder.Name = "btnReloadFolder";
-            this.btnReloadFolder.Size = new System.Drawing.Size(26, 24);
+            this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
             this.btnReloadFolder.TabIndex = 2;
             this.btnReloadFolder.UseVisualStyleBackColor = true;
             this.btnReloadFolder.Click += new System.EventHandler(this.btnReloadFolder_Click);
@@ -121,58 +121,58 @@ namespace ToolWorking.Views
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tempus Sans ITC", 10F);
-            this.label1.Location = new System.Drawing.Point(8, 11);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.label1.Location = new System.Drawing.Point(6, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 18);
+            this.label1.Size = new System.Drawing.Size(107, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Select Directory";
             // 
             // btnOpenFolder
             // 
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(317, 8);
+            this.btnOpenFolder.Location = new System.Drawing.Point(316, 8);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
             this.btnOpenFolder.TabIndex = 1;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
             // txtPathFolder
             // 
-            this.txtPathFolder.Font = new System.Drawing.Font("Tempus Sans ITC", 8.5F);
-            this.txtPathFolder.Location = new System.Drawing.Point(123, 9);
+            this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPathFolder.Location = new System.Drawing.Point(131, 8);
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.ReadOnly = true;
-            this.txtPathFolder.Size = new System.Drawing.Size(189, 22);
+            this.txtPathFolder.Size = new System.Drawing.Size(180, 24);
             this.txtPathFolder.TabIndex = 0;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tempus Sans ITC", 10F);
-            this.label3.Location = new System.Drawing.Point(8, 38);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(6, 40);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(114, 18);
+            this.label3.Size = new System.Drawing.Size(123, 17);
             this.label3.TabIndex = 8;
             this.label3.Text = "Remove Directory";
             // 
             // progressBarFolder
             // 
-            this.progressBarFolder.Location = new System.Drawing.Point(12, 182);
+            this.progressBarFolder.Location = new System.Drawing.Point(9, 193);
             this.progressBarFolder.Name = "progressBarFolder";
-            this.progressBarFolder.Size = new System.Drawing.Size(636, 21);
+            this.progressBarFolder.Size = new System.Drawing.Size(642, 23);
             this.progressBarFolder.TabIndex = 1;
             // 
             // treeViewFolder
             // 
-            this.treeViewFolder.Font = new System.Drawing.Font("Lucida Console", 9F);
+            this.treeViewFolder.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.treeViewFolder.ImageIndex = 0;
             this.treeViewFolder.ImageList = this.imageListTree;
-            this.treeViewFolder.Location = new System.Drawing.Point(12, 6);
+            this.treeViewFolder.Location = new System.Drawing.Point(9, 3);
             this.treeViewFolder.Name = "treeViewFolder";
             this.treeViewFolder.SelectedImageIndex = 0;
-            this.treeViewFolder.Size = new System.Drawing.Size(636, 170);
+            this.treeViewFolder.Size = new System.Drawing.Size(642, 184);
             this.treeViewFolder.TabIndex = 6;
             this.treeViewFolder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFolder_AfterSelect);
             this.treeViewFolder.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewFolder_NodeMouseDoubleClick);
@@ -192,54 +192,53 @@ namespace ToolWorking.Views
             this.panelCenter.Controls.Add(this.treeViewFolder);
             this.panelCenter.Controls.Add(this.progressBarFolder);
             this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 62);
+            this.panelCenter.Location = new System.Drawing.Point(0, 67);
             this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 349);
+            this.panelCenter.Size = new System.Drawing.Size(660, 378);
             this.panelCenter.TabIndex = 3;
             // 
             // btnClearResult
             // 
-            this.btnClearResult.Font = new System.Drawing.Font("Lucida Console", 9.5F);
+            this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnClearResult.Image = ((System.Drawing.Image)(resources.GetObject("btnClearResult.Image")));
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearResult.Location = new System.Drawing.Point(577, 313);
+            this.btnClearResult.Location = new System.Drawing.Point(577, 341);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(71, 24);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 28);
             this.btnClearResult.TabIndex = 9;
-            this.btnClearResult.Text = "  Clear";
-            this.btnClearResult.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnClearResult.Text = "    Copy";
             this.btnClearResult.UseVisualStyleBackColor = true;
             this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
             // 
             // btnCopyResult
             // 
             this.btnCopyResult.Enabled = false;
-            this.btnCopyResult.Font = new System.Drawing.Font("Lucida Console", 9.5F);
+            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
             this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCopyResult.Location = new System.Drawing.Point(507, 313);
+            this.btnCopyResult.Location = new System.Drawing.Point(498, 341);
             this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(66, 24);
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 28);
             this.btnCopyResult.TabIndex = 8;
-            this.btnCopyResult.Text = "  Copy";
-            this.btnCopyResult.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCopyResult.Text = "    Copy";
             this.btnCopyResult.UseVisualStyleBackColor = true;
             this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
             // 
             // txtResult
             // 
-            this.txtResult.Location = new System.Drawing.Point(12, 209);
+            this.txtResult.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.txtResult.Location = new System.Drawing.Point(9, 222);
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(636, 99);
+            this.txtResult.Size = new System.Drawing.Size(642, 114);
             this.txtResult.TabIndex = 7;
             this.txtResult.Text = "";
             // 
             // LinkFolder
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 411);
+            this.ClientSize = new System.Drawing.Size(660, 445);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

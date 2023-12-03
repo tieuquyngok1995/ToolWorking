@@ -19,6 +19,8 @@ namespace ToolWorking.Views
 
         // Const 
         private const string titleFileFolder = "Get Link File and Folder";
+        private const string titleSearchFiles = "Search for files in the directory";
+
         #region Event
         public Main()
         {
@@ -27,11 +29,26 @@ namespace ToolWorking.Views
 
         private void Main_Load(object sender, EventArgs e)
         {
-            panelSide.Height = btnLinkFolder.Height;
-            panelSide.Top = btnLinkFolder.Top;
-            labelTitle.Text = titleFileFolder;
+            int numTabOpen = Properties.Settings.Default.numTabOpen;
+            switch (numTabOpen)
+            {
+                case 0:
+                    panelSide.Height = btnLinkFolder.Height;
+                    panelSide.Top = btnLinkFolder.Top;
+                    panelBotSide.Top = btnLinkFolder.Bottom - 2;
+                    labelTitle.Text = titleFileFolder;
 
-            OpenChildForm(new LinkFolder(), sender);
+                    OpenChildForm(new LinkFolder(), sender);
+                    break;
+                case 1:
+                    panelSide.Height = btnSearchFile.Height;
+                    panelSide.Top = btnSearchFile.Top;
+                    panelBotSide.Top = btnSearchFile.Bottom - 2;
+                    labelTitle.Text = titleSearchFiles;
+
+                    OpenChildForm(new SearchFile(), sender);
+                    break;
+            }
         }
 
         private void panelTop_MouseMove(object sender, MouseEventArgs e)
@@ -52,25 +69,34 @@ namespace ToolWorking.Views
 
         private void btnLinkFolder_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.numTabOpen = 0;
+            Properties.Settings.Default.Save();
+
             panelSide.Height = btnLinkFolder.Height;
             panelSide.Top = btnLinkFolder.Top;
+            panelBotSide.Top = btnLinkFolder.Bottom - 2;
+
             labelTitle.Text = titleFileFolder;
 
             OpenChildForm(new LinkFolder(), sender);
         }
+
+        private void btnSearchFile_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.numTabOpen = 1;
+            Properties.Settings.Default.Save();
+
+            panelSide.Height = btnSearchFile.Height;
+            panelSide.Top = btnSearchFile.Top;
+            panelBotSide.Top = btnSearchFile.Bottom - 2;
+
+            labelTitle.Text = titleSearchFiles;
+
+            OpenChildForm(new SearchFile(), sender);
+        }
         #endregion
 
         #region Function
-
-        private void loadPanelColor()
-        {
-            Color panelColor = CUtils.createColor();
-            panelTop.BackColor = panelColor;
-            panelTopDown.BackColor = panelColor;
-            panelSide.BackColor = panelColor;
-            panelBottom.BackColor = panelColor;
-        }
-
         private void OpenChildForm(Form childForm, object btnSender)
         {
             if (activeForm != null)
@@ -88,8 +114,16 @@ namespace ToolWorking.Views
 
             this.loadPanelColor();
         }
-        #endregion
 
+        private void loadPanelColor()
+        {
+            Color panelColor = CUtils.createColor();
+            panelTop.BackColor = panelColor;
+            panelTopDown.BackColor = panelColor;
+            panelBottom.BackColor = panelColor;
+            panelLeft.BackColor = panelColor;
+        }
+        #endregion
 
     }
 }
