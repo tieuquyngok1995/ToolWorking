@@ -130,7 +130,7 @@ namespace ToolWorking.Views
         {
             try
             {
-                string valSearch = txtPGSearch.Text.Trim();
+                string valSearch = txtPGSearch.Text.Trim().ToUpper();
                 if (string.IsNullOrEmpty(valSearch))
                 {
                     // set data to grid view
@@ -139,7 +139,7 @@ namespace ToolWorking.Views
                 else
                 {
                     // set data to grid view
-                    gridViewFiles.DataSource = listFiles.Where(o => o.fileName.Contains(valSearch)).ToList();
+                    gridViewFiles.DataSource = listFiles.Where(o => o.fileName.ToUpper().Contains(valSearch)).ToList();
                 }
             }
             catch (Exception ex)
