@@ -31,9 +31,9 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchFile));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
             this.btnSearchPG = new System.Windows.Forms.Button();
             this.txtPGSearch = new System.Windows.Forms.TextBox();
@@ -50,16 +50,16 @@ namespace ToolWorking.Views
             this.rbRead = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.gridViewFiles = new System.Windows.Forms.DataGridView();
+            this.btnClearResult = new System.Windows.Forms.Button();
+            this.btnCopyResult = new System.Windows.Forms.Button();
+            this.txtResult = new System.Windows.Forms.RichTextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.folderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pathFile = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lastDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnClearResult = new System.Windows.Forms.Button();
-            this.btnCopyResult = new System.Windows.Forms.Button();
-            this.txtResult = new System.Windows.Forms.RichTextBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelCenter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewFiles)).BeginInit();
@@ -77,15 +77,15 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 38);
+            this.panelTop.Size = new System.Drawing.Size(660, 33);
             this.panelTop.TabIndex = 0;
             // 
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(626, 8);
+            this.btnSearchPG.Location = new System.Drawing.Point(626, 6);
             this.btnSearchPG.Name = "btnSearchPG";
-            this.btnSearchPG.Size = new System.Drawing.Size(26, 26);
+            this.btnSearchPG.Size = new System.Drawing.Size(26, 24);
             this.btnSearchPG.TabIndex = 5;
             this.btnSearchPG.UseVisualStyleBackColor = true;
             this.btnSearchPG.Click += new System.EventHandler(this.btnSearchPG_Click);
@@ -93,7 +93,7 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(452, 8);
+            this.txtPGSearch.Location = new System.Drawing.Point(452, 6);
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 4;
@@ -103,7 +103,7 @@ namespace ToolWorking.Views
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label2.Location = new System.Drawing.Point(376, 12);
+            this.label2.Location = new System.Drawing.Point(376, 10);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 4;
@@ -112,9 +112,9 @@ namespace ToolWorking.Views
             // btnReloadFolder
             // 
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
-            this.btnReloadFolder.Location = new System.Drawing.Point(346, 8);
+            this.btnReloadFolder.Location = new System.Drawing.Point(346, 6);
             this.btnReloadFolder.Name = "btnReloadFolder";
-            this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnReloadFolder.Size = new System.Drawing.Size(26, 24);
             this.btnReloadFolder.TabIndex = 3;
             this.btnReloadFolder.UseVisualStyleBackColor = true;
             this.btnReloadFolder.Click += new System.EventHandler(this.btnReloadFolder_Click);
@@ -123,7 +123,7 @@ namespace ToolWorking.Views
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(6, 12);
+            this.label1.Location = new System.Drawing.Point(6, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 17);
             this.label1.TabIndex = 2;
@@ -132,9 +132,9 @@ namespace ToolWorking.Views
             // btnOpenFolder
             // 
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(316, 8);
+            this.btnOpenFolder.Location = new System.Drawing.Point(316, 6);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
             this.btnOpenFolder.TabIndex = 2;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
@@ -142,7 +142,7 @@ namespace ToolWorking.Views
             // txtPathFolder
             // 
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathFolder.Location = new System.Drawing.Point(131, 8);
+            this.txtPathFolder.Location = new System.Drawing.Point(131, 6);
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.ReadOnly = true;
             this.txtPathFolder.Size = new System.Drawing.Size(180, 24);
@@ -150,9 +150,9 @@ namespace ToolWorking.Views
             // 
             // progressBarFolder
             // 
-            this.progressBarFolder.Location = new System.Drawing.Point(10, 215);
+            this.progressBarFolder.Location = new System.Drawing.Point(10, 198);
             this.progressBarFolder.Name = "progressBarFolder";
-            this.progressBarFolder.Size = new System.Drawing.Size(640, 23);
+            this.progressBarFolder.Size = new System.Drawing.Size(640, 21);
             this.progressBarFolder.TabIndex = 1;
             // 
             // imageListTree
@@ -174,9 +174,9 @@ namespace ToolWorking.Views
             this.panelCenter.Controls.Add(this.txtResult);
             this.panelCenter.Controls.Add(this.progressBarFolder);
             this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 38);
+            this.panelCenter.Location = new System.Drawing.Point(0, 33);
             this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 407);
+            this.panelCenter.Size = new System.Drawing.Size(660, 378);
             this.panelCenter.TabIndex = 3;
             // 
             // cbProcessOpen
@@ -186,7 +186,7 @@ namespace ToolWorking.Views
             this.cbProcessOpen.Items.AddRange(new object[] {
             "Notepad++",
             "SQL Management Studio"});
-            this.cbProcessOpen.Location = new System.Drawing.Point(221, 364);
+            this.cbProcessOpen.Location = new System.Drawing.Point(221, 343);
             this.cbProcessOpen.Name = "cbProcessOpen";
             this.cbProcessOpen.Size = new System.Drawing.Size(272, 25);
             this.cbProcessOpen.TabIndex = 14;
@@ -195,7 +195,7 @@ namespace ToolWorking.Views
             // 
             this.rbReadOpen.AutoSize = true;
             this.rbReadOpen.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbReadOpen.Location = new System.Drawing.Point(120, 366);
+            this.rbReadOpen.Location = new System.Drawing.Point(117, 346);
             this.rbReadOpen.Name = "rbReadOpen";
             this.rbReadOpen.Size = new System.Drawing.Size(102, 21);
             this.rbReadOpen.TabIndex = 13;
@@ -209,7 +209,7 @@ namespace ToolWorking.Views
             this.rbRead.AutoSize = true;
             this.rbRead.Checked = true;
             this.rbRead.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbRead.Location = new System.Drawing.Point(57, 366);
+            this.rbRead.Location = new System.Drawing.Point(55, 346);
             this.rbRead.Name = "rbRead";
             this.rbRead.Size = new System.Drawing.Size(60, 21);
             this.rbRead.TabIndex = 12;
@@ -222,7 +222,7 @@ namespace ToolWorking.Views
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label3.Location = new System.Drawing.Point(6, 368);
+            this.label3.Location = new System.Drawing.Point(6, 348);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 17);
             this.label3.TabIndex = 11;
@@ -236,14 +236,14 @@ namespace ToolWorking.Views
             this.gridViewFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridViewFiles.CausesValidation = false;
             this.gridViewFiles.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.5F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewFiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Century Gothic", 9.5F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewFiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.gridViewFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -252,33 +252,70 @@ namespace ToolWorking.Views
             this.name,
             this.pathFile,
             this.lastDate});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridViewFiles.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Century Gothic", 9F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewFiles.DefaultCellStyle = dataGridViewCellStyle8;
             this.gridViewFiles.EnableHeadersVisualStyles = false;
             this.gridViewFiles.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.gridViewFiles.Location = new System.Drawing.Point(9, 3);
             this.gridViewFiles.Name = "gridViewFiles";
             this.gridViewFiles.ReadOnly = true;
             this.gridViewFiles.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 8.25F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewFiles.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Century Gothic", 8.25F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewFiles.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.gridViewFiles.RowHeadersVisible = false;
             this.gridViewFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridViewFiles.Size = new System.Drawing.Size(638, 197);
+            this.gridViewFiles.Size = new System.Drawing.Size(642, 189);
             this.gridViewFiles.TabIndex = 10;
             this.gridViewFiles.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridViewFiles_CellMouseDoubleClick);
+            // 
+            // btnClearResult
+            // 
+            this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnClearResult.Image = ((System.Drawing.Image)(resources.GetObject("btnClearResult.Image")));
+            this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClearResult.Location = new System.Drawing.Point(577, 344);
+            this.btnClearResult.Name = "btnClearResult";
+            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
+            this.btnClearResult.TabIndex = 9;
+            this.btnClearResult.Text = "    Clear";
+            this.btnClearResult.UseVisualStyleBackColor = true;
+            this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
+            // 
+            // btnCopyResult
+            // 
+            this.btnCopyResult.Enabled = false;
+            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
+            this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCopyResult.Location = new System.Drawing.Point(498, 344);
+            this.btnCopyResult.Name = "btnCopyResult";
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 25);
+            this.btnCopyResult.TabIndex = 8;
+            this.btnCopyResult.Text = "    Copy";
+            this.btnCopyResult.UseVisualStyleBackColor = true;
+            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
+            // 
+            // txtResult
+            // 
+            this.txtResult.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtResult.Location = new System.Drawing.Point(10, 225);
+            this.txtResult.Name = "txtResult";
+            this.txtResult.ReadOnly = true;
+            this.txtResult.Size = new System.Drawing.Size(640, 112);
+            this.txtResult.TabIndex = 7;
+            this.txtResult.Text = "";
             // 
             // no
             // 
@@ -296,7 +333,7 @@ namespace ToolWorking.Views
             this.folderName.HeaderText = "Folder";
             this.folderName.Name = "folderName";
             this.folderName.ReadOnly = true;
-            this.folderName.Width = 90;
+            this.folderName.Width = 99;
             // 
             // type
             // 
@@ -305,7 +342,7 @@ namespace ToolWorking.Views
             this.type.HeaderText = "Type";
             this.type.Name = "type";
             this.type.ReadOnly = true;
-            this.type.Width = 80;
+            this.type.Width = 88;
             // 
             // name
             // 
@@ -314,7 +351,7 @@ namespace ToolWorking.Views
             this.name.HeaderText = "Name";
             this.name.Name = "name";
             this.name.ReadOnly = true;
-            this.name.Width = 340;
+            this.name.Width = 330;
             // 
             // pathFile
             // 
@@ -332,50 +369,13 @@ namespace ToolWorking.Views
             this.lastDate.HeaderText = "Date";
             this.lastDate.Name = "lastDate";
             this.lastDate.ReadOnly = true;
-            this.lastDate.Width = 80;
-            // 
-            // btnClearResult
-            // 
-            this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.btnClearResult.Image = ((System.Drawing.Image)(resources.GetObject("btnClearResult.Image")));
-            this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearResult.Location = new System.Drawing.Point(577, 363);
-            this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 28);
-            this.btnClearResult.TabIndex = 9;
-            this.btnClearResult.Text = "    Clear";
-            this.btnClearResult.UseVisualStyleBackColor = true;
-            this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
-            // 
-            // btnCopyResult
-            // 
-            this.btnCopyResult.Enabled = false;
-            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
-            this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCopyResult.Location = new System.Drawing.Point(498, 363);
-            this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 28);
-            this.btnCopyResult.TabIndex = 8;
-            this.btnCopyResult.Text = "    Copy";
-            this.btnCopyResult.UseVisualStyleBackColor = true;
-            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
-            // 
-            // txtResult
-            // 
-            this.txtResult.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.txtResult.Location = new System.Drawing.Point(10, 244);
-            this.txtResult.Name = "txtResult";
-            this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(640, 114);
-            this.txtResult.TabIndex = 7;
-            this.txtResult.Text = "";
+            this.lastDate.Width = 77;
             // 
             // SearchFile
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 445);
+            this.ClientSize = new System.Drawing.Size(660, 411);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -408,15 +408,15 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Button btnClearResult;
         private System.Windows.Forms.Button btnCopyResult;
         private System.Windows.Forms.DataGridView gridViewFiles;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbProcessOpen;
+        private System.Windows.Forms.RadioButton rbReadOpen;
+        private System.Windows.Forms.RadioButton rbRead;
         private System.Windows.Forms.DataGridViewTextBoxColumn no;
         private System.Windows.Forms.DataGridViewTextBoxColumn folderName;
         private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathFile;
         private System.Windows.Forms.DataGridViewTextBoxColumn lastDate;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cbProcessOpen;
-        private System.Windows.Forms.RadioButton rbReadOpen;
-        private System.Windows.Forms.RadioButton rbRead;
     }
 }
