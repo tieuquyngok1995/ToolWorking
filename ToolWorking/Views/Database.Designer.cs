@@ -52,16 +52,21 @@ namespace ToolWorking.Views
             this.treeViewFolder = new System.Windows.Forms.TreeView();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.btnRunScript = new System.Windows.Forms.Button();
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelCenter = new System.Windows.Forms.Panel();
+            this.panelCenterScript = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.RichTextBox();
-            this.btnRunScript = new System.Windows.Forms.Button();
+            this.panelCenterQuery = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtScriptTable = new System.Windows.Forms.RichTextBox();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
-            this.panelCenter.SuspendLayout();
+            this.panelCenterScript.SuspendLayout();
+            this.panelCenterQuery.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -292,6 +297,20 @@ namespace ToolWorking.Views
             this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 3;
             // 
+            // btnRunScript
+            // 
+            this.btnRunScript.Enabled = false;
+            this.btnRunScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnRunScript.Image = ((System.Drawing.Image)(resources.GetObject("btnRunScript.Image")));
+            this.btnRunScript.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRunScript.Location = new System.Drawing.Point(394, 0);
+            this.btnRunScript.Name = "btnRunScript";
+            this.btnRunScript.Size = new System.Drawing.Size(100, 25);
+            this.btnRunScript.TabIndex = 16;
+            this.btnRunScript.Text = "    Run Script";
+            this.btnRunScript.UseVisualStyleBackColor = true;
+            this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
+            // 
             // btnClearResult
             // 
             this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
@@ -329,17 +348,17 @@ namespace ToolWorking.Views
             this.txtResult.TabIndex = 7;
             this.txtResult.Text = "";
             // 
-            // panelCenter
+            // panelCenterScript
             // 
-            this.panelCenter.Controls.Add(this.txtLog);
-            this.panelCenter.Controls.Add(this.treeViewFolder);
-            this.panelCenter.Controls.Add(this.progressBarFolder);
-            this.panelCenter.Controls.Add(this.txtResult);
-            this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 63);
-            this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 318);
-            this.panelCenter.TabIndex = 4;
+            this.panelCenterScript.Controls.Add(this.txtLog);
+            this.panelCenterScript.Controls.Add(this.treeViewFolder);
+            this.panelCenterScript.Controls.Add(this.progressBarFolder);
+            this.panelCenterScript.Controls.Add(this.txtResult);
+            this.panelCenterScript.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCenterScript.Location = new System.Drawing.Point(0, 63);
+            this.panelCenterScript.Name = "panelCenterScript";
+            this.panelCenterScript.Size = new System.Drawing.Size(660, 318);
+            this.panelCenterScript.TabIndex = 4;
             // 
             // txtLog
             // 
@@ -351,25 +370,45 @@ namespace ToolWorking.Views
             this.txtLog.TabIndex = 8;
             this.txtLog.Text = "";
             // 
-            // btnRunScript
+            // panelCenterQuery
             // 
-            this.btnRunScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.btnRunScript.Image = ((System.Drawing.Image)(resources.GetObject("btnRunScript.Image")));
-            this.btnRunScript.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRunScript.Location = new System.Drawing.Point(394, 0);
-            this.btnRunScript.Name = "btnRunScript";
-            this.btnRunScript.Size = new System.Drawing.Size(100, 25);
-            this.btnRunScript.TabIndex = 16;
-            this.btnRunScript.Text = "    Run Script";
-            this.btnRunScript.UseVisualStyleBackColor = true;
-            this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
+            this.panelCenterQuery.BackColor = System.Drawing.SystemColors.Control;
+            this.panelCenterQuery.Controls.Add(this.groupBox1);
+            this.panelCenterQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCenterQuery.Location = new System.Drawing.Point(0, 63);
+            this.panelCenterQuery.Name = "panelCenterQuery";
+            this.panelCenterQuery.Size = new System.Drawing.Size(660, 318);
+            this.panelCenterQuery.TabIndex = 9;
+            this.panelCenterQuery.Visible = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtScriptTable);
+            this.groupBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.groupBox1.Location = new System.Drawing.Point(9, -2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(642, 76);
+            this.groupBox1.TabIndex = 21;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Input Script Table";
+            // 
+            // txtScriptTable
+            // 
+            this.txtScriptTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtScriptTable.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtScriptTable.Location = new System.Drawing.Point(3, 19);
+            this.txtScriptTable.Name = "txtScriptTable";
+            this.txtScriptTable.Size = new System.Drawing.Size(636, 54);
+            this.txtScriptTable.TabIndex = 20;
+            this.txtScriptTable.Text = "";
             // 
             // Database
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(660, 411);
-            this.Controls.Add(this.panelCenter);
+            this.Controls.Add(this.panelCenterQuery);
+            this.Controls.Add(this.panelCenterScript);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -379,7 +418,9 @@ namespace ToolWorking.Views
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
-            this.panelCenter.ResumeLayout(false);
+            this.panelCenterScript.ResumeLayout(false);
+            this.panelCenterQuery.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -408,10 +449,13 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton rbRunScript;
         private System.Windows.Forms.RadioButton rbRunQuery;
-        private System.Windows.Forms.Panel panelCenter;
+        private System.Windows.Forms.Panel panelCenterScript;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbDatabase;
         private System.Windows.Forms.RichTextBox txtLog;
         private System.Windows.Forms.Button btnRunScript;
+        private System.Windows.Forms.Panel panelCenterQuery;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RichTextBox txtScriptTable;
     }
 }

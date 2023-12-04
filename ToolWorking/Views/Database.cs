@@ -125,6 +125,9 @@ namespace ToolWorking.Views
                 txtPathFolder.Visible = true;
                 btnOpenFolder.Visible = true;
                 btnReloadFolder.Visible = true;
+                panelCenterScript.Visible = true;
+                panelCenterQuery.Visible = false;
+                btnRunScript.Visible = true;
             }
         }
 
@@ -141,6 +144,9 @@ namespace ToolWorking.Views
                 txtPathFolder.Visible = false;
                 btnOpenFolder.Visible = false;
                 btnReloadFolder.Visible = false;
+                panelCenterScript.Visible = false;
+                panelCenterQuery.Visible = true;
+                btnRunScript.Visible = false;
             }
         }
 
