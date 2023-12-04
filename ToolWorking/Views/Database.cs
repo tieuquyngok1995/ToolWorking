@@ -9,6 +9,8 @@ namespace ToolWorking.Views
 {
     public partial class Database : Form
     {
+        // Database connection
+        string database;
         // Dictionary result
         private Dictionary<string, string> dicResult;
         // Tree node
@@ -32,11 +34,13 @@ namespace ToolWorking.Views
             try
             {
                 string settingServer = Properties.Settings.Default.serverDatabse;
+                database = Properties.Settings.Default.database;
                 string settingUser = Properties.Settings.Default.userDatabase;
                 string settingPass = Properties.Settings.Default.passDatabase;
                 string pathFolder = Properties.Settings.Default.pathFolderDatabase;
 
                 txtServer.Text = !string.IsNullOrEmpty(settingServer) ? settingServer : string.Empty;
+                cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
                 txtUser.Text = !string.IsNullOrEmpty(settingUser) ? settingUser : string.Empty;
                 txtPass.Text = !string.IsNullOrEmpty(settingPass) ? settingPass : string.Empty;
                 txtPathFolder.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
@@ -58,6 +62,12 @@ namespace ToolWorking.Views
             Properties.Settings.Default.Save();
         }
 
+        private void cbDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            database = this.cbDatabase.GetItemText(this.cbDatabase.SelectedItem);
+            Properties.Settings.Default.database = database;
+            Properties.Settings.Default.Save();
+        }
 
         /// <summary>
         /// Event change value text box user
@@ -91,7 +101,10 @@ namespace ToolWorking.Views
         {
             try
             {
-
+                if (DBUtils.IsConnection())
+                {
+                    MessageBox.Show("Connection database: " + database + " is success.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -169,10 +182,10 @@ namespace ToolWorking.Views
                 // Clear All Nodes if Already Exists
                 treeViewFolder.Nodes.Clear();
                 dicResult.Clear();
-                toolTip1.ShowAlways = true;
-                if (txtServer.Text != "" && Directory.Exists(txtServer.Text))
+                toolTip.ShowAlways = true;
+                if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
                 {
-                    loadDirectory(txtServer.Text);
+                    loadDirectory(txtPathFolder.Text);
 
                     txtResult.Text = string.Empty;
                 }
@@ -185,54 +198,6 @@ namespace ToolWorking.Views
             {
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        /// <summary>
-        /// Event change value search
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void txtPGSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnSearchPG_Click(sender, e);
-            }
-        }
-
-        /// <summary>
-        /// Event search
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSearchPG_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string valSearch = txtUser.Text.Trim();
-                if (string.IsNullOrEmpty(valSearch)) return;
-
-
-                foreach (TreeNode node in treeViewFolder.Nodes)
-                {
-                }
-
-                reloadResult();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Event change text remove
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void txtPathRemove_TextChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -254,8 +219,14 @@ namespace ToolWorking.Views
         {
             try
             {
-
-               
+                if (nodeSelected.Nodes.Count > 0)
+                {
+                    checkNodeExits(nodeSelected);
+                }
+                else
+                {
+                    checkNodeExits(e.Node);
+                }
 
                 reloadResult();
             }
@@ -266,15 +237,54 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event Run Script
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRunScript_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtResult.Text)) return;
+
+            txtLog.Text = string.Empty;
+            foreach (KeyValuePair<string, string> entry in dicResult)
+            {
+                string fileName = getFileName(entry.Key);
+                string path = entry.Value;
+                try
+                {
+                    if (!File.Exists(path))
+                    {
+                        txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
+                        continue;
+                    }
+
+                    string errMessage = DBUtils.ExecuteFileScript(path);
+                    if (string.IsNullOrEmpty(errMessage))
+                    {
+                        txtLog.Text += addLog(false, fileName) + "\r\n";
+                    }
+                    else
+                    {
+                        txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
+                }
+            }
+        }
+
+        /// <summary>
         /// Event copy 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCopyResult_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtResult.Text)) return;
+            if (string.IsNullOrEmpty(txtLog.Text)) return;
 
-            Clipboard.SetText(txtResult.Text);
+            Clipboard.SetText(txtLog.Text);
         }
 
         /// <summary>
@@ -285,8 +295,10 @@ namespace ToolWorking.Views
         private void btnClearResult_Click(object sender, EventArgs e)
         {
             dicResult.Clear();
-            txtUser.Text = string.Empty;
             txtResult.Text = string.Empty;
+            txtLog.Text = string.Empty;
+            btnRunScript.Enabled = false;
+            btnCopyResult.Enabled = false;
         }
         #endregion
 
@@ -370,50 +382,11 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
-        /// Search node in tree
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="valSearch"></param>
-        /// <param name="dirRemove"></param>
-        private void searchNode(TreeNode node, string valSearch, string dirRemove)
-        {
-            string nodePath = node.Tag as string;
-
-            if (nodePath.Contains(valSearch))
-            {
-                string nodeKey = node.FullPath;
-                string nodeValue = node.Tag as string;
-
-                if (CUtils.dicIsExists(dicResult, nodeKey))
-                {
-                    dicResult.Remove(nodeKey);
-                }
-                else
-                {
-                    FileAttributes attr = File.GetAttributes(nodePath);
-                    if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
-                    {
-                        nodeValue = !String.IsNullOrEmpty(dirRemove) ? nodeValue.Replace(dirRemove, string.Empty) : nodeValue;
-                        dicResult.Add(nodeKey, nodeValue);
-                    }
-                }
-            }
-
-            if (node.Nodes.Count > 0)
-            {
-                foreach (TreeNode actualNode in node.Nodes)
-                {
-                    searchNode(actualNode, valSearch, dirRemove);
-                }
-            }
-        }
-
-        /// <summary>
         /// Check exit node in tree
         /// </summary>
         /// <param name="node"></param>
         /// <param name="dirRemove"></param>
-        private void checkNodeExits(TreeNode node, string dirRemove)
+        private void checkNodeExits(TreeNode node)
         {
             string nodeKey = node.FullPath;
             string nodeValue = node.Tag as string;
@@ -427,7 +400,6 @@ namespace ToolWorking.Views
                 FileAttributes attr = File.GetAttributes(nodeValue);
                 if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                 {
-                    nodeValue = !String.IsNullOrEmpty(dirRemove) ? nodeValue.Replace(dirRemove, string.Empty) : nodeValue;
                     dicResult.Add(nodeKey, nodeValue);
                 }
             }
@@ -436,7 +408,7 @@ namespace ToolWorking.Views
             {
                 foreach (TreeNode actualNode in node.Nodes)
                 {
-                    checkNodeExits(actualNode, dirRemove);
+                    checkNodeExits(actualNode);
                 }
             }
         }
@@ -454,10 +426,51 @@ namespace ToolWorking.Views
 
             if (!string.IsNullOrEmpty(txtResult.Text))
             {
+                btnRunScript.Enabled = true;
                 btnCopyResult.Enabled = true;
+            }
+            else
+            {
+                btnRunScript.Enabled = false;
+                btnCopyResult.Enabled = false;
             }
         }
 
+        /// <summary>
+        /// Get file name 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private string getFileName(string fileName)
+        {
+            int index = fileName.LastIndexOf("\\");
+            if (index == -1)
+            {
+                return fileName;
+            }
+            else
+            {
+                return fileName.Substring(index + 1);
+            }
+        }
+
+        /// <summary>
+        /// Create log run script
+        /// </summary>
+        /// <param name="isError"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private string addLog(bool isError, string fileName)
+        {
+            if (isError)
+            {
+                return "Run Script \t" + fileName + "\t" + "Error";
+            }
+            else
+            {
+                return "Run Script \t" + fileName + "\t" + "Done";
+            }
+        }
         #endregion
 
     }

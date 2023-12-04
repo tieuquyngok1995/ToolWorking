@@ -32,6 +32,8 @@ namespace ToolWorking.Views
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Database));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.cbDatabase = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.rbRunQuery = new System.Windows.Forms.RadioButton();
             this.rbRunScript = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,8 +55,10 @@ namespace ToolWorking.Views
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.txtResult = new System.Windows.Forms.RichTextBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelCenter = new System.Windows.Forms.Panel();
+            this.txtLog = new System.Windows.Forms.RichTextBox();
+            this.btnRunScript = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelCenter.SuspendLayout();
@@ -62,6 +66,8 @@ namespace ToolWorking.Views
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.cbDatabase);
+            this.panelTop.Controls.Add(this.label4);
             this.panelTop.Controls.Add(this.rbRunQuery);
             this.panelTop.Controls.Add(this.rbRunScript);
             this.panelTop.Controls.Add(this.label5);
@@ -79,14 +85,37 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 67);
+            this.panelTop.Size = new System.Drawing.Size(660, 63);
             this.panelTop.TabIndex = 0;
+            // 
+            // cbDatabase
+            // 
+            this.cbDatabase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDatabase.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.cbDatabase.Items.AddRange(new object[] {
+            "esKyotsu",
+            "Usolia障害者福祉システム"});
+            this.cbDatabase.Location = new System.Drawing.Point(220, 6);
+            this.cbDatabase.Name = "cbDatabase";
+            this.cbDatabase.Size = new System.Drawing.Size(120, 25);
+            this.cbDatabase.TabIndex = 22;
+            this.cbDatabase.SelectedIndexChanged += new System.EventHandler(this.cbDatabase_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.label4.Location = new System.Drawing.Point(148, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(72, 17);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Database";
             // 
             // rbRunQuery
             // 
             this.rbRunQuery.AutoSize = true;
             this.rbRunQuery.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbRunQuery.Location = new System.Drawing.Point(152, 36);
+            this.rbRunQuery.Location = new System.Drawing.Point(150, 37);
             this.rbRunQuery.Name = "rbRunQuery";
             this.rbRunQuery.Size = new System.Drawing.Size(91, 21);
             this.rbRunQuery.TabIndex = 20;
@@ -99,7 +128,7 @@ namespace ToolWorking.Views
             this.rbRunScript.AutoSize = true;
             this.rbRunScript.Checked = true;
             this.rbRunScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbRunScript.Location = new System.Drawing.Point(57, 37);
+            this.rbRunScript.Location = new System.Drawing.Point(55, 37);
             this.rbRunScript.Name = "rbRunScript";
             this.rbRunScript.Size = new System.Drawing.Size(89, 21);
             this.rbRunScript.TabIndex = 19;
@@ -112,7 +141,7 @@ namespace ToolWorking.Views
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label5.Location = new System.Drawing.Point(6, 40);
+            this.label5.Location = new System.Drawing.Point(6, 39);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 17);
             this.label5.TabIndex = 18;
@@ -121,17 +150,18 @@ namespace ToolWorking.Views
             // btnReloadFolder
             // 
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
-            this.btnReloadFolder.Location = new System.Drawing.Point(626, 37);
+            this.btnReloadFolder.Location = new System.Drawing.Point(626, 36);
             this.btnReloadFolder.Name = "btnReloadFolder";
-            this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnReloadFolder.Size = new System.Drawing.Size(26, 24);
             this.btnReloadFolder.TabIndex = 16;
             this.btnReloadFolder.UseVisualStyleBackColor = true;
+            this.btnReloadFolder.Click += new System.EventHandler(this.btnReloadFolder_Click);
             // 
             // lblPathFolder
             // 
             this.lblPathFolder.AutoSize = true;
             this.lblPathFolder.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblPathFolder.Location = new System.Drawing.Point(249, 40);
+            this.lblPathFolder.Location = new System.Drawing.Point(248, 39);
             this.lblPathFolder.Name = "lblPathFolder";
             this.lblPathFolder.Size = new System.Drawing.Size(107, 17);
             this.lblPathFolder.TabIndex = 17;
@@ -140,26 +170,29 @@ namespace ToolWorking.Views
             // btnOpenFolder
             // 
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(596, 37);
+            this.btnOpenFolder.Location = new System.Drawing.Point(596, 36);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
             this.btnOpenFolder.TabIndex = 15;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
+            this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
             // txtPathFolder
             // 
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathFolder.Location = new System.Drawing.Point(357, 37);
+            this.txtPathFolder.Location = new System.Drawing.Point(357, 36);
             this.txtPathFolder.Name = "txtPathFolder";
+            this.txtPathFolder.ReadOnly = true;
             this.txtPathFolder.Size = new System.Drawing.Size(234, 24);
             this.txtPathFolder.TabIndex = 14;
             // 
             // txtPass
             // 
             this.txtPass.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPass.Location = new System.Drawing.Point(491, 8);
+            this.txtPass.Location = new System.Drawing.Point(536, 6);
             this.txtPass.Name = "txtPass";
-            this.txtPass.Size = new System.Drawing.Size(130, 24);
+            this.txtPass.PasswordChar = '*';
+            this.txtPass.Size = new System.Drawing.Size(85, 24);
             this.txtPass.TabIndex = 13;
             this.txtPass.Leave += new System.EventHandler(this.txtPass_Leave);
             // 
@@ -167,7 +200,7 @@ namespace ToolWorking.Views
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label3.Location = new System.Drawing.Point(420, 12);
+            this.label3.Location = new System.Drawing.Point(466, 10);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 17);
             this.label3.TabIndex = 12;
@@ -176,9 +209,9 @@ namespace ToolWorking.Views
             // btnCheckConnect
             // 
             this.btnCheckConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnCheckConnect.Image")));
-            this.btnCheckConnect.Location = new System.Drawing.Point(626, 8);
+            this.btnCheckConnect.Location = new System.Drawing.Point(626, 6);
             this.btnCheckConnect.Name = "btnCheckConnect";
-            this.btnCheckConnect.Size = new System.Drawing.Size(26, 26);
+            this.btnCheckConnect.Size = new System.Drawing.Size(26, 24);
             this.btnCheckConnect.TabIndex = 11;
             this.btnCheckConnect.UseVisualStyleBackColor = true;
             this.btnCheckConnect.Click += new System.EventHandler(this.btnCheckConnect_Click);
@@ -187,7 +220,7 @@ namespace ToolWorking.Views
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label2.Location = new System.Drawing.Point(249, 12);
+            this.label2.Location = new System.Drawing.Point(343, 10);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(33, 17);
             this.label2.TabIndex = 9;
@@ -196,9 +229,9 @@ namespace ToolWorking.Views
             // txtUser
             // 
             this.txtUser.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtUser.Location = new System.Drawing.Point(285, 8);
+            this.txtUser.Location = new System.Drawing.Point(378, 6);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(130, 24);
+            this.txtUser.Size = new System.Drawing.Size(85, 24);
             this.txtUser.TabIndex = 3;
             this.txtUser.Leave += new System.EventHandler(this.txtUser_Leave);
             // 
@@ -206,7 +239,7 @@ namespace ToolWorking.Views
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(6, 12);
+            this.label1.Location = new System.Drawing.Point(6, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 17);
             this.label1.TabIndex = 2;
@@ -215,17 +248,17 @@ namespace ToolWorking.Views
             // txtServer
             // 
             this.txtServer.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtServer.Location = new System.Drawing.Point(55, 8);
+            this.txtServer.Location = new System.Drawing.Point(55, 6);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(189, 24);
+            this.txtServer.Size = new System.Drawing.Size(90, 24);
             this.txtServer.TabIndex = 0;
             this.txtServer.Leave += new System.EventHandler(this.txtServer_Leave);
             // 
             // progressBarFolder
             // 
-            this.progressBarFolder.Location = new System.Drawing.Point(9, 164);
+            this.progressBarFolder.Location = new System.Drawing.Point(9, 178);
             this.progressBarFolder.Name = "progressBarFolder";
-            this.progressBarFolder.Size = new System.Drawing.Size(642, 23);
+            this.progressBarFolder.Size = new System.Drawing.Size(642, 21);
             this.progressBarFolder.TabIndex = 1;
             // 
             // treeViewFolder
@@ -236,7 +269,7 @@ namespace ToolWorking.Views
             this.treeViewFolder.Location = new System.Drawing.Point(9, 3);
             this.treeViewFolder.Name = "treeViewFolder";
             this.treeViewFolder.SelectedImageIndex = 0;
-            this.treeViewFolder.Size = new System.Drawing.Size(642, 155);
+            this.treeViewFolder.Size = new System.Drawing.Size(642, 169);
             this.treeViewFolder.TabIndex = 6;
             this.treeViewFolder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFolder_AfterSelect);
             this.treeViewFolder.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewFolder_NodeMouseDoubleClick);
@@ -245,17 +278,18 @@ namespace ToolWorking.Views
             // 
             this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
             this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListTree.Images.SetKeyName(0, "icon-folder-16x16.png");
+            this.imageListTree.Images.SetKeyName(0, "icon-folder-2-16x16.png");
             this.imageListTree.Images.SetKeyName(1, "icon-file-16x16.png");
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.btnRunScript);
             this.panelBottom.Controls.Add(this.btnClearResult);
             this.panelBottom.Controls.Add(this.btnCopyResult);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 398);
+            this.panelBottom.Location = new System.Drawing.Point(0, 381);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 47);
+            this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 3;
             // 
             // btnClearResult
@@ -263,11 +297,11 @@ namespace ToolWorking.Views
             this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnClearResult.Image = ((System.Drawing.Image)(resources.GetObject("btnClearResult.Image")));
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearResult.Location = new System.Drawing.Point(526, 22);
+            this.btnClearResult.Location = new System.Drawing.Point(577, 0);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 28);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
             this.btnClearResult.TabIndex = 9;
-            this.btnClearResult.Text = "    Copy";
+            this.btnClearResult.Text = "    Clear";
             this.btnClearResult.UseVisualStyleBackColor = true;
             this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
             // 
@@ -277,9 +311,9 @@ namespace ToolWorking.Views
             this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
             this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCopyResult.Location = new System.Drawing.Point(447, 22);
+            this.btnCopyResult.Location = new System.Drawing.Point(498, 0);
             this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 28);
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 25);
             this.btnCopyResult.TabIndex = 8;
             this.btnCopyResult.Text = "    Copy";
             this.btnCopyResult.UseVisualStyleBackColor = true;
@@ -288,29 +322,53 @@ namespace ToolWorking.Views
             // txtResult
             // 
             this.txtResult.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.txtResult.Location = new System.Drawing.Point(12, 196);
+            this.txtResult.Location = new System.Drawing.Point(9, 205);
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(642, 114);
+            this.txtResult.Size = new System.Drawing.Size(318, 104);
             this.txtResult.TabIndex = 7;
             this.txtResult.Text = "";
             // 
             // panelCenter
             // 
+            this.panelCenter.Controls.Add(this.txtLog);
             this.panelCenter.Controls.Add(this.treeViewFolder);
             this.panelCenter.Controls.Add(this.progressBarFolder);
             this.panelCenter.Controls.Add(this.txtResult);
             this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 67);
+            this.panelCenter.Location = new System.Drawing.Point(0, 63);
             this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 331);
+            this.panelCenter.Size = new System.Drawing.Size(660, 318);
             this.panelCenter.TabIndex = 4;
+            // 
+            // txtLog
+            // 
+            this.txtLog.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.txtLog.Location = new System.Drawing.Point(333, 205);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.Size = new System.Drawing.Size(318, 104);
+            this.txtLog.TabIndex = 8;
+            this.txtLog.Text = "";
+            // 
+            // btnRunScript
+            // 
+            this.btnRunScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnRunScript.Image = ((System.Drawing.Image)(resources.GetObject("btnRunScript.Image")));
+            this.btnRunScript.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRunScript.Location = new System.Drawing.Point(394, 0);
+            this.btnRunScript.Name = "btnRunScript";
+            this.btnRunScript.Size = new System.Drawing.Size(100, 25);
+            this.btnRunScript.TabIndex = 16;
+            this.btnRunScript.Text = "    Run Script";
+            this.btnRunScript.UseVisualStyleBackColor = true;
+            this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
             // 
             // Database
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 445);
+            this.ClientSize = new System.Drawing.Size(660, 411);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
@@ -333,7 +391,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.TreeView treeViewFolder;
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ImageList imageListTree;
         private System.Windows.Forms.RichTextBox txtResult;
         private System.Windows.Forms.TextBox txtUser;
@@ -351,5 +409,9 @@ namespace ToolWorking.Views
         private System.Windows.Forms.RadioButton rbRunScript;
         private System.Windows.Forms.RadioButton rbRunQuery;
         private System.Windows.Forms.Panel panelCenter;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbDatabase;
+        private System.Windows.Forms.RichTextBox txtLog;
+        private System.Windows.Forms.Button btnRunScript;
     }
 }
