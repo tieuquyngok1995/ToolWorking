@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using ToolWorking.Model;
 using ToolWorking.Utils;
@@ -181,7 +182,7 @@ namespace ToolWorking.Views
 
                 if (!File.Exists(pathFile)) return;
 
-                string result = File.ReadAllText(pathFile);
+                string result = File.ReadAllText(pathFile, Encoding.GetEncoding("shift-jis"));
 
                 if (rbReadOpen.Checked)
                 {
@@ -232,9 +233,9 @@ namespace ToolWorking.Views
             //Setting ProgressBar Maximum Value
             progressBarFolder.Maximum = Directory.GetFiles(pathFolder, "*.*", SearchOption.AllDirectories).Length + Directory.GetDirectories(pathFolder, "**", SearchOption.AllDirectories).Length;
             // Load files in folder
-            loadFiles(pathFolder, directory.Name);
+            loadFiles(string.Empty, pathFolder, directory.Name);
 
-            loadSubDirectories(pathFolder);
+            loadSubDirectories(string.Empty, pathFolder);
         }
 
         /// <summary>
@@ -242,8 +243,11 @@ namespace ToolWorking.Views
         /// </summary>
         /// <param name="pathFolder"></param>
         /// <param name="nameFolder"></param>
-        private void loadFiles(string pathFolder, string nameFolder)
+        private void loadFiles(string pathParentFolder, string pathFolder, string nameFolder)
         {
+            string folder = nameFolder;
+            if (!string.IsNullOrEmpty(pathParentFolder)) folder = pathFolder.Replace(pathParentFolder, string.Empty);
+
             string[] Files = Directory.GetFiles(pathFolder, "*.*");
             // Loop through them to see files
             foreach (string file in Files)
@@ -251,7 +255,7 @@ namespace ToolWorking.Views
                 // Get info file
                 FileInfo fileInfo = new FileInfo(file);
                 // Add info to data grid view
-                listFiles.Add(new FileModel(index, nameFolder, getTypeFile(fileInfo.Name), fileInfo.Name, fileInfo.FullName,
+                listFiles.Add(new FileModel(index, folder, getTypeFile(fileInfo.Name), fileInfo.Name, fileInfo.FullName,
                     File.GetLastWriteTime(fileInfo.FullName).ToString("yyyy-MM-dd")));
                 index++;
                 // Update progress
@@ -263,7 +267,7 @@ namespace ToolWorking.Views
         /// Load sub folder in folder
         /// </summary>
         /// <param name="pathFolder"></param>
-        private void loadSubDirectories(string pathFolder)
+        private void loadSubDirectories(string pathParentFolder, string pathFolder)
         {
             // Get all subdirectories
             string[] pathSubFolder = Directory.GetDirectories(pathFolder);
@@ -273,9 +277,9 @@ namespace ToolWorking.Views
                 // Info sub folder
                 DirectoryInfo subDirectory = new DirectoryInfo(subdirectory);
                 // Load files in folder
-                loadFiles(subdirectory, subDirectory.Name);
+                loadFiles(pathParentFolder, subdirectory, subDirectory.Name);
                 // Load sub folder
-                loadSubDirectories(subdirectory);
+                loadSubDirectories(pathFolder, subdirectory);
                 // Update progress
                 updateProgress();
             }
