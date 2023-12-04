@@ -1,6 +1,9 @@
-ToolWorking/bin/Debug/**
-ToolWorking/obj/Debug/**
-ToolWorking/bin/Release/**
-ToolWorking/obj/Release/**/**
-.vs/ToolWorking/v16/.suo
 
+ToolWorking/ToolWorking/obj/*
+ToolWorking/ToolWorking/bin/
+*/.suo
+*/.vs/*
+*.vsidx
+ToolWorking/.vs/ToolWorking/v17/.suo
+ToolWorking/bin/Debug/
+ToolWorking/bin/Debug/
