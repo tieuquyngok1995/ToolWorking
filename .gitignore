@@ -1,9 +1,10 @@
 
-ToolWorking/ToolWorking/obj/*
-ToolWorking/ToolWorking/bin/
 */.suo
 */.vs/*
 *.vsidx
 ToolWorking/.vs/ToolWorking/v17/.suo
 ToolWorking/bin/Debug/
 ToolWorking/bin/Debug/
+
+ToolWorking/ToolWorking/obj/
+ToolWorking/ToolWorking/bin/
