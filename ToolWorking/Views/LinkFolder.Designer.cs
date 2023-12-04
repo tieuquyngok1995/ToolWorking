@@ -48,7 +48,7 @@ namespace ToolWorking.Views
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.txtResult = new System.Windows.Forms.RichTextBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelCenter.SuspendLayout();
             this.SuspendLayout();
@@ -67,13 +67,13 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 67);
+            this.panelTop.Size = new System.Drawing.Size(660, 63);
             this.panelTop.TabIndex = 0;
             // 
             // txtPathRemove
             // 
             this.txtPathRemove.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathRemove.Location = new System.Drawing.Point(131, 37);
+            this.txtPathRemove.Location = new System.Drawing.Point(131, 36);
             this.txtPathRemove.Name = "txtPathRemove";
             this.txtPathRemove.Size = new System.Drawing.Size(180, 24);
             this.txtPathRemove.TabIndex = 5;
@@ -82,9 +82,9 @@ namespace ToolWorking.Views
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(626, 8);
+            this.btnSearchPG.Location = new System.Drawing.Point(626, 6);
             this.btnSearchPG.Name = "btnSearchPG";
-            this.btnSearchPG.Size = new System.Drawing.Size(26, 26);
+            this.btnSearchPG.Size = new System.Drawing.Size(26, 24);
             this.btnSearchPG.TabIndex = 4;
             this.btnSearchPG.UseVisualStyleBackColor = true;
             this.btnSearchPG.Click += new System.EventHandler(this.btnSearchPG_Click);
@@ -92,7 +92,7 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(452, 8);
+            this.txtPGSearch.Location = new System.Drawing.Point(452, 6);
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 3;
@@ -102,7 +102,7 @@ namespace ToolWorking.Views
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label2.Location = new System.Drawing.Point(378, 12);
+            this.label2.Location = new System.Drawing.Point(378, 10);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 4;
@@ -111,9 +111,9 @@ namespace ToolWorking.Views
             // btnReloadFolder
             // 
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
-            this.btnReloadFolder.Location = new System.Drawing.Point(346, 8);
+            this.btnReloadFolder.Location = new System.Drawing.Point(346, 6);
             this.btnReloadFolder.Name = "btnReloadFolder";
-            this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnReloadFolder.Size = new System.Drawing.Size(26, 24);
             this.btnReloadFolder.TabIndex = 2;
             this.btnReloadFolder.UseVisualStyleBackColor = true;
             this.btnReloadFolder.Click += new System.EventHandler(this.btnReloadFolder_Click);
@@ -122,7 +122,7 @@ namespace ToolWorking.Views
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(6, 12);
+            this.label1.Location = new System.Drawing.Point(6, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 17);
             this.label1.TabIndex = 2;
@@ -131,9 +131,9 @@ namespace ToolWorking.Views
             // btnOpenFolder
             // 
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
-            this.btnOpenFolder.Location = new System.Drawing.Point(316, 8);
+            this.btnOpenFolder.Location = new System.Drawing.Point(316, 6);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
             this.btnOpenFolder.TabIndex = 1;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
@@ -141,7 +141,7 @@ namespace ToolWorking.Views
             // txtPathFolder
             // 
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathFolder.Location = new System.Drawing.Point(131, 8);
+            this.txtPathFolder.Location = new System.Drawing.Point(131, 6);
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.ReadOnly = true;
             this.txtPathFolder.Size = new System.Drawing.Size(180, 24);
@@ -151,7 +151,7 @@ namespace ToolWorking.Views
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(6, 40);
+            this.label3.Location = new System.Drawing.Point(6, 39);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(123, 17);
             this.label3.TabIndex = 8;
@@ -159,9 +159,9 @@ namespace ToolWorking.Views
             // 
             // progressBarFolder
             // 
-            this.progressBarFolder.Location = new System.Drawing.Point(9, 193);
+            this.progressBarFolder.Location = new System.Drawing.Point(9, 178);
             this.progressBarFolder.Name = "progressBarFolder";
-            this.progressBarFolder.Size = new System.Drawing.Size(642, 23);
+            this.progressBarFolder.Size = new System.Drawing.Size(642, 21);
             this.progressBarFolder.TabIndex = 1;
             // 
             // treeViewFolder
@@ -172,7 +172,7 @@ namespace ToolWorking.Views
             this.treeViewFolder.Location = new System.Drawing.Point(9, 3);
             this.treeViewFolder.Name = "treeViewFolder";
             this.treeViewFolder.SelectedImageIndex = 0;
-            this.treeViewFolder.Size = new System.Drawing.Size(642, 184);
+            this.treeViewFolder.Size = new System.Drawing.Size(642, 169);
             this.treeViewFolder.TabIndex = 6;
             this.treeViewFolder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFolder_AfterSelect);
             this.treeViewFolder.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewFolder_NodeMouseDoubleClick);
@@ -181,7 +181,7 @@ namespace ToolWorking.Views
             // 
             this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
             this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListTree.Images.SetKeyName(0, "icon-folder-16x16.png");
+            this.imageListTree.Images.SetKeyName(0, "icon-folder-2-16x16.png");
             this.imageListTree.Images.SetKeyName(1, "icon-file-16x16.png");
             // 
             // panelCenter
@@ -192,9 +192,9 @@ namespace ToolWorking.Views
             this.panelCenter.Controls.Add(this.treeViewFolder);
             this.panelCenter.Controls.Add(this.progressBarFolder);
             this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 67);
+            this.panelCenter.Location = new System.Drawing.Point(0, 63);
             this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 378);
+            this.panelCenter.Size = new System.Drawing.Size(660, 348);
             this.panelCenter.TabIndex = 3;
             // 
             // btnClearResult
@@ -202,11 +202,11 @@ namespace ToolWorking.Views
             this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnClearResult.Image = ((System.Drawing.Image)(resources.GetObject("btnClearResult.Image")));
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearResult.Location = new System.Drawing.Point(577, 341);
+            this.btnClearResult.Location = new System.Drawing.Point(577, 314);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 28);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
             this.btnClearResult.TabIndex = 9;
-            this.btnClearResult.Text = "    Copy";
+            this.btnClearResult.Text = "    Clear";
             this.btnClearResult.UseVisualStyleBackColor = true;
             this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
             // 
@@ -216,9 +216,9 @@ namespace ToolWorking.Views
             this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
             this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCopyResult.Location = new System.Drawing.Point(498, 341);
+            this.btnCopyResult.Location = new System.Drawing.Point(498, 314);
             this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 28);
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 25);
             this.btnCopyResult.TabIndex = 8;
             this.btnCopyResult.Text = "    Copy";
             this.btnCopyResult.UseVisualStyleBackColor = true;
@@ -227,18 +227,18 @@ namespace ToolWorking.Views
             // txtResult
             // 
             this.txtResult.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.txtResult.Location = new System.Drawing.Point(9, 222);
+            this.txtResult.Location = new System.Drawing.Point(9, 205);
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(642, 114);
+            this.txtResult.Size = new System.Drawing.Size(642, 104);
             this.txtResult.TabIndex = 7;
             this.txtResult.Text = "";
             // 
             // LinkFolder
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 445);
+            this.ClientSize = new System.Drawing.Size(660, 411);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -261,7 +261,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Panel panelCenter;
         private System.Windows.Forms.Button btnReloadFolder;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ImageList imageListTree;
         private System.Windows.Forms.RichTextBox txtResult;
         private System.Windows.Forms.Button btnSearchPG;

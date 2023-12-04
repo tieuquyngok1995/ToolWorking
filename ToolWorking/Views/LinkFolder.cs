@@ -81,7 +81,7 @@ namespace ToolWorking.Views
                 // Clear All Nodes if Already Exists
                 treeViewFolder.Nodes.Clear();
                 dicResult.Clear();
-                toolTip1.ShowAlways = true;
+                toolTip.ShowAlways = true;
                 if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
                 {
                     loadDirectory(txtPathFolder.Text);
