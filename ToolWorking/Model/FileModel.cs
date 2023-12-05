@@ -9,18 +9,19 @@
         public string type { get; set; }
 
         public string fileName { get; set; }
+
         public string pathFile { get; set; }
 
         public string date { get; set; }
 
-        public FileModel(int no, string folderName, string type, string fileName, string pathFile, string date)
+        public FileModel(int _no, string _folderName, string _type, string _fileName, string _pathFile, string _date)
         {
-            this.no = no;
-            this.folderName = folderName;
-            this.type = type;
-            this.fileName = fileName;
-            this.pathFile = pathFile;
-            this.date = date;
+            no = _no;
+            folderName = _folderName;
+            type = _type;
+            fileName = _fileName;
+            pathFile = _pathFile;
+            date = _date;
         }
     }
 }

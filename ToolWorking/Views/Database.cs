@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using ToolWorking.Model;
 using ToolWorking.Utils;
 
 namespace ToolWorking.Views
@@ -15,6 +16,10 @@ namespace ToolWorking.Views
         private Dictionary<string, string> dicResult;
         // Tree node
         private TreeNode nodeSelected;
+        // Name Table 
+        private string nameTable;
+        // List column in script table
+        private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
 
         public Database()
         {
@@ -38,12 +43,16 @@ namespace ToolWorking.Views
                 string settingUser = Properties.Settings.Default.userDatabase;
                 string settingPass = Properties.Settings.Default.passDatabase;
                 string pathFolder = Properties.Settings.Default.pathFolderDatabase;
+                int mode = Properties.Settings.Default.modeDatabse;
 
                 txtServer.Text = !string.IsNullOrEmpty(settingServer) ? settingServer : string.Empty;
                 cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
                 txtUser.Text = !string.IsNullOrEmpty(settingUser) ? settingUser : string.Empty;
                 txtPass.Text = !string.IsNullOrEmpty(settingPass) ? settingPass : string.Empty;
                 txtPathFolder.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
+
+                if (mode == 0) { rbRunScript.Checked = true; }
+                else { rbRunQuery.Checked = true; }
             }
             catch (Exception ex)
             {
@@ -128,6 +137,9 @@ namespace ToolWorking.Views
                 panelCenterScript.Visible = true;
                 panelCenterQuery.Visible = false;
                 btnRunScript.Visible = true;
+
+                Properties.Settings.Default.modeDatabse = 0;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -147,6 +159,9 @@ namespace ToolWorking.Views
                 panelCenterScript.Visible = false;
                 panelCenterQuery.Visible = true;
                 btnRunScript.Visible = false;
+
+                Properties.Settings.Default.modeDatabse = 1;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -279,6 +294,78 @@ namespace ToolWorking.Views
                     txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
                 }
             }
+        }
+
+        /// <summary>
+        /// Event change text box script table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtScriptTable_TextChanged(object sender, EventArgs e)
+        {
+            int no = 1;
+            string[] arrTable = txtScriptTable.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
+            // handle data input
+            if (arrTable.Length > 0)
+            {
+                lstColumnTable = new List<ColumnModel>();
+                foreach (var item in arrTable)
+                {
+                    if (string.IsNullOrEmpty(item)) continue;
+
+                    string[] arrItem;
+
+                    if (item.ToUpper().Contains(CONST.SQL_CREATE_TABLE))
+                    {
+                        arrItem = item.Replace(CONST.STRING_DOT, string.Empty).Replace(CONST.STRING_C_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_O_BRACKETS, string.Empty)
+                            .Split(new string[] { CONST.STRING_O_SQU_BRACKETS }, StringSplitOptions.None);
+                        nameTable = arrItem.Length > 2 ? arrItem[2] : null;
+                        continue;
+                    }
+
+                    arrItem = item.Replace(CONST.STRING_C_O_SQU_BRACKETS_SPACE, CONST.STRING_C_SQU_BRACKETS_SPACE)
+                                  .Split(CONST.STRING_SEPARATORS_TABLE, StringSplitOptions.None);
+                    if (arrItem.Length > 1)
+                    {
+                        string name = arrItem[0].Replace(CONST.STRING_O_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_COMMA, string.Empty).Trim();
+                        string type = arrItem[1];
+
+                        int index = type.LastIndexOf(CONST.STRING_C_SQU_BRACKETS);
+                        if (index != -1) type = type.Substring(0, index);
+
+                        index = type.LastIndexOf(CONST.STRING_O_BRACKETS);
+                        if (index != -1) type = type.Substring(0, index);
+
+                        type = CUtils.ConvertSQLToCType(type);
+                        if (type.Equals(CONST.C_TYPE_STRING))
+                        {
+                            string[] arr = arrItem[1].Split(']');
+                            type = arr.Length > 1 ? type + arr[1].ToUpper().Replace("NULL", string.Empty).Replace(",", string.Empty).Trim() : type;
+                        }
+
+                        lstColumnTable.Add(new ColumnModel(no, name, type.ToLower(), ""));
+                        no++;
+                    }
+                }
+            }
+
+            // add data to grid 
+            if (lstColumnTable.Count > 0)
+            {
+                gridInputValue.DataSource = lstColumnTable;
+            }
+        }
+
+        /// <summary>
+        /// Event select text in text box script table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtScriptTable_Click(object sender, EventArgs e)
+        {
+            txtScriptTable.SelectAll();
+            txtScriptTable.Focus();
         }
 
         /// <summary>
@@ -478,6 +565,7 @@ namespace ToolWorking.Views
             }
         }
         #endregion
+
 
     }
 }

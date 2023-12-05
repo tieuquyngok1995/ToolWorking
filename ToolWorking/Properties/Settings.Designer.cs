@@ -130,5 +130,17 @@ namespace ToolWorking.Properties {
                 this["database"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int modeDatabse {
+            get {
+                return ((int)(this["modeDatabse"]));
+            }
+            set {
+                this["modeDatabse"] = value;
+            }
+        }
     }
 }

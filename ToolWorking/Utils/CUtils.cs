@@ -23,7 +23,7 @@ namespace ToolWorking.Utils
         #region Check
         public static bool dicIsExists(Dictionary<string, string> dic, string key)
         {
-            if (dic.ContainsKey(key)) return true; 
+            if (dic.ContainsKey(key)) return true;
             return false;
         }
 
@@ -34,5 +34,25 @@ namespace ToolWorking.Utils
         }
         #endregion
 
+        #region Convert 
+        public static string ConvertSQLToCType(string type)
+        {
+            switch (type)
+            {
+                case var varchar when type.Contains(CONST.SQL_TYPE_VARCHAR):
+                case var nvarchar when type.Contains(CONST.SQL_TYPE_NVARCHAR):
+                    return CONST.C_TYPE_STRING;
+                case CONST.SQL_TYPE_DATE:
+                case CONST.SQL_TYPE_DATE_TIME:
+                    return CONST.C_TYPE_DATE_TIME;
+                case CONST.SQL_TYPE_MONEY:
+                case CONST.SQL_TYPE_NUMERIC:
+                case CONST.SQL_TYPE_DECIMAL:
+                    return CONST.C_TYPE_DECIMAL;
+                default:
+                    return CONST.C_TYPE_INT;
+            }
+        }
+        #endregion
     }
 }
