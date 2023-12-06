@@ -474,6 +474,9 @@ namespace ToolWorking.Views
                         txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
                     }
                 }
+
+                if (!string.IsNullOrEmpty(txtLog.Text)) btnCopyResult.Enabled = true;
+                else btnCopyResult.Enabled = false;
             }
             else if (rbRunQuery.Checked)
             {
@@ -495,7 +498,7 @@ namespace ToolWorking.Views
                         if (!string.IsNullOrEmpty(errMessage))
                         {
                             MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
+                            break;
                         }
                     }
                 }
@@ -511,12 +514,11 @@ namespace ToolWorking.Views
                     if (!string.IsNullOrEmpty(errMessage))
                     {
                         MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
                     }
                 }
 
                 if (!string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = true;
-                if (string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = false;
+                else btnCopyResult.Enabled = false;
             }
         }
 
@@ -548,11 +550,23 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void btnClearResult_Click(object sender, EventArgs e)
         {
-            dicResult.Clear();
-            txtResult.Text = string.Empty;
-            txtLog.Text = string.Empty;
-            btnRunScript.Enabled = false;
-            btnCopyResult.Enabled = false;
+            if (rbRunScript.Checked)
+            {
+                dicResult.Clear();
+                txtResult.Text = string.Empty;
+                txtLog.Text = string.Empty;
+                btnRunScript.Enabled = false;
+                btnCopyResult.Enabled = false;
+            }
+            else if (rbRunQuery.Checked)
+            {
+                txtScriptTable.Text = string.Empty;
+                gridInputValue.DataSource = new List<ColumnModel>();
+                chkMultiRow.Checked = false;
+                btnRunScript.Enabled = false;
+                btnCopyResult.Enabled = false;
+                txtResultQuery.Text = string.Empty;
+            }
         }
         #endregion
 
@@ -681,12 +695,10 @@ namespace ToolWorking.Views
             if (!string.IsNullOrEmpty(txtResult.Text))
             {
                 btnRunScript.Enabled = true;
-                btnCopyResult.Enabled = true;
             }
             else
             {
                 btnRunScript.Enabled = false;
-                btnCopyResult.Enabled = false;
             }
         }
 
@@ -854,6 +866,5 @@ namespace ToolWorking.Views
             }
         }
         #endregion
-
     }
 }
