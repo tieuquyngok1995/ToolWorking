@@ -14,6 +14,8 @@ namespace ToolWorking.Views
 {
     public partial class SearchFile : Form
     {
+        // Path folder
+        string pathFolderDatabase;
         // List data files
         private List<FileModel> listFiles;
         // Index row table
@@ -38,9 +40,9 @@ namespace ToolWorking.Views
             try
             {
                 // get path folder in setting
-                string pathFolder = Properties.Settings.Default.pathFolderSearch;
+                pathFolderDatabase = Properties.Settings.Default.pathFolderSearch;
 
-                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
+                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
 
                 txtPathFolder.Select();
                 txtPathFolder.Focus();
@@ -61,6 +63,7 @@ namespace ToolWorking.Views
             try
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (!string.IsNullOrEmpty(pathFolderDatabase)) fbd.SelectedPath = pathFolderDatabase;
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txtPathFolder.Text = fbd.SelectedPath;

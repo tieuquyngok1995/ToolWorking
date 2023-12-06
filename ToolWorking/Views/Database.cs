@@ -12,6 +12,8 @@ namespace ToolWorking.Views
     {
         // Database connection
         string database;
+        // Path folder
+        string pathFolderDatabase;
         // Dictionary result
         private Dictionary<string, string> dicResult;
         // Tree node
@@ -45,14 +47,14 @@ namespace ToolWorking.Views
                 database = Properties.Settings.Default.database;
                 string settingUser = Properties.Settings.Default.userDatabase;
                 string settingPass = Properties.Settings.Default.passDatabase;
-                string pathFolder = Properties.Settings.Default.pathFolderDatabase;
+                pathFolderDatabase = Properties.Settings.Default.pathFolderDatabase;
                 int mode = Properties.Settings.Default.modeDatabse;
 
                 txtServer.Text = !string.IsNullOrEmpty(settingServer) ? settingServer : string.Empty;
                 cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
                 txtUser.Text = !string.IsNullOrEmpty(settingUser) ? settingUser : string.Empty;
                 txtPass.Text = !string.IsNullOrEmpty(settingPass) ? settingPass : string.Empty;
-                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
+                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
 
                 if (mode == 0) { rbRunScript.Checked = true; }
                 else { rbRunQuery.Checked = true; }
@@ -190,6 +192,7 @@ namespace ToolWorking.Views
             try
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (!string.IsNullOrEmpty(pathFolderDatabase)) fbd.SelectedPath = pathFolderDatabase;
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txtPathFolder.Text = fbd.SelectedPath;

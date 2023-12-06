@@ -9,6 +9,8 @@ namespace ToolWorking.Views
 {
     public partial class LinkFolder : Form
     {
+        // Path folder
+        string pathFolderDatabase;
         // Dictionary result
         private Dictionary<string, string> dicResult;
         // Tree node
@@ -31,10 +33,10 @@ namespace ToolWorking.Views
         {
             try
             {
-                string pathFolder = Properties.Settings.Default.pathFolder;
+                pathFolderDatabase = Properties.Settings.Default.pathFolder;
                 string pathFolderRemove = Properties.Settings.Default.pathFolderRemove;
 
-                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
+                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
                 txtPathRemove.Text = !string.IsNullOrEmpty(pathFolderRemove) ? pathFolderRemove : string.Empty;
             }
             catch (Exception ex)
@@ -53,6 +55,7 @@ namespace ToolWorking.Views
             try
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (!string.IsNullOrEmpty(pathFolderDatabase)) fbd.SelectedPath = pathFolderDatabase;
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txtPathFolder.Text = fbd.SelectedPath;
