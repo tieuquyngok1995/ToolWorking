@@ -54,6 +54,9 @@ namespace ToolWorking.Views
             this.treeViewFolder = new System.Windows.Forms.TreeView();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.lblNumRows = new System.Windows.Forms.Label();
+            this.chkMultiRow = new System.Windows.Forms.CheckBox();
+            this.txtNumRow = new System.Windows.Forms.TextBox();
             this.btnRunScript = new System.Windows.Forms.Button();
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnCopyResult = new System.Windows.Forms.Button();
@@ -65,21 +68,22 @@ namespace ToolWorking.Views
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtScriptTable = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtResultQuery = new System.Windows.Forms.RichTextBox();
             this.gridInputValue = new System.Windows.Forms.DataGridView();
             this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtResultQuery = new System.Windows.Forms.RichTextBox();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelCenterScript.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridInputValue)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -301,6 +305,9 @@ namespace ToolWorking.Views
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.lblNumRows);
+            this.panelBottom.Controls.Add(this.chkMultiRow);
+            this.panelBottom.Controls.Add(this.txtNumRow);
             this.panelBottom.Controls.Add(this.btnRunScript);
             this.panelBottom.Controls.Add(this.btnClearResult);
             this.panelBottom.Controls.Add(this.btnCopyResult);
@@ -309,6 +316,41 @@ namespace ToolWorking.Views
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 3;
+            // 
+            // lblNumRows
+            // 
+            this.lblNumRows.AutoSize = true;
+            this.lblNumRows.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblNumRows.Location = new System.Drawing.Point(101, 4);
+            this.lblNumRows.Name = "lblNumRows";
+            this.lblNumRows.Size = new System.Drawing.Size(77, 17);
+            this.lblNumRows.TabIndex = 24;
+            this.lblNumRows.Text = "Num Rows";
+            this.lblNumRows.Visible = false;
+            // 
+            // chkMultiRow
+            // 
+            this.chkMultiRow.AutoSize = true;
+            this.chkMultiRow.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.chkMultiRow.Location = new System.Drawing.Point(9, 3);
+            this.chkMultiRow.Name = "chkMultiRow";
+            this.chkMultiRow.Size = new System.Drawing.Size(95, 21);
+            this.chkMultiRow.TabIndex = 17;
+            this.chkMultiRow.Text = "Multi Rows";
+            this.chkMultiRow.UseVisualStyleBackColor = true;
+            this.chkMultiRow.Visible = false;
+            this.chkMultiRow.CheckedChanged += new System.EventHandler(this.chkMultiRow_CheckedChanged);
+            // 
+            // txtNumRow
+            // 
+            this.txtNumRow.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtNumRow.Location = new System.Drawing.Point(184, 1);
+            this.txtNumRow.MaxLength = 5;
+            this.txtNumRow.Name = "txtNumRow";
+            this.txtNumRow.Size = new System.Drawing.Size(107, 24);
+            this.txtNumRow.TabIndex = 23;
+            this.txtNumRow.Visible = false;
+            this.txtNumRow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumRow_KeyPress);
             // 
             // btnRunScript
             // 
@@ -430,28 +472,6 @@ namespace ToolWorking.Views
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input Value ";
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.txtResultQuery);
-            this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupBox3.Location = new System.Drawing.Point(378, 78);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(274, 232);
-            this.groupBox3.TabIndex = 23;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Result Query";
-            // 
-            // txtResultQuery
-            // 
-            this.txtResultQuery.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtResultQuery.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtResultQuery.Location = new System.Drawing.Point(3, 19);
-            this.txtResultQuery.Name = "txtResultQuery";
-            this.txtResultQuery.ReadOnly = true;
-            this.txtResultQuery.Size = new System.Drawing.Size(268, 210);
-            this.txtResultQuery.TabIndex = 21;
-            this.txtResultQuery.Text = "";
-            // 
             // gridInputValue
             // 
             this.gridInputValue.AllowUserToAddRows = false;
@@ -473,7 +493,8 @@ namespace ToolWorking.Views
             this.no,
             this.name,
             this.type,
-            this.value});
+            this.value,
+            this.Range});
             this.gridInputValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridInputValue.EnableHeadersVisualStyles = false;
             this.gridInputValue.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -492,6 +513,7 @@ namespace ToolWorking.Views
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridInputValue.Size = new System.Drawing.Size(357, 210);
             this.gridInputValue.TabIndex = 11;
+            this.gridInputValue.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridInputValue_CurrentCellDirtyStateChanged);
             // 
             // no
             // 
@@ -528,6 +550,35 @@ namespace ToolWorking.Views
             this.value.Name = "value";
             this.value.Width = 134;
             // 
+            // Range
+            // 
+            this.Range.DataPropertyName = "range";
+            this.Range.HeaderText = "Range";
+            this.Range.Name = "Range";
+            this.Range.Visible = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.txtResultQuery);
+            this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.groupBox3.Location = new System.Drawing.Point(378, 78);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(274, 232);
+            this.groupBox3.TabIndex = 23;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Result Query";
+            // 
+            // txtResultQuery
+            // 
+            this.txtResultQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtResultQuery.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtResultQuery.Location = new System.Drawing.Point(3, 19);
+            this.txtResultQuery.Name = "txtResultQuery";
+            this.txtResultQuery.ReadOnly = true;
+            this.txtResultQuery.Size = new System.Drawing.Size(268, 210);
+            this.txtResultQuery.TabIndex = 21;
+            this.txtResultQuery.Text = "";
+            // 
             // Database
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -544,12 +595,13 @@ namespace ToolWorking.Views
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
+            this.panelBottom.PerformLayout();
             this.panelCenterScript.ResumeLayout(false);
             this.panelCenterQuery.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridInputValue)).EndInit();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -594,5 +646,9 @@ namespace ToolWorking.Views
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Range;
+        private System.Windows.Forms.CheckBox chkMultiRow;
+        private System.Windows.Forms.Label lblNumRows;
+        private System.Windows.Forms.TextBox txtNumRow;
     }
 }

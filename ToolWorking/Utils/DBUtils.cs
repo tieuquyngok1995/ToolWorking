@@ -118,6 +118,36 @@ namespace ToolWorking.Utils
             connection.Close();
             return errMess;
         }
+
+        /// <summary>
+        /// Execute script sql
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static string ExecuteScript(string query)
+        {
+            string errMess = string.Empty;
+
+            // Open connection
+            connection = GetDBConnection();
+            connection.Open();
+            SqlTransaction sqlTran = connection.BeginTransaction();
+
+            try
+            {
+                SqlCommand command = new SqlCommand(query, connection, sqlTran);
+                command.ExecuteNonQuery();
+                sqlTran.Commit();
+            }
+            catch (SqlException ex)
+            {
+                sqlTran.Rollback();
+                errMess += ex.Message + "\r\n";
+            }
+
+            connection.Close();
+            return errMess;
+        }
     }
 }
 

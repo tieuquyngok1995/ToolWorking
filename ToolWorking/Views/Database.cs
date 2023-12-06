@@ -18,6 +18,8 @@ namespace ToolWorking.Views
         private TreeNode nodeSelected;
         // Name Table 
         private string nameTable;
+        // Template insert
+        private string tempInsert;
         // List column in script table
         private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
 
@@ -26,6 +28,7 @@ namespace ToolWorking.Views
             InitializeComponent();
 
             dicResult = new Dictionary<string, string>();
+            tempInsert = "INSERT INTO [dbo].[{0}] VALUES ( {1} )";
         }
 
         #region Event
@@ -71,6 +74,11 @@ namespace ToolWorking.Views
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Evemt change combobx database
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbDatabase_SelectedIndexChanged(object sender, EventArgs e)
         {
             database = this.cbDatabase.GetItemText(this.cbDatabase.SelectedItem);
@@ -88,7 +96,6 @@ namespace ToolWorking.Views
             Properties.Settings.Default.userDatabase = txtUser.Text;
             Properties.Settings.Default.Save();
         }
-
 
         /// <summary>
         /// Event change value text box pass
@@ -136,7 +143,11 @@ namespace ToolWorking.Views
                 btnReloadFolder.Visible = true;
                 panelCenterScript.Visible = true;
                 panelCenterQuery.Visible = false;
-                btnRunScript.Visible = true;
+                chkMultiRow.Visible = false;
+                lblNumRows.Visible = false;
+                txtNumRow.Visible = false;
+                btnRunScript.Enabled = false;
+                btnRunScript.Text = "    Run Script";
 
                 Properties.Settings.Default.modeDatabse = 0;
                 Properties.Settings.Default.Save();
@@ -158,7 +169,11 @@ namespace ToolWorking.Views
                 btnReloadFolder.Visible = false;
                 panelCenterScript.Visible = false;
                 panelCenterQuery.Visible = true;
-                btnRunScript.Visible = false;
+                chkMultiRow.Visible = true;
+                lblNumRows.Visible = chkMultiRow.Checked;
+                txtNumRow.Visible = chkMultiRow.Checked;
+                btnRunScript.Enabled = false;
+                btnRunScript.Text = "    Run Query";
 
                 Properties.Settings.Default.modeDatabse = 1;
                 Properties.Settings.Default.Save();
@@ -258,45 +273,6 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
-        /// Event Run Script
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnRunScript_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtResult.Text)) return;
-
-            txtLog.Text = string.Empty;
-            foreach (KeyValuePair<string, string> entry in dicResult)
-            {
-                string fileName = getFileName(entry.Key);
-                string path = entry.Value;
-                try
-                {
-                    if (!File.Exists(path))
-                    {
-                        txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
-                        continue;
-                    }
-
-                    string errMessage = DBUtils.ExecuteFileScript(path);
-                    if (string.IsNullOrEmpty(errMessage))
-                    {
-                        txtLog.Text += addLog(false, fileName) + "\r\n";
-                    }
-                    else
-                    {
-                        txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
-                }
-            }
-        }
-
-        /// <summary>
         /// Event change text box script table
         /// </summary>
         /// <param name="sender"></param>
@@ -338,13 +314,64 @@ namespace ToolWorking.Views
                         if (index != -1) type = type.Substring(0, index);
 
                         type = CUtils.ConvertSQLToCType(type);
+                        int range = 0;
                         if (type.Equals(CONST.C_TYPE_STRING))
                         {
-                            string[] arr = arrItem[1].Split(']');
-                            type = arr.Length > 1 ? type + arr[1].ToUpper().Replace("NULL", string.Empty).Replace(",", string.Empty).Trim() : type;
+                            string[] arr = arrItem[1].Split(new string[] { CONST.STRING_O_BRACKETS, CONST.STRING_C_BRACKETS }, StringSplitOptions.None);
+                            range = arr.Length > 1 ? Convert.ToInt32(arr[1]) : 0;
+                            type = type + "(" + range + ")";
                         }
 
-                        lstColumnTable.Add(new ColumnModel(no, name, type.ToLower(), ""));
+                        string defaultValue = string.Empty;
+                        if (type.Contains(CONST.C_TYPE_STRING))
+                        {
+                            if (name.Contains("コード"))
+                            {
+                                defaultValue = addValue(range) + "1";
+                            }
+                            else if (range > 7)
+                            {
+                                defaultValue = "Fjn-Test1";
+                            }
+                            else if (range == 7)
+                            {
+                                defaultValue = "Fjn-Test";
+                            }
+                            else if (range == 6)
+                            {
+                                defaultValue = "FjnTest";
+                            }
+                            else if (range == 4)
+                            {
+                                defaultValue = "Test";
+                            }
+                            else if (range == 3)
+                            {
+                                defaultValue = "Fjn";
+                            }
+                            else if (range == 2)
+                            {
+                                defaultValue = "01";
+                            }
+                            else if (range == 1)
+                            {
+                                defaultValue = "1";
+                            }
+                        }
+                        else if (type.Contains(CONST.C_TYPE_DATE_TIME))
+                        {
+                            defaultValue = DateTime.Now.ToString("dd/MM/yyyy");
+                        }
+                        else if (type.Contains(CONST.C_TYPE_DOUBLE))
+                        {
+                            defaultValue = "1.0";
+                        }
+                        else
+                        {
+                            defaultValue = "1";
+                        }
+
+                        lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
                         no++;
                     }
                 }
@@ -354,6 +381,7 @@ namespace ToolWorking.Views
             if (lstColumnTable.Count > 0)
             {
                 gridInputValue.DataSource = lstColumnTable;
+                btnRunScript.Enabled = true;
             }
         }
 
@@ -369,15 +397,148 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event set value to cell table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gridInputValue_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (gridInputValue.IsCurrentCellDirty)
+            {
+                gridInputValue.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        /// <summary>
+        /// Event check add multi row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chkMultiRow_CheckedChanged(object sender, EventArgs e)
+        {
+            txtNumRow.Visible = chkMultiRow.Checked;
+            lblNumRows.Visible = chkMultiRow.Checked;
+        }
+
+        /// <summary>
+        /// Event check valid input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtNumRow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Event Run Script
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRunScript_Click(object sender, EventArgs e)
+        {
+            string errMessage = string.Empty;
+
+            if (rbRunScript.Checked)
+            {
+                if (string.IsNullOrEmpty(txtResult.Text)) return;
+
+                txtLog.Text = string.Empty;
+                foreach (KeyValuePair<string, string> entry in dicResult)
+                {
+                    string fileName = getFileName(entry.Key);
+                    string path = entry.Value;
+                    try
+                    {
+                        if (!File.Exists(path))
+                        {
+                            txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
+                            continue;
+                        }
+
+                        errMessage = DBUtils.ExecuteFileScript(path);
+                        if (string.IsNullOrEmpty(errMessage))
+                        {
+                            txtLog.Text += addLog(false, fileName) + "\r\n";
+                        }
+                        else
+                        {
+                            txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
+                    }
+                }
+            }
+            else if (rbRunQuery.Checked)
+            {
+                txtResultQuery.Text = string.Empty;
+
+                string value = string.Empty;
+                if (chkMultiRow.Checked)
+                {
+                    int numRow = Convert.ToInt32(txtNumRow.Text);
+                    for (int i = 1; i <= numRow; i++)
+                    {
+                        value = getValue(i);
+                        if (string.IsNullOrEmpty(value)) return;
+
+                        value = string.Format(tempInsert, nameTable, value);
+                        txtResultQuery.Text += value + "\r\n";
+
+                        errMessage = DBUtils.ExecuteScript(value);
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    value = getValue(null);
+                    if (string.IsNullOrEmpty(value)) return;
+
+                    value = string.Format(tempInsert, nameTable, value);
+                    txtResultQuery.Text = value;
+
+                    errMessage = DBUtils.ExecuteScript(value);
+                    if (!string.IsNullOrEmpty(errMessage))
+                    {
+                        MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = true;
+                if (string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = false;
+            }
+        }
+
+        /// <summary>
         /// Event copy 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCopyResult_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtLog.Text)) return;
+            if (rbRunScript.Checked)
+            {
+                if (string.IsNullOrEmpty(txtLog.Text)) return;
 
-            Clipboard.SetText(txtLog.Text);
+                Clipboard.SetText(txtLog.Text);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(txtResultQuery.Text)) return;
+
+                Clipboard.SetText(txtResultQuery.Text);
+            }
         }
 
         /// <summary>
@@ -564,8 +725,135 @@ namespace ToolWorking.Views
                 return "Run Script \t" + fileName + "\t" + "Done";
             }
         }
-        #endregion
 
+        /// <summary>
+        /// Add value to cell table
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        private string addValue(int range)
+        {
+            int index = 0;
+            string result = string.Empty;
+
+            while (index < range - 1)
+            {
+                result += "0";
+                index++;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get value in cell table
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private string getValue(int? index)
+        {
+            string result = string.Empty;
+            foreach (DataGridViewRow row in gridInputValue.Rows)
+            {
+                string name = row.Cells[1].Value.ToString();
+                string type = row.Cells[2].Value.ToString();
+                string value = row.Cells[3].Value.ToString();
+                int range = Convert.ToInt32(row.Cells[4].Value);
+
+                if (isValidate(type, value, range))
+                {
+                    MessageBox.Show("The value of column [" + name + "] entered is incorrect, please edit and try again.", "Error Valid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return string.Empty;
+                }
+
+                if (type.Contains(CONST.C_TYPE_STRING))
+                {
+                    if (index.HasValue)
+                    {
+                        if (range <= 1) value = (index % 10).ToString();
+                        else if (range <= 2) value = (index % 100).ToString();
+                        else if (range <= 3) value = (index % 1000).ToString();
+                        else value = index.ToString();
+
+                        if (name.Contains("コード"))
+                        {
+                            if (value.Length < range)
+                            {
+                                value = addValue(range - value.Length + 1) + value;
+                            }
+                        }
+                        else if (range >= 11)
+                        {
+                            value = "Fjn-Test" + value;
+                        }
+                        else if (range >= 6)
+                        {
+                            value = "Fjn" + value;
+                        }
+                    }
+                    result += "'" + value + "'" + ", ";
+                }
+                else if (type.Equals(CONST.C_TYPE_DATE_TIME))
+                {
+                    result += "'" + value + "'" + ", ";
+                }
+                else if (type.Equals(CONST.C_TYPE_DOUBLE))
+                {
+                    if (index.HasValue)
+                    {
+                        result += index + "." + (index % 10).ToString() + ", ";
+                    }
+                    else
+                    {
+                        result += value + ", ";
+                    }
+                }
+                else
+                {
+                    if (index.HasValue)
+                    {
+                        result += index + ", ";
+                    }
+                    else
+                    {
+                        result += value + ", ";
+                    }
+                }
+            }
+
+            return result.Trim().TrimEnd(',');
+        }
+
+        /// <summary>
+        /// Check validate input in table
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
+        private bool isValidate(string type, string value, int range)
+        {
+            if (type.Contains(CONST.C_TYPE_STRING))
+            {
+                return value.Length > range;
+            }
+            else if (type.Contains(CONST.C_TYPE_DATE_TIME))
+            {
+                DateTime val;
+                return !DateTime.TryParse(value, out val);
+            }
+            else if (type.Contains(CONST.C_TYPE_DOUBLE))
+            {
+                double val;
+                return !Double.TryParse(value, out val);
+            }
+            else
+            {
+                int val;
+                return !int.TryParse(value, out val);
+            }
+        }
+        #endregion
 
     }
 }

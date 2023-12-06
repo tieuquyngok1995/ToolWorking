@@ -167,6 +167,7 @@ namespace ToolWorking.Views
         private void rbReadOpen_CheckedChanged(object sender, EventArgs e)
         {
             cbProcessOpen.Visible = true;
+            cbProcessOpen.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -187,6 +188,11 @@ namespace ToolWorking.Views
                 if (rbReadOpen.Checked)
                 {
                     if (cbProcessOpen.SelectedIndex == 0)
+                    {
+                        pathFile = pathFile.Substring(0, pathFile.LastIndexOf("\\"));
+                        Process.Start("explorer.exe", @pathFile);
+                    }
+                    else if (cbProcessOpen.SelectedIndex == 1)
                     {
                         Process.Start("notepad++.exe", $@"""{pathFile}""");
                     }

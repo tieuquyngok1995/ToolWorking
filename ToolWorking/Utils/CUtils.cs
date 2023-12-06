@@ -48,7 +48,7 @@ namespace ToolWorking.Utils
                 case CONST.SQL_TYPE_MONEY:
                 case CONST.SQL_TYPE_NUMERIC:
                 case CONST.SQL_TYPE_DECIMAL:
-                    return CONST.C_TYPE_DECIMAL;
+                    return CONST.C_TYPE_DOUBLE;
                 default:
                     return CONST.C_TYPE_INT;
             }

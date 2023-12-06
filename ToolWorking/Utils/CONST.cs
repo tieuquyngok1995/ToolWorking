@@ -12,6 +12,7 @@
         public const string STRING_COMMA = ",";
         public const string STRING_DOT = ".";
         public const string STRING_O_BRACKETS = "(";
+        public const string STRING_C_BRACKETS = ")";
         public const string STRING_C_SQU_BRACKETS_SPACE = "] ";
         public const string STRING_C_O_SQU_BRACKETS_SPACE = "] [";
         public const string STRING_O_SQU_BRACKETS = "[";
