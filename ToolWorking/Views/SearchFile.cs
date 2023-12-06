@@ -67,6 +67,7 @@ namespace ToolWorking.Views
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txtPathFolder.Text = fbd.SelectedPath;
+                    pathFolderDatabase = fbd.SelectedPath;
 
                     Properties.Settings.Default.pathFolderSearch = fbd.SelectedPath;
                     Properties.Settings.Default.Save();
