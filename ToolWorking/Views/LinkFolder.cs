@@ -80,10 +80,15 @@ namespace ToolWorking.Views
         {
             try
             {
+                // Set cursor as hourglass
+                Cursor.Current = Cursors.WaitCursor;
+
                 // Setting Inital Value of Progress Bar
                 progressBarFolder.Value = 0;
+
                 // Clear All Nodes if Already Exists
                 treeViewFolder.Nodes.Clear();
+
                 dicResult.Clear();
                 toolTip.ShowAlways = true;
                 if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
@@ -96,9 +101,13 @@ namespace ToolWorking.Views
                 {
                     MessageBox.Show("Select Directory!!");
                 }
+                // Set cursor as default arrow
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
+                // Set cursor as default arrow
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -175,6 +184,9 @@ namespace ToolWorking.Views
             {
                 string dirRemove = txtPathRemove.Text.Trim();
 
+                // Set cursor as hourglass
+                Cursor.Current = Cursors.WaitCursor;
+
                 if (nodeSelected.Nodes.Count > 0)
                 {
                     checkNodeExits(nodeSelected, dirRemove);
@@ -185,6 +197,9 @@ namespace ToolWorking.Views
                 }
 
                 reloadResult();
+
+                // Set cursor as default arrow
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
@@ -374,9 +389,16 @@ namespace ToolWorking.Views
         private void reloadResult()
         {
             txtResult.Text = string.Empty;
+
+            // Setting Inital Value of Progress Bar
+            progressBarFolder.Value = 0;
+            //Setting ProgressBar Maximum Value
+            progressBarFolder.Maximum = dicResult.Count;
+
             foreach (KeyValuePair<string, string> entry in dicResult)
             {
                 txtResult.Text = txtResult.Text + entry.Value + "\r\n";
+                updateProgress();
             }
 
             if (!string.IsNullOrEmpty(txtResult.Text))

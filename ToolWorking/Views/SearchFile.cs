@@ -88,6 +88,9 @@ namespace ToolWorking.Views
         {
             try
             {
+                // Set cursor as hourglass
+                Cursor.Current = Cursors.WaitCursor;
+
                 // Setting Inital Value of Progress Bar
                 progressBarFolder.Value = 0;
                 toolTip1.ShowAlways = true;
@@ -109,9 +112,13 @@ namespace ToolWorking.Views
                 {
                     MessageBox.Show("Select Directory!!");
                 }
+                // Set cursor as default arrow
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
+                // Set cursor as default arrow
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
