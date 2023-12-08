@@ -124,6 +124,17 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event select all text in text box Search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtPGSearch_Click(object sender, EventArgs e)
+        {
+            txtPGSearch.SelectAll();
+            txtPGSearch.Focus();
+        }
+
+        /// <summary>
         /// Event change value search
         /// </summary>
         /// <param name="sender"></param>
@@ -348,5 +359,6 @@ namespace ToolWorking.Views
             return string.Empty;
         }
         #endregion
+
     }
 }

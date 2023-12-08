@@ -119,6 +119,8 @@ namespace ToolWorking.Views
         {
             try
             {
+                txtResult.Text = string.Empty;
+                txtLog.Text = string.Empty;
                 if (DBUtils.IsConnection())
                 {
                     MessageBox.Show("Connection database: " + database + " is success.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -151,6 +153,9 @@ namespace ToolWorking.Views
                 btnRunScript.Enabled = false;
                 btnRunScript.Text = "    Run Script";
 
+                txtResult.Text = string.Empty;
+                txtLog.Text = string.Empty;
+
                 Properties.Settings.Default.modeDatabse = 0;
                 Properties.Settings.Default.Save();
             }
@@ -176,6 +181,8 @@ namespace ToolWorking.Views
                 txtNumRow.Visible = chkMultiRow.Checked;
                 btnRunScript.Enabled = false;
                 btnRunScript.Text = "    Run Query";
+
+                txtResultQuery.Text = string.Empty;
 
                 Properties.Settings.Default.modeDatabse = 1;
                 Properties.Settings.Default.Save();
@@ -235,6 +242,10 @@ namespace ToolWorking.Views
                 {
                     MessageBox.Show("Select Directory!!");
                 }
+
+                txtResult.Text = string.Empty;
+                txtLog.Text = string.Empty;
+
                 // Set cursor as default arrow
                 Cursor.Current = Cursors.Default;
             }
@@ -298,7 +309,7 @@ namespace ToolWorking.Views
                 lstColumnTable = new List<ColumnModel>();
                 foreach (var item in arrTable)
                 {
-                    if (string.IsNullOrEmpty(item)) continue;
+                    if (string.IsNullOrEmpty(item) || item.ToLower().Contains("primary key")) continue;
 
                     string[] arrItem;
 
@@ -306,11 +317,11 @@ namespace ToolWorking.Views
                     {
                         arrItem = item.Replace(CONST.STRING_DOT, string.Empty).Replace(CONST.STRING_C_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_O_BRACKETS, string.Empty)
                             .Split(new string[] { CONST.STRING_O_SQU_BRACKETS }, StringSplitOptions.None);
-                        nameTable = arrItem.Length > 2 ? arrItem[2] : null;
+                        nameTable = arrItem.Length > 2 ? arrItem[2].Trim() : null;
                         continue;
                     }
 
-                    arrItem = item.Replace(CONST.STRING_C_O_SQU_BRACKETS_SPACE, CONST.STRING_C_SQU_BRACKETS_SPACE)
+                    arrItem = item.Replace(CONST.STRING_COMMA, string.Empty).Trim().Replace(CONST.STRING_C_O_SQU_BRACKETS_SPACE, CONST.STRING_C_SQU_BRACKETS_SPACE)
                                   .Split(CONST.STRING_SEPARATORS_TABLE, StringSplitOptions.None);
                     if (arrItem.Length > 1)
                     {
@@ -328,7 +339,12 @@ namespace ToolWorking.Views
                         if (type.Equals(CONST.C_TYPE_STRING))
                         {
                             string[] arr = arrItem[1].Split(new string[] { CONST.STRING_O_BRACKETS, CONST.STRING_C_BRACKETS }, StringSplitOptions.None);
-                            range = arr.Length > 1 ? Convert.ToInt32(arr[1]) : 0;
+                            range = 0;
+                            if (arr.Length > 1)
+                            {
+                                if (arr[1].ToUpper().Equals("MAX")) range = 255;
+                                else range = Convert.ToInt32(arr[1]);
+                            }
                             type = type + "(" + range + ")";
                         }
 
@@ -339,17 +355,25 @@ namespace ToolWorking.Views
                             {
                                 defaultValue = addValue(range) + "1";
                             }
-                            else if (range > 7)
+                            else if (range > 8)
                             {
                                 defaultValue = "Fjn-Test1";
                             }
-                            else if (range == 7)
+                            else if (range == 8)
                             {
                                 defaultValue = "Fjn-Test";
                             }
-                            else if (range == 6)
+                            else if (range == 7)
                             {
                                 defaultValue = "FjnTest";
+                            }
+                            else if (range == 6)
+                            {
+                                defaultValue = "Test01";
+                            }
+                            else if (range == 5)
+                            {
+                                defaultValue = "Test1";
                             }
                             else if (range == 4)
                             {
@@ -375,6 +399,14 @@ namespace ToolWorking.Views
                         else if (type.Contains(CONST.C_TYPE_DOUBLE))
                         {
                             defaultValue = "1.0";
+                        }
+                        else if (type.Equals(CONST.C_TYPE_TIME))
+                        {
+                            defaultValue = "SYSDATETIME()";
+                        }
+                        else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
+                        {
+                            defaultValue = "null";
                         }
                         else
                         {
@@ -505,11 +537,15 @@ namespace ToolWorking.Views
                         txtResultQuery.Text += value + "\r\n";
 
                         errMessage = DBUtils.ExecuteScript(value);
-                        if (!string.IsNullOrEmpty(errMessage))
-                        {
-                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            break;
-                        }
+                        if (!string.IsNullOrEmpty(errMessage)) break;
+                    }
+                    if (!string.IsNullOrEmpty(errMessage))
+                    {
+                        MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
@@ -524,6 +560,10 @@ namespace ToolWorking.Views
                     if (!string.IsNullOrEmpty(errMessage))
                     {
                         MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
 
@@ -697,6 +737,7 @@ namespace ToolWorking.Views
         private void reloadResult()
         {
             txtResult.Text = string.Empty;
+            txtLog.Text = string.Empty;
             foreach (KeyValuePair<string, string> entry in dicResult)
             {
                 txtResult.Text = txtResult.Text + entry.Value + "\r\n";
@@ -868,6 +909,14 @@ namespace ToolWorking.Views
             {
                 double val;
                 return !Double.TryParse(value, out val);
+            }
+            else if (type.Contains(CONST.C_TYPE_TIME))
+            {
+                return value != "SYSDATETIME()";
+            }
+            else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
+            {
+                return value != "null";
             }
             else
             {

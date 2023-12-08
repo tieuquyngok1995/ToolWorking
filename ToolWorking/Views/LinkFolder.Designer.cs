@@ -77,6 +77,7 @@ namespace ToolWorking.Views
             this.txtPathRemove.Name = "txtPathRemove";
             this.txtPathRemove.Size = new System.Drawing.Size(180, 24);
             this.txtPathRemove.TabIndex = 5;
+            this.txtPathRemove.Click += new System.EventHandler(this.txtPathRemove_Click);
             this.txtPathRemove.TextChanged += new System.EventHandler(this.txtPathRemove_TextChanged);
             // 
             // btnSearchPG
@@ -96,6 +97,7 @@ namespace ToolWorking.Views
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(169, 24);
             this.txtPGSearch.TabIndex = 3;
+            this.txtPGSearch.Click += new System.EventHandler(this.txtPGSearch_Click);
             this.txtPGSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPGSearch_KeyDown);
             // 
             // label2

@@ -42,9 +42,14 @@ namespace ToolWorking.Utils
                 case var varchar when type.Contains(CONST.SQL_TYPE_VARCHAR):
                 case var nvarchar when type.Contains(CONST.SQL_TYPE_NVARCHAR):
                     return CONST.C_TYPE_STRING;
-                case CONST.SQL_TYPE_DATE:
+                case var nvarchar when type.Contains(CONST.SQL_TYPE_DATE):
+                    return CONST.C_TYPE_DATE_TIME;
                 case CONST.SQL_TYPE_DATE_TIME:
                     return CONST.C_TYPE_DATE_TIME;
+                case CONST.SQL_TYPE_TIME:
+                    return CONST.C_TYPE_TIME;
+                case CONST.SQL_TYPE_TIME_STAMP:
+                    return CONST.C_TYPE_TIME_STAMP;
                 case CONST.SQL_TYPE_MONEY:
                 case CONST.SQL_TYPE_NUMERIC:
                 case CONST.SQL_TYPE_DECIMAL:

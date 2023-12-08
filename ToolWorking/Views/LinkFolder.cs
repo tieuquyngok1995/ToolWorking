@@ -113,6 +113,17 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event select all text in text box search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtPGSearch_Click(object sender, EventArgs e)
+        {
+            txtPGSearch.SelectAll();
+            txtPGSearch.Focus();
+        }
+
+        /// <summary>
         /// Event change value search
         /// </summary>
         /// <param name="sender"></param>
@@ -150,6 +161,17 @@ namespace ToolWorking.Views
             {
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Event select all text in text box remove path
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtPathRemove_Click(object sender, EventArgs e)
+        {
+            txtPathRemove.SelectAll();
+            txtPathRemove.Focus();
         }
 
         /// <summary>

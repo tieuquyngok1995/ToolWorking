@@ -4,13 +4,14 @@
     {
 
         public static string[] STRING_SEPARATORS = new string[] { STRING_NEW_LINE };
-        public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE };
+        public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE, STRING_SPACE };
 
         #region String 
 
         public const string STRING_NEW_LINE = "\n";
         public const string STRING_COMMA = ",";
         public const string STRING_DOT = ".";
+        public const string STRING_SPACE = " ";
         public const string STRING_O_BRACKETS = "(";
         public const string STRING_C_BRACKETS = ")";
         public const string STRING_C_SQU_BRACKETS_SPACE = "] ";
@@ -25,7 +26,9 @@
         public const string SQL_TYPE_VARCHAR = "varchar";
         public const string SQL_TYPE_NVARCHAR = "nvarchar";
         public const string SQL_TYPE_DATE = "date";
+        public const string SQL_TYPE_TIME_STAMP = "timestamp";
         public const string SQL_TYPE_DATE_TIME = "datetime";
+        public const string SQL_TYPE_TIME = "time";
         public const string SQL_TYPE_BIGINT = "bigint";
         public const string SQL_TYPE_SMALLINT = "smallint";
         public const string SQL_TYPE_MONEY = "money";
@@ -37,6 +40,8 @@
         public const string C_TYPE_STRING = "string";
         public const string C_TYPE_BOOL = "bool";
         public const string C_TYPE_DATE_TIME = "DateTime";
+        public const string C_TYPE_TIME = "Time";
+        public const string C_TYPE_TIME_STAMP = "timestamp";
         public const string C_TYPE_SHORT = "short";
         public const string C_TYPE_INT = "int";
         public const string C_TYPE_LONG = "long";
