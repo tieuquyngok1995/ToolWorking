@@ -48,7 +48,7 @@ namespace ToolWorking.Views
                 string settingUser = Properties.Settings.Default.userDatabase;
                 string settingPass = Properties.Settings.Default.passDatabase;
                 pathFolderDatabase = Properties.Settings.Default.pathFolderDatabase;
-                int mode = Properties.Settings.Default.modeDatabse;
+                int mode = Properties.Settings.Default.modeDatabase;
 
                 txtServer.Text = !string.IsNullOrEmpty(settingServer) ? settingServer : string.Empty;
                 cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
@@ -156,7 +156,7 @@ namespace ToolWorking.Views
                 txtResult.Text = string.Empty;
                 txtLog.Text = string.Empty;
 
-                Properties.Settings.Default.modeDatabse = 0;
+                Properties.Settings.Default.modeDatabase = 0;
                 Properties.Settings.Default.Save();
             }
         }
@@ -184,7 +184,7 @@ namespace ToolWorking.Views
 
                 txtResultQuery.Text = string.Empty;
 
-                Properties.Settings.Default.modeDatabse = 1;
+                Properties.Settings.Default.modeDatabase = 1;
                 Properties.Settings.Default.Save();
             }
         }
@@ -491,7 +491,7 @@ namespace ToolWorking.Views
                 txtLog.Text = string.Empty;
                 foreach (KeyValuePair<string, string> entry in dicResult)
                 {
-                    string fileName = getFileName(entry.Key);
+                    string fileName = CUtils.getFileName(entry.Key);
                     string path = entry.Value;
                     try
                     {
@@ -750,24 +750,6 @@ namespace ToolWorking.Views
             else
             {
                 btnRunScript.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Get file name 
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private string getFileName(string fileName)
-        {
-            int index = fileName.LastIndexOf("\\");
-            if (index == -1)
-            {
-                return fileName;
-            }
-            else
-            {
-                return fileName.Substring(index + 1);
             }
         }
 

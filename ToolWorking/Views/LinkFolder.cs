@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using ToolWorking.Utils;
 
@@ -9,12 +10,18 @@ namespace ToolWorking.Views
 {
     public partial class LinkFolder : Form
     {
-        // Path folder
-        string pathFolderDatabase;
-        // Dictionary result
-        private Dictionary<string, string> dicResult;
+        // Path folder source
+        private string pathFolderSource;
+        // Path folder move/remove
+        private string pathFolder;
+
+        // Path Files
+        private List<string> listFiles;
         // Tree node
         private TreeNode nodeSelected;
+        // Dictionary result
+        private Dictionary<string, string> dicResult;
+
 
         public LinkFolder()
         {
@@ -24,6 +31,7 @@ namespace ToolWorking.Views
         }
 
         #region Event
+
         /// <summary>
         /// Event setting path folder init
         /// </summary>
@@ -33,11 +41,16 @@ namespace ToolWorking.Views
         {
             try
             {
-                pathFolderDatabase = Properties.Settings.Default.pathFolder;
-                string pathFolderRemove = Properties.Settings.Default.pathFolderRemove;
+                int mode = Properties.Settings.Default.modeLinkFolder;
+                pathFolderSource = Properties.Settings.Default.pathFolder;
+                pathFolder = Properties.Settings.Default.pathFolderRemove;
 
-                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
-                txtPathRemove.Text = !string.IsNullOrEmpty(pathFolderRemove) ? pathFolderRemove : string.Empty;
+                if (mode == 0) rbModeTree.Checked = true; else rbModePath.Checked = true;
+                panelCenterTreeFolder.Visible = rbModeTree.Checked;
+                panelCenterPath.Visible = rbModePath.Checked;
+
+                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderSource) ? pathFolderSource : string.Empty;
+                txtPath.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
             }
             catch (Exception ex)
             {
@@ -46,7 +59,51 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
-        /// Event Open Folder
+        /// Event chose mode get path in tree
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbModeTree_CheckedChanged(object sender, EventArgs e)
+        {
+            btnReloadFolder.Visible = true;
+            lblSearch.Text = "PG Search";
+            txtPGSearch.Visible = rbModeTree.Checked;
+            btnSearchPG.Visible = rbModeTree.Checked;
+
+            lblPath.Text = "Remove Directory";
+
+            panelCenterTreeFolder.Visible = rbModeTree.Checked;
+            panelCenterPath.Visible = rbModePath.Checked;
+
+            // Save mode
+            Properties.Settings.Default.modeLinkFolder = 0;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Event chose mode get path in list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbModePath_CheckedChanged(object sender, EventArgs e)
+        {
+            btnReloadFolder.Visible = false;
+            lblSearch.Text = "List Files";
+            txtPGSearch.Visible = rbModeTree.Checked;
+            btnSearchPG.Visible = rbModeTree.Checked;
+
+            lblPath.Text = "    Move Directory";
+
+            panelCenterTreeFolder.Visible = rbModeTree.Checked;
+            panelCenterPath.Visible = rbModePath.Checked;
+
+            // Save mode
+            Properties.Settings.Default.modeLinkFolder = 1;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Event select folder source
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -55,11 +112,11 @@ namespace ToolWorking.Views
             try
             {
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
-                if (!string.IsNullOrEmpty(pathFolderDatabase)) fbd.SelectedPath = pathFolderDatabase;
+                if (!string.IsNullOrEmpty(pathFolderSource)) fbd.SelectedPath = pathFolderSource;
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txtPathFolder.Text = fbd.SelectedPath;
-                    pathFolderDatabase = fbd.SelectedPath;
+                    pathFolderSource = fbd.SelectedPath;
 
                     Properties.Settings.Default.pathFolder = fbd.SelectedPath;
                     Properties.Settings.Default.Save();
@@ -91,16 +148,16 @@ namespace ToolWorking.Views
 
                 dicResult.Clear();
                 toolTip.ShowAlways = true;
-                if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
+                if (!string.IsNullOrEmpty(txtPathFolder.Text) && Directory.Exists(txtPathFolder.Text))
                 {
                     loadDirectory(txtPathFolder.Text);
-
                     txtResult.Text = string.Empty;
                 }
                 else
                 {
                     MessageBox.Show("Select Directory!!");
                 }
+
                 // Set cursor as default arrow
                 Cursor.Current = Cursors.Default;
             }
@@ -148,7 +205,7 @@ namespace ToolWorking.Views
                 string valSearch = txtPGSearch.Text.Trim();
                 if (string.IsNullOrEmpty(valSearch)) return;
 
-                string dirRemove = txtPathRemove.Text.Trim();
+                string dirRemove = txtPath.Text.Trim();
 
                 foreach (TreeNode node in treeViewFolder.Nodes)
                 {
@@ -170,8 +227,8 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtPathRemove_Click(object sender, EventArgs e)
         {
-            txtPathRemove.SelectAll();
-            txtPathRemove.Focus();
+            txtPath.SelectAll();
+            txtPath.Focus();
         }
 
         /// <summary>
@@ -181,8 +238,34 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtPathRemove_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.pathFolderRemove = txtPathRemove.Text.Trim();
+            Properties.Settings.Default.pathFolderRemove = txtPath.Text.Trim();
             Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Event select folder remove/move
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnOpenPath_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (!string.IsNullOrEmpty(pathFolder)) fbd.SelectedPath = pathFolder;
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    txtPath.Text = fbd.SelectedPath;
+                    pathFolder = fbd.SelectedPath;
+
+                    Properties.Settings.Default.pathFolderRemove = fbd.SelectedPath;
+                    Properties.Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -204,7 +287,7 @@ namespace ToolWorking.Views
         {
             try
             {
-                string dirRemove = txtPathRemove.Text.Trim();
+                string dirRemove = txtPath.Text.Trim();
 
                 // Set cursor as hourglass
                 Cursor.Current = Cursors.WaitCursor;
@@ -230,15 +313,92 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event select all text in text box list file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtListFile_Click(object sender, EventArgs e)
+        {
+            txtListFile.SelectAll();
+            txtListFile.Focus();
+        }
+        /// <summary>
+        /// Event change value textbox list file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtListFile_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtListFile.Text))
+            {
+                txtResultPathFile.Text = string.Empty;
+                btnCopyResult.Enabled = false;
+                return;
+            }
+
+            string[] arrPathFiles = txtListFile.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
+            btnCopyResult.Enabled = false;
+            if (arrPathFiles.Length > 0)
+            {
+                int numCheck;
+                listFiles = new List<string>();
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var pathFile in arrPathFiles)
+                {
+                    if (pathFile.LastIndexOf(".mjs") != -1 || pathFile.LastIndexOf(".mjs.map") != -1 || pathFile.LastIndexOf(".d.ts") != -1)
+                    {
+                        continue;
+                    }
+
+                    if (!int.TryParse(pathFile.Trim(), out numCheck))
+                    {
+                        listFiles.Add(pathFile.Trim());
+                        sb.Append(pathFile.Trim());
+                        sb.AppendLine();
+                    }
+                }
+                txtResultPathFile.Text = string.Empty;
+                btnCopyResult.Enabled = true;
+                txtListFile.Text = sb.ToString();
+            }
+        }
+        /// <summary>
         /// Event copy 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCopyResult_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtResult.Text)) return;
+            try
+            {
+                if (rbModeTree.Checked)
+                {
+                    if (string.IsNullOrEmpty(txtResult.Text)) return;
 
-            Clipboard.SetText(txtResult.Text);
+                    Clipboard.SetText(txtResult.Text);
+                }
+                else if (rbModePath.Checked)
+                {
+                    if (string.IsNullOrEmpty(txtPathFolder.Text) || !Directory.Exists(txtPathFolder.Text))
+                    {
+                        MessageBox.Show("Select path folder srouce!!");
+                    }
+                    else if (string.IsNullOrEmpty(txtPath.Text) || !Directory.Exists(txtPath.Text))
+                    {
+                        MessageBox.Show("Select path folder move source!!");
+                    }
+                    else
+                    {
+                        copyFile();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -249,8 +409,9 @@ namespace ToolWorking.Views
         private void btnClearResult_Click(object sender, EventArgs e)
         {
             dicResult.Clear();
-            txtPGSearch.Text = string.Empty;
             txtResult.Text = string.Empty;
+
+            txtResultPathFile.Text = string.Empty;
         }
         #endregion
 
@@ -429,6 +590,41 @@ namespace ToolWorking.Views
             }
         }
 
+        private void copyFile()
+        {
+
+            txtResultPathFile.Text = string.Empty;
+
+            foreach (string path in listFiles)
+            {
+                string fileName = CUtils.getFileName(path);
+                string targetDir = string.Empty;
+
+                try
+                {
+                    string sourceFile = txtPathFolder.Text + "/" + path;
+
+                    FileInfo fileInfo = new FileInfo(sourceFile);
+                    targetDir = txtPath.Text + "/" + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
+
+                    string targetFile = Path.Combine(targetDir, (new FileInfo(sourceFile)).Name);
+
+                    if (!Directory.Exists(targetDir))
+                    {
+                        Directory.CreateDirectory(targetDir);
+                    }
+
+                    File.Copy(sourceFile, targetFile, true);
+
+                    txtResultPathFile.Text += "Copy file " + fileName + " success.\r\n";
+                }
+                catch (Exception ex)
+                {
+                    txtResultPathFile.Text += "Copy file " + fileName + " unsuccessful.\r\nError detail: " + ex.Message + "\r\n";
+                }
+            }
+        }
         #endregion
+
     }
 }

@@ -134,12 +134,36 @@ namespace ToolWorking.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int modeDatabse {
+        public int modeDatabase {
             get {
-                return ((int)(this["modeDatabse"]));
+                return ((int)(this["modeDatabase"]));
             }
             set {
-                this["modeDatabse"] = value;
+                this["modeDatabase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int modeLinkFolder {
+            get {
+                return ((int)(this["modeLinkFolder"]));
+            }
+            set {
+                this["modeLinkFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int modeSearchFile {
+            get {
+                return ((int)(this["modeSearchFile"]));
+            }
+            set {
+                this["modeSearchFile"] = value;
             }
         }
     }

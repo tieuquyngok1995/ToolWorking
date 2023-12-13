@@ -59,5 +59,25 @@ namespace ToolWorking.Utils
             }
         }
         #endregion
+
+        #region File info
+        /// <summary>
+        /// Get file name 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string getFileName(string fileName)
+        {
+            int index = fileName.LastIndexOf("\\");
+            if (index == -1)
+            {
+                return fileName;
+            }
+            else
+            {
+                return fileName.Substring(index + 1);
+            }
+        }
+        #endregion
     }
 }

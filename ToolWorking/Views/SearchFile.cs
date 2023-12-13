@@ -46,6 +46,9 @@ namespace ToolWorking.Views
 
                 txtPathFolder.Select();
                 txtPathFolder.Focus();
+
+                int mode = Properties.Settings.Default.modeSearchFile;
+                if (mode == 0) rbRead.Checked = true; else rbReadOpen.Checked = true;
             }
             catch (Exception ex)
             {
@@ -179,6 +182,9 @@ namespace ToolWorking.Views
         private void rbRead_CheckedChanged(object sender, EventArgs e)
         {
             cbProcessOpen.Visible = false;
+            // Save mode
+            Properties.Settings.Default.modeSearchFile = 0;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -190,6 +196,9 @@ namespace ToolWorking.Views
         {
             cbProcessOpen.Visible = true;
             cbProcessOpen.SelectedIndex = 0;
+            // Save mode
+            Properties.Settings.Default.modeSearchFile = 1;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
