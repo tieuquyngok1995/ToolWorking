@@ -392,17 +392,13 @@ namespace ToolWorking.Views
                                 defaultValue = "1";
                             }
                         }
-                        else if (type.Contains(CONST.C_TYPE_DATE_TIME))
+                        else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
                         {
-                            defaultValue = DateTime.Now.ToString("dd/MM/yyyy");
+                            defaultValue = "SYSDATETIME()";
                         }
                         else if (type.Contains(CONST.C_TYPE_DOUBLE))
                         {
                             defaultValue = "1.0";
-                        }
-                        else if (type.Equals(CONST.C_TYPE_TIME))
-                        {
-                            defaultValue = "SYSDATETIME()";
                         }
                         else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
                         {
@@ -838,10 +834,6 @@ namespace ToolWorking.Views
                     }
                     result += "'" + value + "'" + ", ";
                 }
-                else if (type.Equals(CONST.C_TYPE_DATE_TIME))
-                {
-                    result += "'" + value + "'" + ", ";
-                }
                 else if (type.Equals(CONST.C_TYPE_DOUBLE))
                 {
                     if (index.HasValue)
@@ -852,6 +844,10 @@ namespace ToolWorking.Views
                     {
                         result += value + ", ";
                     }
+                }
+                else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                {
+                    result += value + ", ";
                 }
                 else
                 {
@@ -882,19 +878,13 @@ namespace ToolWorking.Views
             {
                 return value.Length > range;
             }
-            else if (type.Contains(CONST.C_TYPE_DATE_TIME))
+            else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
             {
-                DateTime val;
-                return !DateTime.TryParse(value, out val);
+                return value != "SYSDATETIME()";
             }
             else if (type.Contains(CONST.C_TYPE_DOUBLE))
             {
-                double val;
-                return !Double.TryParse(value, out val);
-            }
-            else if (type.Contains(CONST.C_TYPE_TIME))
-            {
-                return value != "SYSDATETIME()";
+                return !Double.TryParse(value, out _);
             }
             else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
             {
@@ -902,8 +892,7 @@ namespace ToolWorking.Views
             }
             else
             {
-                int val;
-                return !int.TryParse(value, out val);
+                return !int.TryParse(value, out _);
             }
         }
         #endregion
