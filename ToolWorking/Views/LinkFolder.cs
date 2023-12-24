@@ -22,7 +22,6 @@ namespace ToolWorking.Views
         // Dictionary result
         private Dictionary<string, string> dicResult;
 
-
         public LinkFolder()
         {
             InitializeComponent();
@@ -72,6 +71,11 @@ namespace ToolWorking.Views
 
             lblPath.Text = "Remove Directory";
 
+            lblAction.Visible = false;
+            rbCopy.Visible = false;
+            rbDelete.Visible = false;
+            btnCopyResult.Text = "    Copy";
+
             panelCenterTreeFolder.Visible = rbModeTree.Checked;
             panelCenterPath.Visible = rbModePath.Checked;
 
@@ -93,6 +97,12 @@ namespace ToolWorking.Views
             btnSearchPG.Visible = rbModeTree.Checked;
 
             lblPath.Text = "    Move Directory";
+
+            lblAction.Visible = true;
+            rbCopy.Visible = true;
+            rbCopy.Checked = true;
+            rbDelete.Visible = true;
+            btnCopyResult.Text = "    Copy";
 
             panelCenterTreeFolder.Visible = rbModeTree.Checked;
             panelCenterPath.Visible = rbModePath.Checked;
@@ -322,6 +332,7 @@ namespace ToolWorking.Views
             txtListFile.SelectAll();
             txtListFile.Focus();
         }
+
         /// <summary>
         /// Event change value textbox list file
         /// </summary>
@@ -364,6 +375,27 @@ namespace ToolWorking.Views
                 txtListFile.Text = sb.ToString();
             }
         }
+
+        /// <summary>
+        /// Event change select radio action mode copy
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbCopy_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCopyResult.Text = "    Copy";
+        }
+
+        /// <summary>
+        /// Event change select radio action mode delete
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbDelete_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCopyResult.Text = "    Delete";
+        }
+
         /// <summary>
         /// Event copy 
         /// </summary>
@@ -391,7 +423,7 @@ namespace ToolWorking.Views
                     }
                     else
                     {
-                        copyFile();
+                        handelFile();
                     }
                 }
             }
@@ -590,7 +622,10 @@ namespace ToolWorking.Views
             }
         }
 
-        private void copyFile()
+        /// <summary>
+        /// Handel file in list file
+        /// </summary>
+        private void handelFile()
         {
 
             txtResultPathFile.Text = string.Empty;
@@ -598,23 +633,29 @@ namespace ToolWorking.Views
             foreach (string path in listFiles)
             {
                 string fileName = CUtils.getFileName(path);
-                string targetDir = string.Empty;
 
                 try
                 {
                     string sourceFile = txtPathFolder.Text + "/" + path;
 
                     FileInfo fileInfo = new FileInfo(sourceFile);
-                    targetDir = txtPath.Text + "/" + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
+                    string targetDir = txtPath.Text + "/" + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
 
                     string targetFile = Path.Combine(targetDir, (new FileInfo(sourceFile)).Name);
 
-                    if (!Directory.Exists(targetDir))
+                    if (rbCopy.Checked)
                     {
-                        Directory.CreateDirectory(targetDir);
-                    }
+                        if (!Directory.Exists(targetDir))
+                        {
+                            Directory.CreateDirectory(targetDir);
+                        }
 
-                    File.Copy(sourceFile, targetFile, true);
+                        File.Copy(sourceFile, targetFile, true);
+                    }
+                    else
+                    {
+                        if (File.Exists(targetDir)) File.Delete(targetFile);
+                    }
 
                     txtResultPathFile.Text += "Copy file " + fileName + " success.\r\n";
                 }
