@@ -69,7 +69,7 @@ namespace ToolWorking.Views
             txtPGSearch.Visible = rbModeTree.Checked;
             btnSearchPG.Visible = rbModeTree.Checked;
 
-            lblPath.Text = "Remove Directory";
+            lblPath.Text = "Remove Folder";
 
             lblAction.Visible = false;
             rbCopy.Visible = false;
@@ -96,7 +96,7 @@ namespace ToolWorking.Views
             txtPGSearch.Visible = rbModeTree.Checked;
             btnSearchPG.Visible = rbModeTree.Checked;
 
-            lblPath.Text = "    Move Directory";
+            lblPath.Text = "Destination Folder";
 
             lblAction.Visible = true;
             rbCopy.Visible = true;
