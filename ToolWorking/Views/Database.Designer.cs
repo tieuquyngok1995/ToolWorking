@@ -115,6 +115,7 @@ namespace ToolWorking.Views
             this.cbDatabase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDatabase.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.cbDatabase.Items.AddRange(new object[] {
+            "---None---",
             "esKyotsu",
             "Usolia障害者福祉システム"});
             this.cbDatabase.Location = new System.Drawing.Point(220, 6);

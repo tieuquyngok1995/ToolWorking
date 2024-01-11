@@ -389,7 +389,7 @@ namespace ToolWorking.Views
                             }
                             else if (range == 1)
                             {
-                                defaultValue = "1";
+                                defaultValue = "0";
                             }
                         }
                         else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
@@ -478,93 +478,100 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void btnRunScript_Click(object sender, EventArgs e)
         {
-            string errMessage = string.Empty;
-
-            if (rbRunScript.Checked)
+            try
             {
-                if (string.IsNullOrEmpty(txtResult.Text)) return;
+                string errMessage = string.Empty;
 
-                txtLog.Text = string.Empty;
-                foreach (KeyValuePair<string, string> entry in dicResult)
+                if (rbRunScript.Checked)
                 {
-                    string fileName = CUtils.getFileName(entry.Key);
-                    string path = entry.Value;
-                    try
-                    {
-                        if (!File.Exists(path))
-                        {
-                            txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
-                            continue;
-                        }
+                    if (string.IsNullOrEmpty(txtResult.Text)) return;
 
-                        errMessage = DBUtils.ExecuteFileScript(path);
-                        if (string.IsNullOrEmpty(errMessage))
-                        {
-                            txtLog.Text += addLog(false, fileName) + "\r\n";
-                        }
-                        else
-                        {
-                            txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
-                        }
-                    }
-                    catch (Exception ex)
+                    txtLog.Text = string.Empty;
+                    foreach (KeyValuePair<string, string> entry in dicResult)
                     {
-                        txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
+                        string fileName = CUtils.getFileName(entry.Key);
+                        string path = entry.Value;
+                        try
+                        {
+                            if (!File.Exists(path))
+                            {
+                                txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
+                                continue;
+                            }
+
+                            errMessage = DBUtils.ExecuteFileScript(path);
+                            if (string.IsNullOrEmpty(errMessage))
+                            {
+                                txtLog.Text += addLog(false, fileName) + "\r\n";
+                            }
+                            else
+                            {
+                                txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
+                        }
                     }
+
+                    if (!string.IsNullOrEmpty(txtLog.Text)) btnCopyResult.Enabled = true;
+                    else btnCopyResult.Enabled = false;
                 }
-
-                if (!string.IsNullOrEmpty(txtLog.Text)) btnCopyResult.Enabled = true;
-                else btnCopyResult.Enabled = false;
-            }
-            else if (rbRunQuery.Checked)
-            {
-                txtResultQuery.Text = string.Empty;
-
-                string value = string.Empty;
-                if (chkMultiRow.Checked)
+                else if (rbRunQuery.Checked)
                 {
-                    int numRow = Convert.ToInt32(txtNumRow.Text);
-                    for (int i = 1; i <= numRow; i++)
+                    txtResultQuery.Text = string.Empty;
+
+                    string value = string.Empty;
+                    if (chkMultiRow.Checked)
                     {
-                        value = getValue(i);
+                        int numRow = Convert.ToInt32(txtNumRow.Text);
+                        for (int i = 1; i <= numRow; i++)
+                        {
+                            value = getValue(i);
+                            if (string.IsNullOrEmpty(value)) return;
+
+                            value = string.Format(tempInsert, nameTable, value);
+                            txtResultQuery.Text += value + "\r\n";
+
+                            if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                            if (!string.IsNullOrEmpty(errMessage)) break;
+                        }
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (cbDatabase.SelectedIndex != 0)
+                        {
+                            MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        value = getValue(null);
                         if (string.IsNullOrEmpty(value)) return;
 
                         value = string.Format(tempInsert, nameTable, value);
-                        txtResultQuery.Text += value + "\r\n";
+                        txtResultQuery.Text = value;
 
-                        errMessage = DBUtils.ExecuteScript(value);
-                        if (!string.IsNullOrEmpty(errMessage)) break;
+                        if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (cbDatabase.SelectedIndex != 0)
+                        {
+                            MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-                    if (!string.IsNullOrEmpty(errMessage))
-                    {
-                        MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+
+                    if (!string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = true;
+                    else btnCopyResult.Enabled = false;
                 }
-                else
-                {
-                    value = getValue(null);
-                    if (string.IsNullOrEmpty(value)) return;
-
-                    value = string.Format(tempInsert, nameTable, value);
-                    txtResultQuery.Text = value;
-
-                    errMessage = DBUtils.ExecuteScript(value);
-                    if (!string.IsNullOrEmpty(errMessage))
-                    {
-                        MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = true;
-                else btnCopyResult.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -798,7 +805,7 @@ namespace ToolWorking.Views
             {
                 string name = row.Cells[1].Value.ToString();
                 string type = row.Cells[2].Value.ToString();
-                string value = row.Cells[3].Value.ToString();
+                string value = row.Cells[3].Value != null ? row.Cells[3].Value.ToString() : "null";
                 int range = Convert.ToInt32(row.Cells[4].Value);
 
                 if (isValidate(type, value, range))
@@ -809,11 +816,15 @@ namespace ToolWorking.Views
 
                 if (type.Contains(CONST.C_TYPE_STRING))
                 {
-                    if (index.HasValue)
+                    if (value.Equals("null"))
                     {
-                        if (range <= 1) value = (index % 10).ToString();
-                        else if (range <= 2) value = (index % 100).ToString();
-                        else if (range <= 3) value = (index % 1000).ToString();
+                        result += "null, ";
+                    }
+                    else if (index.HasValue)
+                    {
+                        if (range == 1) value = "0";
+                        else if (range == 2) value = (index % 100).ToString();
+                        else if (range == 3) value = (index % 1000).ToString();
                         else value = index.ToString();
 
                         if (name.Contains("コード"))
@@ -832,11 +843,18 @@ namespace ToolWorking.Views
                             value = "Fjn" + value;
                         }
                     }
-                    result += "'" + value + "'" + ", ";
+                    else
+                    {
+                        result += "'" + value + "'" + ", ";
+                    }
                 }
                 else if (type.Equals(CONST.C_TYPE_DOUBLE))
                 {
-                    if (index.HasValue)
+                    if (value.Equals("null"))
+                    {
+                        result += "null, ";
+                    }
+                    else if (index.HasValue)
                     {
                         result += index + "." + (index % 10).ToString() + ", ";
                     }
@@ -851,7 +869,11 @@ namespace ToolWorking.Views
                 }
                 else
                 {
-                    if (index.HasValue)
+                    if (value.Equals("null"))
+                    {
+                        result += "null, ";
+                    }
+                    else if (index.HasValue)
                     {
                         result += index + ", ";
                     }
@@ -874,6 +896,8 @@ namespace ToolWorking.Views
         /// <returns></returns>
         private bool isValidate(string type, string value, int range)
         {
+            if (value == "null") return false;
+
             if (type.Contains(CONST.C_TYPE_STRING))
             {
                 return value.Length > range;

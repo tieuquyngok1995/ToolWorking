@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ToolWorking.Utils;
@@ -365,9 +366,13 @@ namespace ToolWorking.Views
 
                     if (!int.TryParse(pathFile.Trim(), out numCheck))
                     {
-                        listFiles.Add(pathFile.Trim());
-                        sb.Append(pathFile.Trim());
-                        sb.AppendLine();
+                        string isExit = listFiles.FirstOrDefault(str => str.Equals(pathFile.Trim()));
+                        if (isExit == null)
+                        {
+                            listFiles.Add(pathFile.Trim());
+                            sb.Append(pathFile.Trim());
+                            sb.AppendLine();
+                        }
                     }
                 }
                 txtResultPathFile.Text = string.Empty;
@@ -639,7 +644,7 @@ namespace ToolWorking.Views
                     string sourceFile = txtPathFolder.Text + "/" + path;
 
                     FileInfo fileInfo = new FileInfo(sourceFile);
-                    string targetDir = txtPath.Text + "/" + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
+                    string targetDir = txtPath.Text + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
 
                     string targetFile = Path.Combine(targetDir, (new FileInfo(sourceFile)).Name);
 
@@ -654,7 +659,7 @@ namespace ToolWorking.Views
                     }
                     else
                     {
-                        if (File.Exists(targetDir)) File.Delete(targetFile);
+                        if (File.Exists(targetFile)) File.Delete(targetFile);
                     }
 
                     txtResultPathFile.Text += "Copy file " + fileName + " success.\r\n";
