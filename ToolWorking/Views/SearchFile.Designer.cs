@@ -185,8 +185,8 @@ namespace ToolWorking.Views
             this.cbProcessOpen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProcessOpen.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.cbProcessOpen.Items.AddRange(new object[] {
-            "Explorer",
-            "Notepad++"});
+            "Notepad++",
+            "Explorer"});
             this.cbProcessOpen.Location = new System.Drawing.Point(221, 343);
             this.cbProcessOpen.Name = "cbProcessOpen";
             this.cbProcessOpen.Size = new System.Drawing.Size(272, 25);

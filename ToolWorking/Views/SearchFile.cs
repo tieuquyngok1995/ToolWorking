@@ -220,12 +220,12 @@ namespace ToolWorking.Views
                 {
                     if (cbProcessOpen.SelectedIndex == 0)
                     {
-                        pathFile = pathFile.Substring(0, pathFile.LastIndexOf("\\"));
-                        Process.Start("explorer.exe", @pathFile);
+                        Process.Start("notepad++.exe", $@"""{pathFile}""");
                     }
                     else if (cbProcessOpen.SelectedIndex == 1)
                     {
-                        Process.Start("notepad++.exe", $@"""{pathFile}""");
+                        pathFile = pathFile.Substring(0, pathFile.LastIndexOf("\\"));
+                        Process.Start("explorer.exe", @pathFile);
                     }
                 }
 
