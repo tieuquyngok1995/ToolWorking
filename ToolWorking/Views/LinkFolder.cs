@@ -348,6 +348,7 @@ namespace ToolWorking.Views
                 return;
             }
 
+            int numBefore = 0;
             string[] arrPathFiles = txtListFile.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
 
             btnCopyResult.Enabled = false;
@@ -359,13 +360,15 @@ namespace ToolWorking.Views
 
                 foreach (var pathFile in arrPathFiles)
                 {
-                    if (pathFile.LastIndexOf(".mjs") != -1 || pathFile.LastIndexOf(".mjs.map") != -1 || pathFile.LastIndexOf(".d.ts") != -1)
-                    {
-                        continue;
-                    }
-
                     if (!int.TryParse(pathFile.Trim(), out numCheck))
                     {
+                        numBefore++;
+
+                        if (pathFile.LastIndexOf(".mjs") != -1 || pathFile.LastIndexOf(".mjs.map") != -1 || pathFile.LastIndexOf(".d.ts") != -1)
+                        {
+                            continue;
+                        }
+
                         string isExit = listFiles.FirstOrDefault(str => str.Equals(pathFile.Trim()));
                         if (isExit == null)
                         {
@@ -375,9 +378,24 @@ namespace ToolWorking.Views
                         }
                     }
                 }
+
+                lblNumBefore.Text = "Line number before input: " + numBefore;
+                lblNumBefore.Visible = true;
+
+                if (listFiles.Count > 0)
+                {
+                    lblNumAfter.Text = "Line number after change: " + listFiles.Count;
+                    lblNumAfter.Visible = true;
+                }
+
                 txtResultPathFile.Text = string.Empty;
                 btnCopyResult.Enabled = true;
                 txtListFile.Text = sb.ToString();
+            }
+            else
+            {
+                lblNumBefore.Visible = false;
+                lblNumAfter.Visible = false;
             }
         }
 

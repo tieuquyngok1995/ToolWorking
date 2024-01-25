@@ -60,6 +60,8 @@ namespace ToolWorking.Views
             this.rbDelete = new System.Windows.Forms.RadioButton();
             this.rbCopy = new System.Windows.Forms.RadioButton();
             this.lblAction = new System.Windows.Forms.Label();
+            this.lblNumAfter = new System.Windows.Forms.Label();
+            this.lblNumBefore = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.panelCenterTreeFolder.SuspendLayout();
             this.panelCenterPath.SuspendLayout();
@@ -302,6 +304,8 @@ namespace ToolWorking.Views
             // 
             // panelCenterPath
             // 
+            this.panelCenterPath.Controls.Add(this.lblNumBefore);
+            this.panelCenterPath.Controls.Add(this.lblNumAfter);
             this.panelCenterPath.Controls.Add(this.txtResultPathFile);
             this.panelCenterPath.Controls.Add(this.txtListFile);
             this.panelCenterPath.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -325,7 +329,7 @@ namespace ToolWorking.Views
             this.txtListFile.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtListFile.Location = new System.Drawing.Point(9, 3);
             this.txtListFile.Name = "txtListFile";
-            this.txtListFile.Size = new System.Drawing.Size(642, 196);
+            this.txtListFile.Size = new System.Drawing.Size(642, 182);
             this.txtListFile.TabIndex = 21;
             this.txtListFile.Text = "";
             this.txtListFile.Click += new System.EventHandler(this.txtListFile_Click);
@@ -384,6 +388,28 @@ namespace ToolWorking.Views
             this.lblAction.Text = "Choose Action";
             this.lblAction.Visible = false;
             // 
+            // lblNumAfter
+            // 
+            this.lblNumAfter.AutoSize = true;
+            this.lblNumAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNumAfter.Location = new System.Drawing.Point(478, 186);
+            this.lblNumAfter.Name = "lblNumAfter";
+            this.lblNumAfter.Size = new System.Drawing.Size(154, 15);
+            this.lblNumAfter.TabIndex = 23;
+            this.lblNumAfter.Text = "Line number after change: ";
+            this.lblNumAfter.Visible = false;
+            // 
+            // lblNumBefore
+            // 
+            this.lblNumBefore.AutoSize = true;
+            this.lblNumBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNumBefore.Location = new System.Drawing.Point(13, 186);
+            this.lblNumBefore.Name = "lblNumBefore";
+            this.lblNumBefore.Size = new System.Drawing.Size(148, 15);
+            this.lblNumBefore.TabIndex = 24;
+            this.lblNumBefore.Text = "Line number before input:";
+            this.lblNumBefore.Visible = false;
+            // 
             // LinkFolder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -401,6 +427,7 @@ namespace ToolWorking.Views
             this.panelTop.PerformLayout();
             this.panelCenterTreeFolder.ResumeLayout(false);
             this.panelCenterPath.ResumeLayout(false);
+            this.panelCenterPath.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.ResumeLayout(false);
@@ -437,5 +464,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.RadioButton rbDelete;
         private System.Windows.Forms.RadioButton rbCopy;
         private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.Label lblNumAfter;
+        private System.Windows.Forms.Label lblNumBefore;
     }
 }
