@@ -24,6 +24,10 @@ namespace ToolWorking.Views
         private string tempInsert;
         // List column in script table
         private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
+        private Dictionary<int, string> dicTypeInput = new Dictionary<int, string>();
+        // List value input excel
+        private List<string> lstInputExcel = new List<string>();
+
 
         public Database()
         {
@@ -56,8 +60,12 @@ namespace ToolWorking.Views
                 txtPass.Text = !string.IsNullOrEmpty(settingPass) ? settingPass : string.Empty;
                 txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
 
-                if (mode == 0) { rbRunScript.Checked = true; }
-                else { rbRunQuery.Checked = true; }
+                rbRunScript.Checked = true;
+                if (mode != 0)
+                {
+                    panelQueryInput.Visible = true;
+                    rbRunQuery.Checked = true;
+                }
             }
             catch (Exception ex)
             {
@@ -141,10 +149,7 @@ namespace ToolWorking.Views
         {
             if (rbRunScript.Checked)
             {
-                lblPathFolder.Visible = true;
-                txtPathFolder.Visible = true;
-                btnOpenFolder.Visible = true;
-                btnReloadFolder.Visible = true;
+                panelQueryInput.Visible = false;
                 panelCenterScript.Visible = true;
                 panelCenterQuery.Visible = false;
                 chkMultiRow.Visible = false;
@@ -170,10 +175,7 @@ namespace ToolWorking.Views
         {
             if (rbRunQuery.Checked)
             {
-                lblPathFolder.Visible = false;
-                txtPathFolder.Visible = false;
-                btnOpenFolder.Visible = false;
-                btnReloadFolder.Visible = false;
+                panelQueryInput.Visible = true;
                 panelCenterScript.Visible = false;
                 panelCenterQuery.Visible = true;
                 chkMultiRow.Visible = true;
@@ -187,6 +189,42 @@ namespace ToolWorking.Views
                 Properties.Settings.Default.modeDatabase = 1;
                 Properties.Settings.Default.Save();
             }
+        }
+
+        /// <summary>
+        /// Event show input value using table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbInputTable_CheckedChanged(object sender, EventArgs e)
+        {
+            gridInputValue.Visible = true;
+            txtInputExcel.Visible = false;
+
+            chkMultiRow.Visible = true;
+            txtNumRow.Visible = chkMultiRow.Checked;
+            lblNumRows.Visible = chkMultiRow.Checked;
+
+            if (!string.IsNullOrEmpty(txtScriptTable.Text))
+            {
+                txtScriptTable_TextChanged(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Event show input value using excel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbInputExcel_CheckedChanged(object sender, EventArgs e)
+        {
+            gridInputValue.Visible = false;
+            txtInputExcel.Visible = true;
+            txtInputExcel.Text = string.Empty;
+
+            chkMultiRow.Visible = false;
+            txtNumRow.Visible = chkMultiRow.Checked;
+            lblNumRows.Visible = chkMultiRow.Checked;
         }
 
         /// <summary>
@@ -307,6 +345,7 @@ namespace ToolWorking.Views
             if (arrTable.Length > 0)
             {
                 lstColumnTable = new List<ColumnModel>();
+                dicTypeInput = new Dictionary<int, string>();
                 foreach (var item in arrTable)
                 {
                     if (string.IsNullOrEmpty(item) || item.ToLower().Contains("primary key")) continue;
@@ -410,6 +449,7 @@ namespace ToolWorking.Views
                         }
 
                         lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
+                        dicTypeInput.Add(no, type);
                         no++;
                     }
                 }
@@ -419,7 +459,77 @@ namespace ToolWorking.Views
             if (lstColumnTable.Count > 0)
             {
                 gridInputValue.DataSource = lstColumnTable;
+                txtInputExcel.Enabled = true;
                 btnRunScript.Enabled = true;
+            }
+            else
+            {
+                gridInputValue.DataSource = new List<ColumnModel>();
+                txtInputExcel.Enabled = false;
+                btnRunScript.Enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Event select all text in text box Input Excel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtInputExcel_Click(object sender, EventArgs e)
+        {
+            txtInputExcel.SelectAll();
+            txtInputExcel.Focus();
+        }
+
+        /// <summary>
+        /// Event change text box input excel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtInputExcel_TextChanged(object sender, EventArgs e)
+        {
+            int numItem = lstColumnTable.Count;
+            string[] arrTable = txtInputExcel.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
+            // handle data input
+            if (arrTable.Length > 0)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                lstInputExcel = new List<string>();
+                foreach (var row in arrTable)
+                {
+                    if (string.IsNullOrEmpty(row)) continue;
+
+                    string[] arrRow = row.Split('\t');
+                    if (arrRow.Length < numItem)
+                    {
+                        lstInputExcel.Add(string.Empty);
+                        continue;
+                    }
+
+                    string result = string.Empty;
+                    for (int i = 0; i < arrRow.Length; i++)
+                    {
+                        string item = arrRow[i];
+                        string type = string.Empty;
+                        if (dicTypeInput.Count >= i + 1)
+                        {
+                            type = dicTypeInput[i + 1];
+                        }
+
+                        if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
+                        {
+                            result += "null, ";
+                        }
+                        else
+                        {
+                            result += createValue(type, item.Trim()) + ", ";
+                        }
+                    }
+
+                    lstInputExcel.Add(CUtils.RemoveLastCommaSpace(result));
+                }
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -480,11 +590,16 @@ namespace ToolWorking.Views
         {
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
                 string errMessage = string.Empty;
+                progressBarFolder.Value = 0;
+                progressBarQuery.Value = 0;
 
                 if (rbRunScript.Checked)
                 {
                     if (string.IsNullOrEmpty(txtResult.Text)) return;
+
+                    progressBarFolder.Maximum = dicResult.Count;
 
                     txtLog.Text = string.Empty;
                     foreach (KeyValuePair<string, string> entry in dicResult)
@@ -508,6 +623,7 @@ namespace ToolWorking.Views
                             {
                                 txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
                             }
+                            updateProgressFolder();
                         }
                         catch (Exception ex)
                         {
@@ -526,6 +642,8 @@ namespace ToolWorking.Views
                     if (chkMultiRow.Checked)
                     {
                         int numRow = Convert.ToInt32(txtNumRow.Text);
+                        progressBarQuery.Maximum = numRow;
+
                         for (int i = 1; i <= numRow; i++)
                         {
                             value = getValue(i);
@@ -535,15 +653,51 @@ namespace ToolWorking.Views
                             txtResultQuery.Text += value + "\r\n";
 
                             if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+
+                            updateProgressQuery();
+
                             if (!string.IsNullOrEmpty(errMessage)) break;
                         }
                         if (!string.IsNullOrEmpty(errMessage))
                         {
                             MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            progressBarQuery.Value = 0;
                         }
                         else if (cbDatabase.SelectedIndex != 0)
                         {
                             MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    if (rbInputExcel.Checked)
+                    {
+                        progressBarQuery.Maximum = lstInputExcel.Count;
+                        for (int i = 0; i < lstInputExcel.Count; i++)
+                        {
+                            value = lstInputExcel[i];
+                            if (string.IsNullOrEmpty(value))
+                            {
+                                txtResultQuery.Text += "Data line " + i + 1 + " entered the wrong format" + "\r\n";
+                                continue;
+                            }
+
+                            value = string.Format(tempInsert, nameTable, value);
+                            txtResultQuery.Text += value + "\r\n";
+
+                            if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+
+                            updateProgressQuery();
+
+                            if (!string.IsNullOrEmpty(errMessage)) break;
+                        }
+
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            progressBarQuery.Value = 0;
+                        }
+                        else if (cbDatabase.SelectedIndex != 0)
+                        {
+                            MessageBox.Show("Execute inserting " + lstInputExcel.Count + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     else
@@ -568,10 +722,12 @@ namespace ToolWorking.Views
                     if (!string.IsNullOrEmpty(txtResultQuery.Text)) btnCopyResult.Enabled = true;
                     else btnCopyResult.Enabled = false;
                 }
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -659,7 +815,7 @@ namespace ToolWorking.Views
                 treeNodeAdd.StateImageIndex = 1;
                 treeNodeAdd.ImageIndex = 1;
                 treeNodeAdd.SelectedImageIndex = 1;
-                updateProgress();
+                updateProgressFolder();
             }
         }
 
@@ -683,14 +839,14 @@ namespace ToolWorking.Views
                 treeNodeAdd.SelectedImageIndex = 0;
                 loadFiles(pathSubFolder, treeNodeAdd);
                 loadSubDirectories(pathSubFolder, treeNodeAdd);
-                updateProgress();
+                updateProgressFolder();
             }
         }
 
         /// <summary>
         /// Update processing progress
         /// </summary>
-        private void updateProgress()
+        private void updateProgressFolder()
         {
             if (progressBarFolder.Value < progressBarFolder.Maximum)
             {
@@ -698,6 +854,21 @@ namespace ToolWorking.Views
                 int percent = (int)(((double)progressBarFolder.Value / (double)progressBarFolder.Maximum) * 100);
                 string percentDisplay = percent < 10 ? "0" + percent.ToString() : percent.ToString();
                 progressBarFolder.CreateGraphics().DrawString(percentDisplay + " %", new Font("Century Gothic", (float)10, FontStyle.Regular), Brushes.Black, new PointF(progressBarFolder.Width / 2 - 10, progressBarFolder.Height / 2 - 7));
+                Application.DoEvents();
+            }
+        }
+
+        /// <summary>
+        /// Update processing progress
+        /// </summary>
+        private void updateProgressQuery()
+        {
+            if (progressBarQuery.Value < progressBarQuery.Maximum)
+            {
+                progressBarQuery.Value++;
+                int percent = (int)(((double)progressBarQuery.Value / (double)progressBarQuery.Maximum) * 100);
+                string percentDisplay = percent < 10 ? "0" + percent.ToString() : percent.ToString();
+                progressBarQuery.CreateGraphics().DrawString(percentDisplay + " %", new Font("Century Gothic", (float)10, FontStyle.Regular), Brushes.Black, new PointF(progressBarQuery.Width / 2 - 10, progressBarQuery.Height / 2 - 7));
                 Application.DoEvents();
             }
         }
@@ -885,6 +1056,35 @@ namespace ToolWorking.Views
             }
 
             return result.Trim().TrimEnd(',');
+        }
+
+        /// <summary>
+        /// Create value in data excel
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private string createValue(string type, string value)
+        {
+            if (type.Contains(CONST.C_TYPE_STRING))
+            {
+                if (isValidate(type, value, value.Length)) return "null";
+
+                return "'" + value + "'";
+            }
+            else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
+            {
+                return "SYSDATETIME()";
+            }
+            else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
+            {
+                return "null";
+            }
+            else
+            {
+                if (isValidate(type, value, value.Length)) return "0";
+                return value;
+            }
         }
 
         /// <summary>

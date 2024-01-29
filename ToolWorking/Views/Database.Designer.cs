@@ -31,9 +31,12 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Database));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.panelQueryInput = new System.Windows.Forms.Panel();
+            this.rbInputTable = new System.Windows.Forms.RadioButton();
+            this.rbInputExcel = new System.Windows.Forms.RadioButton();
             this.cbDatabase = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.rbRunQuery = new System.Windows.Forms.RadioButton();
@@ -68,6 +71,7 @@ namespace ToolWorking.Views
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtScriptTable = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtInputExcel = new System.Windows.Forms.RichTextBox();
             this.gridInputValue = new System.Windows.Forms.DataGridView();
             this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,7 +80,9 @@ namespace ToolWorking.Views
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtResultQuery = new System.Windows.Forms.RichTextBox();
+            this.progressBarQuery = new System.Windows.Forms.ProgressBar();
             this.panelTop.SuspendLayout();
+            this.panelQueryInput.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.panelCenterScript.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
@@ -88,6 +94,7 @@ namespace ToolWorking.Views
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.panelQueryInput);
             this.panelTop.Controls.Add(this.cbDatabase);
             this.panelTop.Controls.Add(this.label4);
             this.panelTop.Controls.Add(this.rbRunQuery);
@@ -109,6 +116,42 @@ namespace ToolWorking.Views
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(660, 63);
             this.panelTop.TabIndex = 0;
+            // 
+            // panelQueryInput
+            // 
+            this.panelQueryInput.Controls.Add(this.rbInputTable);
+            this.panelQueryInput.Controls.Add(this.rbInputExcel);
+            this.panelQueryInput.Location = new System.Drawing.Point(246, 35);
+            this.panelQueryInput.Name = "panelQueryInput";
+            this.panelQueryInput.Size = new System.Drawing.Size(404, 27);
+            this.panelQueryInput.TabIndex = 25;
+            this.panelQueryInput.Visible = false;
+            // 
+            // rbInputTable
+            // 
+            this.rbInputTable.AutoSize = true;
+            this.rbInputTable.Checked = true;
+            this.rbInputTable.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.rbInputTable.Location = new System.Drawing.Point(3, 2);
+            this.rbInputTable.Name = "rbInputTable";
+            this.rbInputTable.Size = new System.Drawing.Size(97, 21);
+            this.rbInputTable.TabIndex = 23;
+            this.rbInputTable.TabStop = true;
+            this.rbInputTable.Text = "Input Table";
+            this.rbInputTable.UseVisualStyleBackColor = true;
+            this.rbInputTable.CheckedChanged += new System.EventHandler(this.rbInputTable_CheckedChanged);
+            // 
+            // rbInputExcel
+            // 
+            this.rbInputExcel.AutoSize = true;
+            this.rbInputExcel.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.rbInputExcel.Location = new System.Drawing.Point(107, 2);
+            this.rbInputExcel.Name = "rbInputExcel";
+            this.rbInputExcel.Size = new System.Drawing.Size(95, 21);
+            this.rbInputExcel.TabIndex = 24;
+            this.rbInputExcel.Text = "Input Excel";
+            this.rbInputExcel.UseVisualStyleBackColor = true;
+            this.rbInputExcel.CheckedChanged += new System.EventHandler(this.rbInputExcel_CheckedChanged);
             // 
             // cbDatabase
             // 
@@ -137,11 +180,13 @@ namespace ToolWorking.Views
             // rbRunQuery
             // 
             this.rbRunQuery.AutoSize = true;
+            this.rbRunQuery.Checked = true;
             this.rbRunQuery.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.rbRunQuery.Location = new System.Drawing.Point(150, 37);
             this.rbRunQuery.Name = "rbRunQuery";
             this.rbRunQuery.Size = new System.Drawing.Size(91, 21);
             this.rbRunQuery.TabIndex = 20;
+            this.rbRunQuery.TabStop = true;
             this.rbRunQuery.Text = "Run Query";
             this.rbRunQuery.UseVisualStyleBackColor = true;
             this.rbRunQuery.CheckedChanged += new System.EventHandler(this.rbRunQuery_CheckedChanged);
@@ -149,13 +194,11 @@ namespace ToolWorking.Views
             // rbRunScript
             // 
             this.rbRunScript.AutoSize = true;
-            this.rbRunScript.Checked = true;
             this.rbRunScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.rbRunScript.Location = new System.Drawing.Point(55, 37);
             this.rbRunScript.Name = "rbRunScript";
             this.rbRunScript.Size = new System.Drawing.Size(89, 21);
             this.rbRunScript.TabIndex = 19;
-            this.rbRunScript.TabStop = true;
             this.rbRunScript.Text = "Run Script";
             this.rbRunScript.UseVisualStyleBackColor = true;
             this.rbRunScript.CheckedChanged += new System.EventHandler(this.rbRunScript_CheckedChanged);
@@ -184,7 +227,7 @@ namespace ToolWorking.Views
             // 
             this.lblPathFolder.AutoSize = true;
             this.lblPathFolder.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblPathFolder.Location = new System.Drawing.Point(248, 39);
+            this.lblPathFolder.Location = new System.Drawing.Point(246, 39);
             this.lblPathFolder.Name = "lblPathFolder";
             this.lblPathFolder.Size = new System.Drawing.Size(107, 17);
             this.lblPathFolder.TabIndex = 17;
@@ -203,10 +246,10 @@ namespace ToolWorking.Views
             // txtPathFolder
             // 
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathFolder.Location = new System.Drawing.Point(357, 36);
+            this.txtPathFolder.Location = new System.Drawing.Point(355, 36);
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.ReadOnly = true;
-            this.txtPathFolder.Size = new System.Drawing.Size(234, 24);
+            this.txtPathFolder.Size = new System.Drawing.Size(236, 24);
             this.txtPathFolder.TabIndex = 14;
             // 
             // txtPass
@@ -429,6 +472,7 @@ namespace ToolWorking.Views
             // panelCenterQuery
             // 
             this.panelCenterQuery.BackColor = System.Drawing.SystemColors.Control;
+            this.panelCenterQuery.Controls.Add(this.progressBarQuery);
             this.panelCenterQuery.Controls.Add(this.groupBox1);
             this.panelCenterQuery.Controls.Add(this.groupBox2);
             this.panelCenterQuery.Controls.Add(this.groupBox3);
@@ -464,14 +508,29 @@ namespace ToolWorking.Views
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtInputExcel);
             this.groupBox2.Controls.Add(this.gridInputValue);
             this.groupBox2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupBox2.Location = new System.Drawing.Point(9, 78);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(363, 232);
+            this.groupBox2.Size = new System.Drawing.Size(363, 205);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input Value ";
+            // 
+            // txtInputExcel
+            // 
+            this.txtInputExcel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtInputExcel.Enabled = false;
+            this.txtInputExcel.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtInputExcel.Location = new System.Drawing.Point(3, 19);
+            this.txtInputExcel.Name = "txtInputExcel";
+            this.txtInputExcel.Size = new System.Drawing.Size(357, 183);
+            this.txtInputExcel.TabIndex = 21;
+            this.txtInputExcel.Text = "";
+            this.txtInputExcel.Visible = false;
+            this.txtInputExcel.Click += new System.EventHandler(this.txtInputExcel_Click);
+            this.txtInputExcel.TextChanged += new System.EventHandler(this.txtInputExcel_TextChanged);
             // 
             // gridInputValue
             // 
@@ -481,14 +540,14 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -502,17 +561,17 @@ namespace ToolWorking.Views
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridInputValue.Size = new System.Drawing.Size(357, 210);
+            this.gridInputValue.Size = new System.Drawing.Size(357, 183);
             this.gridInputValue.TabIndex = 11;
             this.gridInputValue.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridInputValue_CurrentCellDirtyStateChanged);
             // 
@@ -564,7 +623,7 @@ namespace ToolWorking.Views
             this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupBox3.Location = new System.Drawing.Point(378, 78);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(274, 232);
+            this.groupBox3.Size = new System.Drawing.Size(274, 205);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Result Query";
@@ -576,9 +635,16 @@ namespace ToolWorking.Views
             this.txtResultQuery.Location = new System.Drawing.Point(3, 19);
             this.txtResultQuery.Name = "txtResultQuery";
             this.txtResultQuery.ReadOnly = true;
-            this.txtResultQuery.Size = new System.Drawing.Size(268, 210);
+            this.txtResultQuery.Size = new System.Drawing.Size(268, 183);
             this.txtResultQuery.TabIndex = 21;
             this.txtResultQuery.Text = "";
+            // 
+            // progressBarQuery
+            // 
+            this.progressBarQuery.Location = new System.Drawing.Point(9, 288);
+            this.progressBarQuery.Name = "progressBarQuery";
+            this.progressBarQuery.Size = new System.Drawing.Size(642, 21);
+            this.progressBarQuery.TabIndex = 24;
             // 
             // Database
             // 
@@ -595,6 +661,8 @@ namespace ToolWorking.Views
             this.Load += new System.EventHandler(this.Database_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.panelQueryInput.ResumeLayout(false);
+            this.panelQueryInput.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelCenterScript.ResumeLayout(false);
@@ -651,5 +719,10 @@ namespace ToolWorking.Views
         private System.Windows.Forms.CheckBox chkMultiRow;
         private System.Windows.Forms.Label lblNumRows;
         private System.Windows.Forms.TextBox txtNumRow;
+        private System.Windows.Forms.RadioButton rbInputExcel;
+        private System.Windows.Forms.RadioButton rbInputTable;
+        private System.Windows.Forms.Panel panelQueryInput;
+        private System.Windows.Forms.RichTextBox txtInputExcel;
+        private System.Windows.Forms.ProgressBar progressBarQuery;
     }
 }

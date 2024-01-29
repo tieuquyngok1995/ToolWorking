@@ -79,5 +79,29 @@ namespace ToolWorking.Utils
             }
         }
         #endregion
+
+        #region Handle string 
+        public static string RemoveLastCommaSpace(string str)
+        {
+            int lastIndex = str.LastIndexOf(CONST.STRING_COMMA + CONST.STRING_SPACE);
+            if (lastIndex != -1 && lastIndex == str.Length - 2)
+            {
+                str = str.Substring(0, lastIndex);
+                str = RemoveLastLineBlank(str);
+            }
+            return str;
+        }
+
+        public static string RemoveLastLineBlank(string str)
+        {
+            int lastIndex = str.LastIndexOf("\r\n");
+            if (lastIndex != -1 && lastIndex == str.Length - 2)
+            {
+                str = str.Substring(0, lastIndex);
+                str = RemoveLastLineBlank(str);
+            }
+            return str;
+        }
+        #endregion
     }
 }

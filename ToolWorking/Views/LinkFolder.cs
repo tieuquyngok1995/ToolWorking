@@ -166,7 +166,7 @@ namespace ToolWorking.Views
                 }
                 else
                 {
-                    MessageBox.Show("Select Directory!!");
+                    MessageBox.Show("Select Directory!!!");
                 }
 
                 // Set cursor as default arrow
@@ -438,11 +438,11 @@ namespace ToolWorking.Views
                 {
                     if (string.IsNullOrEmpty(txtPathFolder.Text) || !Directory.Exists(txtPathFolder.Text))
                     {
-                        MessageBox.Show("Select path folder srouce!!");
+                        MessageBox.Show("Select path folder srouce!!!");
                     }
                     else if (string.IsNullOrEmpty(txtPath.Text) || !Directory.Exists(txtPath.Text))
                     {
-                        MessageBox.Show("Select path folder move source!!");
+                        MessageBox.Show("Select path folder move source!!!");
                     }
                     else
                     {
@@ -674,17 +674,25 @@ namespace ToolWorking.Views
                         }
 
                         File.Copy(sourceFile, targetFile, true);
+
+                        txtResultPathFile.Text += "Copy file [" + fileName + "] success.\r\n";
                     }
                     else
                     {
-                        if (File.Exists(targetFile)) File.Delete(targetFile);
+                        if (File.Exists(targetFile))
+                        {
+                            File.Delete(targetFile);
+                            txtResultPathFile.Text += "Delete file [" + fileName + "] success.\r\n";
+                        }
+                        else
+                        {
+                            txtResultPathFile.Text += "Delete file [" + fileName + "] unsuccessful. File does not exist.\r\n";
+                        }
                     }
-
-                    txtResultPathFile.Text += "Copy file " + fileName + " success.\r\n";
                 }
                 catch (Exception ex)
                 {
-                    txtResultPathFile.Text += "Copy file " + fileName + " unsuccessful.\r\nError detail: " + ex.Message + "\r\n";
+                    txtResultPathFile.Text += "File processing [" + fileName + "] failed.\r\nError detail: " + ex.Message + "\r\n";
                 }
             }
         }
