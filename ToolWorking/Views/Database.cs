@@ -296,6 +296,42 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event change value search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtSearchScript_Click(object sender, EventArgs e)
+        {
+            txtSearchScript.SelectAll();
+            txtSearchScript.Focus();
+        }
+
+        /// <summary>
+        /// Event search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSearchScript_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string valSearch = txtSearchScript.Text.Trim();
+                if (string.IsNullOrEmpty(valSearch)) return;
+
+                foreach (TreeNode node in treeViewFolder.Nodes)
+                {
+                    searchNode(node, valSearch);
+                }
+
+                reloadResult();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
         /// Event select node tree
         /// </summary>
         /// <param name="sender"></param>
@@ -874,6 +910,44 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Search node in tree
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="valSearch"></param>
+        /// <param name="dirRemove"></param>
+        private void searchNode(TreeNode node, string valSearch)
+        {
+            string nodePath = node.Tag as string;
+
+            if (nodePath.Contains(valSearch))
+            {
+                string nodeKey = node.FullPath;
+                string nodeValue = node.Tag as string;
+
+                if (CUtils.dicIsExists(dicResult, nodeKey))
+                {
+                    dicResult.Remove(nodeKey);
+                }
+                else
+                {
+                    FileAttributes attr = File.GetAttributes(nodePath);
+                    if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                    {
+                        dicResult.Add(nodeKey, nodeValue);
+                    }
+                }
+            }
+
+            if (node.Nodes.Count > 0)
+            {
+                foreach (TreeNode actualNode in node.Nodes)
+                {
+                    searchNode(actualNode, valSearch);
+                }
+            }
+        }
+
+        /// <summary>
         /// Check exit node in tree
         /// </summary>
         /// <param name="node"></param>
@@ -1120,5 +1194,6 @@ namespace ToolWorking.Views
             }
         }
         #endregion
+
     }
 }

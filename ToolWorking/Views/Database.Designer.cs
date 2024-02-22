@@ -66,8 +66,12 @@ namespace ToolWorking.Views
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelCenterScript = new System.Windows.Forms.Panel();
+            this.btnSearchScript = new System.Windows.Forms.Button();
+            this.txtSearchScript = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.panelCenterQuery = new System.Windows.Forms.Panel();
+            this.progressBarQuery = new System.Windows.Forms.ProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtScriptTable = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -80,7 +84,6 @@ namespace ToolWorking.Views
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtResultQuery = new System.Windows.Forms.RichTextBox();
-            this.progressBarQuery = new System.Windows.Forms.ProgressBar();
             this.panelTop.SuspendLayout();
             this.panelQueryInput.SuspendLayout();
             this.panelBottom.SuspendLayout();
@@ -332,10 +335,10 @@ namespace ToolWorking.Views
             this.treeViewFolder.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.treeViewFolder.ImageIndex = 0;
             this.treeViewFolder.ImageList = this.imageListTree;
-            this.treeViewFolder.Location = new System.Drawing.Point(9, 3);
+            this.treeViewFolder.Location = new System.Drawing.Point(9, 32);
             this.treeViewFolder.Name = "treeViewFolder";
             this.treeViewFolder.SelectedImageIndex = 0;
-            this.treeViewFolder.Size = new System.Drawing.Size(642, 169);
+            this.treeViewFolder.Size = new System.Drawing.Size(642, 140);
             this.treeViewFolder.TabIndex = 6;
             this.treeViewFolder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFolder_AfterSelect);
             this.treeViewFolder.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewFolder_NodeMouseDoubleClick);
@@ -449,6 +452,9 @@ namespace ToolWorking.Views
             // 
             // panelCenterScript
             // 
+            this.panelCenterScript.Controls.Add(this.btnSearchScript);
+            this.panelCenterScript.Controls.Add(this.txtSearchScript);
+            this.panelCenterScript.Controls.Add(this.label6);
             this.panelCenterScript.Controls.Add(this.txtLog);
             this.panelCenterScript.Controls.Add(this.treeViewFolder);
             this.panelCenterScript.Controls.Add(this.progressBarFolder);
@@ -458,6 +464,35 @@ namespace ToolWorking.Views
             this.panelCenterScript.Name = "panelCenterScript";
             this.panelCenterScript.Size = new System.Drawing.Size(660, 318);
             this.panelCenterScript.TabIndex = 4;
+            // 
+            // btnSearchScript
+            // 
+            this.btnSearchScript.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchScript.Image")));
+            this.btnSearchScript.Location = new System.Drawing.Point(314, 1);
+            this.btnSearchScript.Name = "btnSearchScript";
+            this.btnSearchScript.Size = new System.Drawing.Size(26, 24);
+            this.btnSearchScript.TabIndex = 11;
+            this.btnSearchScript.UseVisualStyleBackColor = true;
+            this.btnSearchScript.Click += new System.EventHandler(this.btnSearchScript_Click);
+            // 
+            // txtSearchScript
+            // 
+            this.txtSearchScript.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtSearchScript.Location = new System.Drawing.Point(96, 1);
+            this.txtSearchScript.Name = "txtSearchScript";
+            this.txtSearchScript.Size = new System.Drawing.Size(213, 24);
+            this.txtSearchScript.TabIndex = 9;
+            this.txtSearchScript.Click += new System.EventHandler(this.txtSearchScript_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.label6.Location = new System.Drawing.Point(6, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(90, 17);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Search Script";
             // 
             // txtLog
             // 
@@ -482,6 +517,13 @@ namespace ToolWorking.Views
             this.panelCenterQuery.Size = new System.Drawing.Size(660, 318);
             this.panelCenterQuery.TabIndex = 9;
             this.panelCenterQuery.Visible = false;
+            // 
+            // progressBarQuery
+            // 
+            this.progressBarQuery.Location = new System.Drawing.Point(9, 288);
+            this.progressBarQuery.Name = "progressBarQuery";
+            this.progressBarQuery.Size = new System.Drawing.Size(642, 21);
+            this.progressBarQuery.TabIndex = 24;
             // 
             // groupBox1
             // 
@@ -639,13 +681,6 @@ namespace ToolWorking.Views
             this.txtResultQuery.TabIndex = 21;
             this.txtResultQuery.Text = "";
             // 
-            // progressBarQuery
-            // 
-            this.progressBarQuery.Location = new System.Drawing.Point(9, 288);
-            this.progressBarQuery.Name = "progressBarQuery";
-            this.progressBarQuery.Size = new System.Drawing.Size(642, 21);
-            this.progressBarQuery.TabIndex = 24;
-            // 
             // Database
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -666,6 +701,7 @@ namespace ToolWorking.Views
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelCenterScript.ResumeLayout(false);
+            this.panelCenterScript.PerformLayout();
             this.panelCenterQuery.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -724,5 +760,8 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Panel panelQueryInput;
         private System.Windows.Forms.RichTextBox txtInputExcel;
         private System.Windows.Forms.ProgressBar progressBarQuery;
+        private System.Windows.Forms.Button btnSearchScript;
+        private System.Windows.Forms.TextBox txtSearchScript;
+        private System.Windows.Forms.Label label6;
     }
 }
