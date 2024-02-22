@@ -72,6 +72,28 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event mouse move form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void panelLabel_MouseMove(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        /// <summary>
+        /// Event mouse move form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void labelTitle_MouseMove(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        /// <summary>
         /// Event minimize form
         /// </summary>
         /// <param name="sender"></param>
@@ -105,7 +127,7 @@ namespace ToolWorking.Views
             panelSide.Top = btnLinkFolder.Top;
             panelBotSide.Top = btnLinkFolder.Bottom - 2;
 
-            labelTitle.Text = CONST.TITLE_FILE_FOLDER; 
+            labelTitle.Text = CONST.TITLE_FILE_FOLDER;
 
             OpenChildForm(new LinkFolder(), sender);
         }
@@ -185,5 +207,6 @@ namespace ToolWorking.Views
             panelLeft.BackColor = panelColor;
         }
         #endregion
+
     }
 }

@@ -174,6 +174,7 @@ namespace ToolWorking.Views
             this.panelLabel.Name = "panelLabel";
             this.panelLabel.Size = new System.Drawing.Size(660, 37);
             this.panelLabel.TabIndex = 3;
+            this.panelLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelLabel_MouseMove);
             // 
             // labelTitle
             // 
@@ -184,6 +185,7 @@ namespace ToolWorking.Views
             this.labelTitle.Size = new System.Drawing.Size(172, 27);
             this.labelTitle.TabIndex = 3;
             this.labelTitle.Text = "labelTitle";
+            this.labelTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.labelTitle_MouseMove);
             // 
             // panelTopDown
             // 
