@@ -2,12 +2,10 @@
 {
     public static class CONST
     {
-
         public static string[] STRING_SEPARATORS = new string[] { STRING_NEW_LINE };
         public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE, STRING_SPACE };
 
         #region String 
-
         public const string STRING_NEW_LINE = "\n";
         public const string STRING_COMMA = ",";
         public const string STRING_DOT = ".";
@@ -18,11 +16,13 @@
         public const string STRING_C_O_SQU_BRACKETS_SPACE = "] [";
         public const string STRING_O_SQU_BRACKETS = "[";
         public const string STRING_C_SQU_BRACKETS = "]";
+
+        public const string STRING_EMPTY = "EMPTY";
         #endregion
 
         #region String SQL 
-
         public const string SQL_CREATE_TABLE = "CREATE TABLE";
+        public const string SQL_TYPE_CHAR = "char";
         public const string SQL_TYPE_VARCHAR = "varchar";
         public const string SQL_TYPE_NVARCHAR = "nvarchar";
         public const string SQL_TYPE_DATE = "date";

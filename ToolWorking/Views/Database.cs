@@ -28,7 +28,6 @@ namespace ToolWorking.Views
         // List value input excel
         private List<string> lstInputExcel = new List<string>();
 
-
         public Database()
         {
             InitializeComponent();
@@ -180,6 +179,7 @@ namespace ToolWorking.Views
                 panelCenterQuery.Visible = true;
                 chkMultiRow.Visible = true;
                 lblNumRows.Visible = chkMultiRow.Checked;
+                lblNumScript.Visible = false;
                 txtNumRow.Visible = chkMultiRow.Checked;
                 btnRunScript.Enabled = false;
                 btnRunScript.Text = "    Run Query";
@@ -315,6 +315,8 @@ namespace ToolWorking.Views
         {
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 string valSearch = txtSearchScript.Text.Trim();
                 if (string.IsNullOrEmpty(valSearch)) return;
 
@@ -324,9 +326,11 @@ namespace ToolWorking.Views
                 }
 
                 reloadResult();
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -350,6 +354,8 @@ namespace ToolWorking.Views
         {
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 if (nodeSelected.Nodes.Count > 0)
                 {
                     checkNodeExits(nodeSelected);
@@ -360,9 +366,11 @@ namespace ToolWorking.Views
                 }
 
                 reloadResult();
+                Cursor.Current = Cursors.Default;
             }
             catch (Exception ex)
             {
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -556,6 +564,10 @@ namespace ToolWorking.Views
                         if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
                         {
                             result += "null, ";
+                        }
+                        else if (item.ToUpper().Equals(CONST.STRING_EMPTY) && type.Contains(CONST.C_TYPE_STRING))
+                        {
+                            result += "'', ";
                         }
                         else
                         {
@@ -802,6 +814,7 @@ namespace ToolWorking.Views
                 txtLog.Text = string.Empty;
                 btnRunScript.Enabled = false;
                 btnCopyResult.Enabled = false;
+                lblNumScript.Visible = false;
             }
             else if (rbRunQuery.Checked)
             {
@@ -984,20 +997,29 @@ namespace ToolWorking.Views
         /// </summary>
         private void reloadResult()
         {
+            string result = string.Empty;
             txtResult.Text = string.Empty;
             txtLog.Text = string.Empty;
-            foreach (KeyValuePair<string, string> entry in dicResult)
+
+            progressBarFolder.Maximum = dicResult.Count;
+
+            foreach (var entry in dicResult)
             {
-                txtResult.Text = txtResult.Text + entry.Value + "\r\n";
+                result += entry.Value + "\r\n";
+                updateProgressFolder();
             }
 
+            txtResult.Text = result;
             if (!string.IsNullOrEmpty(txtResult.Text))
             {
                 btnRunScript.Enabled = true;
+                lblNumScript.Visible = true;
+                lblNumScript.Text = "Num Script Select: " + dicResult.Count;
             }
             else
             {
                 btnRunScript.Enabled = false;
+                lblNumScript.Visible = false;
             }
         }
 

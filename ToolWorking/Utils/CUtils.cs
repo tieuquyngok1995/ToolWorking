@@ -39,6 +39,7 @@ namespace ToolWorking.Utils
         {
             switch (type)
             {
+                case var sqlchar when type.Contains(CONST.SQL_TYPE_CHAR):
                 case var varchar when type.Contains(CONST.SQL_TYPE_VARCHAR):
                 case var nvarchar when type.Contains(CONST.SQL_TYPE_NVARCHAR):
                     return CONST.C_TYPE_STRING;
