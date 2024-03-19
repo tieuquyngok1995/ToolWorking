@@ -716,24 +716,6 @@ namespace ToolWorking.Views
                             MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
-                    else if (!chkMultiRow.Checked)
-                    {
-                        value = getValue(null);
-                        if (string.IsNullOrEmpty(value)) return;
-
-                        value = string.Format(tempInsert, nameTable, value);
-                        txtResultQuery.Text = value;
-
-                        if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
-                        if (!string.IsNullOrEmpty(errMessage))
-                        {
-                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        else if (cbDatabase.SelectedIndex != 0)
-                        {
-                            MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
                     else if (rbInputExcel.Checked)
                     {
                         progressBarQuery.Maximum = lstInputExcel.Count;
@@ -764,6 +746,24 @@ namespace ToolWorking.Views
                         else if (cbDatabase.SelectedIndex != 0)
                         {
                             MessageBox.Show("Execute inserting " + lstInputExcel.Count + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        value = getValue(null);
+                        if (string.IsNullOrEmpty(value)) return;
+
+                        value = string.Format(tempInsert, nameTable, value);
+                        txtResultQuery.Text = value;
+
+                        if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (cbDatabase.SelectedIndex != 0)
+                        {
+                            MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
 
