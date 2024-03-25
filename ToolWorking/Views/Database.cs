@@ -436,7 +436,7 @@ namespace ToolWorking.Views
                         {
                             if (name.Contains("コード"))
                             {
-                                defaultValue = addValue(range) + "1";
+                                defaultValue = addValue(range, 0) + "1";
                             }
                             else if (range > 8)
                             {
@@ -1046,17 +1046,20 @@ namespace ToolWorking.Views
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private string addValue(int range)
+        private string addValue(int range, int numIndex)
         {
             int index = 0;
             string result = string.Empty;
+            int numOut = range - numIndex.ToString().Length - 1;
+            numOut = numOut > 15 ? 15 : numOut;
 
-            while (index < range - 1)
+            while (index < numOut)
             {
                 result += "0";
                 index++;
             }
 
+            if (numOut >= 0) result += numIndex;
             return result;
         }
 
@@ -1089,26 +1092,34 @@ namespace ToolWorking.Views
                     }
                     else if (index.HasValue)
                     {
-                        if (range == 1) value = "0";
-                        else if (range == 2) value = (index % 100).ToString();
-                        else if (range == 3) value = (index % 1000).ToString();
-                        else value = index.ToString();
-
-                        if (name.Contains("コード"))
+                        if (value.Length <= range)
                         {
-                            if (value.Length < range)
+                            value = value + addValue(range - value.Length + 1, index.Value);
+                        }
+                        else
+                        {
+                            if (range == 2) value = (index % 100).ToString();
+                            else if (range == 3) value = (index % 1000).ToString();
+                            else value = index.ToString();
+
+                            if (name.Contains("コード"))
                             {
-                                value = addValue(range - value.Length + 1) + value;
+                                if (value.Length < range)
+                                {
+                                    value = addValue(range - value.Length + 1, index.Value) + value;
+                                }
+                            }
+                            else if (range >= 11)
+                            {
+                                value = "Fjn-Test" + value;
+                            }
+                            else if (range >= 6)
+                            {
+                                value = "Fjn" + value;
                             }
                         }
-                        else if (range >= 11)
-                        {
-                            value = "Fjn-Test" + value;
-                        }
-                        else if (range >= 6)
-                        {
-                            value = "Fjn" + value;
-                        }
+
+                        result += "'" + value + "'" + ", ";
                     }
                     else
                     {
