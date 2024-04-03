@@ -434,46 +434,7 @@ namespace ToolWorking.Views
                         string defaultValue = string.Empty;
                         if (type.Contains(CONST.C_TYPE_STRING))
                         {
-                            if (name.Contains("コード"))
-                            {
-                                defaultValue = addValue(range, 0) + "1";
-                            }
-                            else if (range > 8)
-                            {
-                                defaultValue = "Fjn-Test1";
-                            }
-                            else if (range == 8)
-                            {
-                                defaultValue = "Fjn-Test";
-                            }
-                            else if (range == 7)
-                            {
-                                defaultValue = "FjnTest";
-                            }
-                            else if (range == 6)
-                            {
-                                defaultValue = "Test01";
-                            }
-                            else if (range == 5)
-                            {
-                                defaultValue = "Test1";
-                            }
-                            else if (range == 4)
-                            {
-                                defaultValue = "Test";
-                            }
-                            else if (range == 3)
-                            {
-                                defaultValue = "Fjn";
-                            }
-                            else if (range == 2)
-                            {
-                                defaultValue = "01";
-                            }
-                            else if (range == 1)
-                            {
-                                defaultValue = "0";
-                            }
+                            defaultValue = addValue(range, 0) + "1";
                         }
                         else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
                         {
@@ -1101,22 +1062,6 @@ namespace ToolWorking.Views
                             if (range == 2) value = (index % 100).ToString();
                             else if (range == 3) value = (index % 1000).ToString();
                             else value = index.ToString();
-
-                            if (name.Contains("コード"))
-                            {
-                                if (value.Length < range)
-                                {
-                                    value = addValue(range - value.Length + 1, index.Value) + value;
-                                }
-                            }
-                            else if (range >= 11)
-                            {
-                                value = "Fjn-Test" + value;
-                            }
-                            else if (range >= 6)
-                            {
-                                value = "Fjn" + value;
-                            }
                         }
 
                         result += "'" + value + "'" + ", ";
