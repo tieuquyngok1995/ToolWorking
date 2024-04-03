@@ -1,6 +1,6 @@
 ﻿namespace ToolWorking.Model
 {
-    class FileModel
+    public class FileModel
     {
         public int no { get; set; }
 
