@@ -272,6 +272,8 @@ namespace ToolWorking.Views
                 toolTip.ShowAlways = true;
                 if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
                 {
+                    runCommandUpdateSVN();
+
                     loadDirectory(txtPathFolder.Text);
 
                     txtResult.Text = string.Empty;
@@ -1169,6 +1171,30 @@ namespace ToolWorking.Views
             else
             {
                 return !int.TryParse(value, out _);
+            }
+        }
+
+        /// <summary>
+        /// Run command line update svn 
+        /// </summary>
+        /// <returns></returns>
+        private void runCommandUpdateSVN()
+        {
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = "/C cd /d \"" + pathFolderDatabase + "\" && svn update \"" + pathFolderDatabase + "\"&& exit";
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+                process.Close();
+            }
+            catch
+            {
+                throw;
             }
         }
         #endregion

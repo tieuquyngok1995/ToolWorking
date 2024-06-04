@@ -57,6 +57,7 @@ namespace ToolWorking.Views
             this.treeViewFolder = new System.Windows.Forms.TreeView();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.lblNumScript = new System.Windows.Forms.Label();
             this.lblNumRows = new System.Windows.Forms.Label();
             this.chkMultiRow = new System.Windows.Forms.CheckBox();
             this.txtNumRow = new System.Windows.Forms.TextBox();
@@ -84,7 +85,6 @@ namespace ToolWorking.Views
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtResultQuery = new System.Windows.Forms.RichTextBox();
-            this.lblNumScript = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.panelQueryInput.SuspendLayout();
             this.panelBottom.SuspendLayout();
@@ -164,6 +164,7 @@ namespace ToolWorking.Views
             this.cbDatabase.Items.AddRange(new object[] {
             "---None---",
             "esKyotsu",
+            "UsoliaMvc",
             "Usolia障害者福祉システム"});
             this.cbDatabase.Location = new System.Drawing.Point(220, 6);
             this.cbDatabase.Name = "cbDatabase";
@@ -365,6 +366,17 @@ namespace ToolWorking.Views
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 3;
+            // 
+            // lblNumScript
+            // 
+            this.lblNumScript.AutoSize = true;
+            this.lblNumScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblNumScript.Location = new System.Drawing.Point(9, 4);
+            this.lblNumScript.Name = "lblNumScript";
+            this.lblNumScript.Size = new System.Drawing.Size(128, 17);
+            this.lblNumScript.TabIndex = 25;
+            this.lblNumScript.Text = "Num Script Select: ";
+            this.lblNumScript.Visible = false;
             // 
             // lblNumRows
             // 
@@ -682,17 +694,6 @@ namespace ToolWorking.Views
             this.txtResultQuery.Size = new System.Drawing.Size(268, 183);
             this.txtResultQuery.TabIndex = 21;
             this.txtResultQuery.Text = "";
-            // 
-            // lblNumScript
-            // 
-            this.lblNumScript.AutoSize = true;
-            this.lblNumScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblNumScript.Location = new System.Drawing.Point(9, 4);
-            this.lblNumScript.Name = "lblNumScript";
-            this.lblNumScript.Size = new System.Drawing.Size(128, 17);
-            this.lblNumScript.TabIndex = 25;
-            this.lblNumScript.Text = "Num Script Select: ";
-            this.lblNumScript.Visible = false;
             // 
             // Database
             // 
