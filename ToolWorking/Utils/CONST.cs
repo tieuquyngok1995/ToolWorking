@@ -18,6 +18,7 @@
         public const string STRING_C_SQU_BRACKETS = "]";
 
         public const string STRING_EMPTY = "EMPTY";
+        public const string STRING_TRUNK = "trunk";
         #endregion
 
         #region String SQL 

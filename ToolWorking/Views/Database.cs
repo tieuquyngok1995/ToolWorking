@@ -275,7 +275,6 @@ namespace ToolWorking.Views
                     runCommandUpdateSVN();
 
                     loadDirectory(txtPathFolder.Text);
-
                     txtResult.Text = string.Empty;
                 }
                 else
@@ -590,6 +589,68 @@ namespace ToolWorking.Views
             {
                 e.Handled = true;
             }
+        }
+
+        /// <summary>
+        /// Event check change value text
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtResult_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtResult.Text))
+            {
+                btnRunScript.Enabled = true;
+            }
+            else
+            {
+                btnRunScript.Enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Event edit value 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtResult_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtResult.Text)) return;
+
+            string nameFolder = pathFolderDatabase.Substring(pathFolderDatabase.LastIndexOf("\\"));
+            string[] arrPaths = txtResult.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
+            string result = string.Empty;
+            foreach (string path in arrPaths)
+            {
+                string tmpPath = path.Replace("/", "\\");
+                if (tmpPath.Contains(CONST.STRING_TRUNK) && tmpPath.Contains(nameFolder))
+                {
+                    string pathKey = tmpPath.Substring(tmpPath.LastIndexOf(nameFolder));
+                    string pathValue = pathFolderDatabase.Replace(nameFolder, "") + pathKey;
+
+                    if (CUtils.dicIsExists(dicResult, pathKey))
+                    {
+                        dicResult.Remove(pathKey);
+                    }
+                    else
+                    {
+                        FileAttributes attr = File.GetAttributes(pathValue);
+                        if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                        {
+                            dicResult.Add(pathKey, pathValue);
+                        }
+                    }
+
+                    result += pathValue + CONST.STRING_NEW_LINE;
+                }
+                else
+                {
+                    result += path + CONST.STRING_NEW_LINE;
+                }
+            }
+
+            txtResult.Text = result;
         }
 
         /// <summary>
