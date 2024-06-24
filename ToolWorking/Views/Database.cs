@@ -635,6 +635,8 @@ namespace ToolWorking.Views
                     }
                     else
                     {
+                        int index = pathValue.IndexOf(".sql");
+                        if (index >= 0) pathValue = pathValue.Substring(0, index) + ".sql";
                         FileAttributes attr = File.GetAttributes(pathValue);
                         if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                         {
