@@ -54,14 +54,16 @@ namespace ToolWorking.Views
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelCenterPath = new System.Windows.Forms.Panel();
+            this.lblNumBefore = new System.Windows.Forms.Label();
+            this.lblNumAfter = new System.Windows.Forms.Label();
             this.txtResultPathFile = new System.Windows.Forms.RichTextBox();
             this.txtListFile = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.rbDelete = new System.Windows.Forms.RadioButton();
             this.rbCopy = new System.Windows.Forms.RadioButton();
             this.lblAction = new System.Windows.Forms.Label();
-            this.lblNumAfter = new System.Windows.Forms.Label();
-            this.lblNumBefore = new System.Windows.Forms.Label();
+            this.btnOpenPathBk = new System.Windows.Forms.Button();
+            this.txtPathBk = new System.Windows.Forms.TextBox();
             this.panelTop.SuspendLayout();
             this.panelCenterTreeFolder.SuspendLayout();
             this.panelCenterPath.SuspendLayout();
@@ -70,6 +72,8 @@ namespace ToolWorking.Views
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.btnOpenPathBk);
+            this.panelTop.Controls.Add(this.txtPathBk);
             this.panelTop.Controls.Add(this.btnOpenPath);
             this.panelTop.Controls.Add(this.rbModePath);
             this.panelTop.Controls.Add(this.rbModeTree);
@@ -144,13 +148,12 @@ namespace ToolWorking.Views
             this.txtPath.ReadOnly = true;
             this.txtPath.Size = new System.Drawing.Size(170, 24);
             this.txtPath.TabIndex = 5;
-            this.txtPath.Click += new System.EventHandler(this.txtPathRemove_Click);
             this.txtPath.TextChanged += new System.EventHandler(this.txtPathRemove_TextChanged);
             // 
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(255, 35);
+            this.btnSearchPG.Location = new System.Drawing.Point(264, 36);
             this.btnSearchPG.Name = "btnSearchPG";
             this.btnSearchPG.Size = new System.Drawing.Size(26, 24);
             this.btnSearchPG.TabIndex = 4;
@@ -160,9 +163,9 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(80, 35);
+            this.txtPGSearch.Location = new System.Drawing.Point(109, 36);
             this.txtPGSearch.Name = "txtPGSearch";
-            this.txtPGSearch.Size = new System.Drawing.Size(170, 24);
+            this.txtPGSearch.Size = new System.Drawing.Size(150, 24);
             this.txtPGSearch.TabIndex = 3;
             this.txtPGSearch.Click += new System.EventHandler(this.txtPGSearch_Click);
             this.txtPGSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPGSearch_KeyDown);
@@ -173,9 +176,9 @@ namespace ToolWorking.Views
             this.lblSearch.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.lblSearch.Location = new System.Drawing.Point(6, 39);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(74, 17);
+            this.lblSearch.Size = new System.Drawing.Size(100, 17);
             this.lblSearch.TabIndex = 4;
-            this.lblSearch.Text = "PG Search";
+            this.lblSearch.Text = "Project Search";
             // 
             // btnReloadFolder
             // 
@@ -236,6 +239,7 @@ namespace ToolWorking.Views
             // 
             // treeViewFolder
             // 
+            this.treeViewFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.treeViewFolder.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.treeViewFolder.ImageIndex = 0;
             this.treeViewFolder.ImageList = this.imageListTree;
@@ -314,6 +318,28 @@ namespace ToolWorking.Views
             this.panelCenterPath.Size = new System.Drawing.Size(660, 348);
             this.panelCenterPath.TabIndex = 10;
             // 
+            // lblNumBefore
+            // 
+            this.lblNumBefore.AutoSize = true;
+            this.lblNumBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNumBefore.Location = new System.Drawing.Point(13, 186);
+            this.lblNumBefore.Name = "lblNumBefore";
+            this.lblNumBefore.Size = new System.Drawing.Size(148, 15);
+            this.lblNumBefore.TabIndex = 24;
+            this.lblNumBefore.Text = "Line number before input:";
+            this.lblNumBefore.Visible = false;
+            // 
+            // lblNumAfter
+            // 
+            this.lblNumAfter.AutoSize = true;
+            this.lblNumAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNumAfter.Location = new System.Drawing.Point(478, 186);
+            this.lblNumAfter.Name = "lblNumAfter";
+            this.lblNumAfter.Size = new System.Drawing.Size(154, 15);
+            this.lblNumAfter.TabIndex = 23;
+            this.lblNumAfter.Text = "Line number after change: ";
+            this.lblNumAfter.Visible = false;
+            // 
             // txtResultPathFile
             // 
             this.txtResultPathFile.Font = new System.Drawing.Font("Century Gothic", 9F);
@@ -332,7 +358,6 @@ namespace ToolWorking.Views
             this.txtListFile.Size = new System.Drawing.Size(642, 182);
             this.txtListFile.TabIndex = 21;
             this.txtListFile.Text = "";
-            this.txtListFile.Click += new System.EventHandler(this.txtListFile_Click);
             this.txtListFile.TextChanged += new System.EventHandler(this.txtListFile_TextChanged);
             // 
             // panelBottom
@@ -388,27 +413,25 @@ namespace ToolWorking.Views
             this.lblAction.Text = "Choose Action";
             this.lblAction.Visible = false;
             // 
-            // lblNumAfter
+            // btnOpenPathBk
             // 
-            this.lblNumAfter.AutoSize = true;
-            this.lblNumAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumAfter.Location = new System.Drawing.Point(478, 186);
-            this.lblNumAfter.Name = "lblNumAfter";
-            this.lblNumAfter.Size = new System.Drawing.Size(154, 15);
-            this.lblNumAfter.TabIndex = 23;
-            this.lblNumAfter.Text = "Line number after change: ";
-            this.lblNumAfter.Visible = false;
+            this.btnOpenPathBk.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenPathBk.Image")));
+            this.btnOpenPathBk.Location = new System.Drawing.Point(265, 36);
+            this.btnOpenPathBk.Name = "btnOpenPathBk";
+            this.btnOpenPathBk.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenPathBk.TabIndex = 18;
+            this.btnOpenPathBk.UseVisualStyleBackColor = true;
+            this.btnOpenPathBk.Click += new System.EventHandler(this.btnOpenPathBk_Click);
             // 
-            // lblNumBefore
+            // txtPathBk
             // 
-            this.lblNumBefore.AutoSize = true;
-            this.lblNumBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumBefore.Location = new System.Drawing.Point(13, 186);
-            this.lblNumBefore.Name = "lblNumBefore";
-            this.lblNumBefore.Size = new System.Drawing.Size(148, 15);
-            this.lblNumBefore.TabIndex = 24;
-            this.lblNumBefore.Text = "Line number before input:";
-            this.lblNumBefore.Visible = false;
+            this.txtPathBk.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPathBk.Location = new System.Drawing.Point(109, 36);
+            this.txtPathBk.Name = "txtPathBk";
+            this.txtPathBk.ReadOnly = true;
+            this.txtPathBk.Size = new System.Drawing.Size(150, 24);
+            this.txtPathBk.TabIndex = 17;
+            this.txtPathBk.TextChanged += new System.EventHandler(this.txtPathBk_TextChanged);
             // 
             // LinkFolder
             // 
@@ -466,5 +489,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Label lblAction;
         private System.Windows.Forms.Label lblNumAfter;
         private System.Windows.Forms.Label lblNumBefore;
+        private System.Windows.Forms.Button btnOpenPathBk;
+        private System.Windows.Forms.TextBox txtPathBk;
     }
 }
