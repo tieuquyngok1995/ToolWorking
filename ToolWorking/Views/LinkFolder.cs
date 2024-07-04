@@ -73,8 +73,8 @@ namespace ToolWorking.Views
             lblSearch.Text = "Project Search";
             txtPGSearch.Visible = rbModeTree.Checked;
             btnSearchPG.Visible = rbModeTree.Checked;
-            txtPathBk.Visible = rbModeTree.Checked;
-            btnOpenPathBk.Visible = rbModeTree.Checked;
+            txtPathBk.Visible = rbModePath.Checked;
+            btnOpenPathBk.Visible = rbModePath.Checked;
 
             lblPath.Text = "Remove Folder";
 
@@ -110,6 +110,7 @@ namespace ToolWorking.Views
             lblAction.Visible = true;
             rbCopy.Visible = true;
             rbCopy.Checked = true;
+            rbCopyBackup.Visible = true;
             rbDelete.Visible = true;
             btnCopyResult.Text = "    Copy";
 
@@ -358,6 +359,19 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event select all text 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtListFile_Click(object sender, EventArgs e)
+        {
+            txtListFile.SelectAll();
+            txtListFile.Focus();
+            txtListFile.SelectionStart = txtListFile.Text.Length;
+            txtListFile.SelectionLength = 0;
+        }
+
+        /// <summary>
         /// Event change value textbox list file
         /// </summary>
         /// <param name="sender"></param>
@@ -466,6 +480,10 @@ namespace ToolWorking.Views
                     else if (string.IsNullOrEmpty(txtPath.Text) || !Directory.Exists(txtPath.Text))
                     {
                         MessageBox.Show("Select path folder move source!!!");
+                    }
+                    else if (string.IsNullOrEmpty(txtPathBk.Text) || !Directory.Exists(txtPathBk.Text))
+                    {
+                        if (rbCopyBackup.Checked) MessageBox.Show("Select path folder backup source!!!");
                     }
                     else
                     {
@@ -701,7 +719,7 @@ namespace ToolWorking.Views
                     {
                         if (!string.IsNullOrEmpty(txtPathBk.Text))
                         {
-                            if (!Directory.Exists(targetBk))
+                            if (!Directory.Exists(targetBk) && File.Exists(sourceFile))
                             {
                                 Directory.CreateDirectory(targetBk);
                             }
@@ -709,12 +727,23 @@ namespace ToolWorking.Views
                             File.Copy(sourceFile, targetFileBk, true);
                         }
 
-                        if (!Directory.Exists(targetDir))
+                        if (!Directory.Exists(targetDir) && File.Exists(sourceFile))
                         {
                             Directory.CreateDirectory(targetDir);
                         }
 
                         File.Copy(sourceFile, targetFile, true);
+
+                        txtResultPathFile.Text += "Copy file [" + fileName + "] success.\r\n";
+                    }
+                    else if (rbCopyBackup.Checked)
+                    {
+                        if (!Directory.Exists(targetBk) && File.Exists(targetFile))
+                        {
+                            Directory.CreateDirectory(targetBk);
+                        }
+
+                        File.Copy(targetFile, targetFileBk, true);
 
                         txtResultPathFile.Text += "Copy file [" + fileName + "] success.\r\n";
                     }

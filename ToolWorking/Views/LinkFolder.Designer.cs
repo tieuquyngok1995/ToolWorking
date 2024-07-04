@@ -32,6 +32,8 @@ namespace ToolWorking.Views
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LinkFolder));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btnOpenPathBk = new System.Windows.Forms.Button();
+            this.txtPathBk = new System.Windows.Forms.TextBox();
             this.btnOpenPath = new System.Windows.Forms.Button();
             this.rbModePath = new System.Windows.Forms.RadioButton();
             this.rbModeTree = new System.Windows.Forms.RadioButton();
@@ -59,11 +61,10 @@ namespace ToolWorking.Views
             this.txtResultPathFile = new System.Windows.Forms.RichTextBox();
             this.txtListFile = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.rbCopyBackup = new System.Windows.Forms.RadioButton();
             this.rbDelete = new System.Windows.Forms.RadioButton();
             this.rbCopy = new System.Windows.Forms.RadioButton();
             this.lblAction = new System.Windows.Forms.Label();
-            this.btnOpenPathBk = new System.Windows.Forms.Button();
-            this.txtPathBk = new System.Windows.Forms.TextBox();
             this.panelTop.SuspendLayout();
             this.panelCenterTreeFolder.SuspendLayout();
             this.panelCenterPath.SuspendLayout();
@@ -92,6 +93,26 @@ namespace ToolWorking.Views
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(660, 63);
             this.panelTop.TabIndex = 0;
+            // 
+            // btnOpenPathBk
+            // 
+            this.btnOpenPathBk.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenPathBk.Image")));
+            this.btnOpenPathBk.Location = new System.Drawing.Point(265, 36);
+            this.btnOpenPathBk.Name = "btnOpenPathBk";
+            this.btnOpenPathBk.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenPathBk.TabIndex = 18;
+            this.btnOpenPathBk.UseVisualStyleBackColor = true;
+            this.btnOpenPathBk.Click += new System.EventHandler(this.btnOpenPathBk_Click);
+            // 
+            // txtPathBk
+            // 
+            this.txtPathBk.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPathBk.Location = new System.Drawing.Point(109, 36);
+            this.txtPathBk.Name = "txtPathBk";
+            this.txtPathBk.ReadOnly = true;
+            this.txtPathBk.Size = new System.Drawing.Size(150, 24);
+            this.txtPathBk.TabIndex = 17;
+            this.txtPathBk.TextChanged += new System.EventHandler(this.txtPathBk_TextChanged);
             // 
             // btnOpenPath
             // 
@@ -358,10 +379,12 @@ namespace ToolWorking.Views
             this.txtListFile.Size = new System.Drawing.Size(642, 182);
             this.txtListFile.TabIndex = 21;
             this.txtListFile.Text = "";
+            this.txtListFile.Click += new System.EventHandler(this.txtListFile_Click);
             this.txtListFile.TextChanged += new System.EventHandler(this.txtListFile_TextChanged);
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.rbCopyBackup);
             this.panelBottom.Controls.Add(this.rbDelete);
             this.panelBottom.Controls.Add(this.btnCopyResult);
             this.panelBottom.Controls.Add(this.rbCopy);
@@ -373,15 +396,26 @@ namespace ToolWorking.Views
             this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 11;
             // 
+            // rbCopyBackup
+            // 
+            this.rbCopyBackup.AutoSize = true;
+            this.rbCopyBackup.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.rbCopyBackup.Location = new System.Drawing.Point(231, 3);
+            this.rbCopyBackup.Name = "rbCopyBackup";
+            this.rbCopyBackup.Size = new System.Drawing.Size(113, 21);
+            this.rbCopyBackup.TabIndex = 20;
+            this.rbCopyBackup.Text = "Copy Backup";
+            this.rbCopyBackup.UseVisualStyleBackColor = true;
+            this.rbCopyBackup.Visible = false;
+            // 
             // rbDelete
             // 
             this.rbDelete.AutoSize = true;
             this.rbDelete.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbDelete.Location = new System.Drawing.Point(189, 3);
+            this.rbDelete.Location = new System.Drawing.Point(348, 3);
             this.rbDelete.Name = "rbDelete";
             this.rbDelete.Size = new System.Drawing.Size(68, 21);
             this.rbDelete.TabIndex = 19;
-            this.rbDelete.TabStop = true;
             this.rbDelete.Text = "Delete";
             this.rbDelete.UseVisualStyleBackColor = true;
             this.rbDelete.Visible = false;
@@ -394,10 +428,9 @@ namespace ToolWorking.Views
             this.rbCopy.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.rbCopy.Location = new System.Drawing.Point(118, 3);
             this.rbCopy.Name = "rbCopy";
-            this.rbCopy.Size = new System.Drawing.Size(61, 21);
+            this.rbCopy.Size = new System.Drawing.Size(108, 21);
             this.rbCopy.TabIndex = 18;
-            this.rbCopy.TabStop = true;
-            this.rbCopy.Text = "Copy";
+            this.rbCopy.Text = "Copy Source";
             this.rbCopy.UseVisualStyleBackColor = true;
             this.rbCopy.Visible = false;
             this.rbCopy.CheckedChanged += new System.EventHandler(this.rbCopy_CheckedChanged);
@@ -412,26 +445,6 @@ namespace ToolWorking.Views
             this.lblAction.TabIndex = 17;
             this.lblAction.Text = "Choose Action";
             this.lblAction.Visible = false;
-            // 
-            // btnOpenPathBk
-            // 
-            this.btnOpenPathBk.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenPathBk.Image")));
-            this.btnOpenPathBk.Location = new System.Drawing.Point(265, 36);
-            this.btnOpenPathBk.Name = "btnOpenPathBk";
-            this.btnOpenPathBk.Size = new System.Drawing.Size(26, 24);
-            this.btnOpenPathBk.TabIndex = 18;
-            this.btnOpenPathBk.UseVisualStyleBackColor = true;
-            this.btnOpenPathBk.Click += new System.EventHandler(this.btnOpenPathBk_Click);
-            // 
-            // txtPathBk
-            // 
-            this.txtPathBk.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathBk.Location = new System.Drawing.Point(109, 36);
-            this.txtPathBk.Name = "txtPathBk";
-            this.txtPathBk.ReadOnly = true;
-            this.txtPathBk.Size = new System.Drawing.Size(150, 24);
-            this.txtPathBk.TabIndex = 17;
-            this.txtPathBk.TextChanged += new System.EventHandler(this.txtPathBk_TextChanged);
             // 
             // LinkFolder
             // 
@@ -491,5 +504,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Label lblNumBefore;
         private System.Windows.Forms.Button btnOpenPathBk;
         private System.Windows.Forms.TextBox txtPathBk;
+        private System.Windows.Forms.RadioButton rbCopyBackup;
     }
 }
