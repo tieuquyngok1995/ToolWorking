@@ -45,6 +45,7 @@ namespace ToolWorking.Views
             {
                 int mode = Properties.Settings.Default.modeLinkFolder;
                 pathFolderSource = Properties.Settings.Default.pathFolder;
+                pathFolderBk = Properties.Settings.Default.pathFolderBk;
                 pathFolder = Properties.Settings.Default.pathFolderRemove;
 
                 if (mode == 0) rbModeTree.Checked = true; else rbModePath.Checked = true;
@@ -52,6 +53,7 @@ namespace ToolWorking.Views
                 panelCenterPath.Visible = rbModePath.Checked;
 
                 txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderSource) ? pathFolderSource : string.Empty;
+                txtPathBk.Text = !string.IsNullOrEmpty(pathFolderBk) ? pathFolderBk : string.Empty;
                 txtPath.Text = !string.IsNullOrEmpty(pathFolder) ? pathFolder : string.Empty;
             }
             catch (Exception ex)
@@ -675,6 +677,8 @@ namespace ToolWorking.Views
 
             foreach (string path in listFiles)
             {
+                if (string.IsNullOrEmpty(path)) continue;
+
                 string fileName = CUtils.getFileName(path);
 
                 try
@@ -699,7 +703,7 @@ namespace ToolWorking.Views
                         {
                             if (!Directory.Exists(targetBk))
                             {
-                                Directory.CreateDirectory(targetFileBk);
+                                Directory.CreateDirectory(targetBk);
                             }
 
                             File.Copy(sourceFile, targetFileBk, true);
