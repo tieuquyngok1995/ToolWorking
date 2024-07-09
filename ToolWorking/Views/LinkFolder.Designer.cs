@@ -109,7 +109,6 @@ namespace ToolWorking.Views
             this.txtPathBk.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtPathBk.Location = new System.Drawing.Point(109, 36);
             this.txtPathBk.Name = "txtPathBk";
-            this.txtPathBk.ReadOnly = true;
             this.txtPathBk.Size = new System.Drawing.Size(150, 24);
             this.txtPathBk.TabIndex = 17;
             this.txtPathBk.TextChanged += new System.EventHandler(this.txtPathBk_TextChanged);
@@ -166,7 +165,6 @@ namespace ToolWorking.Views
             this.txtPath.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtPath.Location = new System.Drawing.Point(421, 36);
             this.txtPath.Name = "txtPath";
-            this.txtPath.ReadOnly = true;
             this.txtPath.Size = new System.Drawing.Size(170, 24);
             this.txtPath.TabIndex = 5;
             this.txtPath.TextChanged += new System.EventHandler(this.txtPathRemove_TextChanged);
@@ -236,7 +234,6 @@ namespace ToolWorking.Views
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtPathFolder.Location = new System.Drawing.Point(421, 6);
             this.txtPathFolder.Name = "txtPathFolder";
-            this.txtPathFolder.ReadOnly = true;
             this.txtPathFolder.Size = new System.Drawing.Size(170, 24);
             this.txtPathFolder.TabIndex = 0;
             // 
@@ -407,6 +404,7 @@ namespace ToolWorking.Views
             this.rbCopyBackup.Text = "Copy Backup";
             this.rbCopyBackup.UseVisualStyleBackColor = true;
             this.rbCopyBackup.Visible = false;
+            this.rbCopyBackup.CheckedChanged += new System.EventHandler(this.rbCopyBackup_CheckedChanged);
             // 
             // rbDelete
             // 
@@ -430,6 +428,7 @@ namespace ToolWorking.Views
             this.rbCopy.Name = "rbCopy";
             this.rbCopy.Size = new System.Drawing.Size(108, 21);
             this.rbCopy.TabIndex = 18;
+            this.rbCopy.TabStop = true;
             this.rbCopy.Text = "Copy Source";
             this.rbCopy.UseVisualStyleBackColor = true;
             this.rbCopy.Visible = false;

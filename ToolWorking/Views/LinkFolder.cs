@@ -270,6 +270,14 @@ namespace ToolWorking.Views
                     Properties.Settings.Default.pathFolderBk = fbd.SelectedPath;
                     Properties.Settings.Default.Save();
                 }
+                else
+                {
+                    txtPathBk.Text = string.Empty;
+                    pathFolderBk = string.Empty;
+
+                    Properties.Settings.Default.pathFolderBk = string.Empty;
+                    Properties.Settings.Default.Save();
+                }
             }
             catch (Exception ex)
             {
@@ -442,6 +450,16 @@ namespace ToolWorking.Views
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void rbCopy_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCopyResult.Text = "    Copy";
+        }
+
+        /// <summary>
+        /// Event change select radio action mode copy backup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbCopyBackup_CheckedChanged(object sender, EventArgs e)
         {
             btnCopyResult.Text = "    Copy";
         }
@@ -708,6 +726,7 @@ namespace ToolWorking.Views
                     string targetFileBk = string.Empty;
                     if (!string.IsNullOrEmpty(txtPathBk.Text))
                     {
+                        DateTime now = DateTime.Now;
                         targetBk = txtPathBk.Text + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
                         targetFileBk = Path.Combine(targetBk, (new FileInfo(sourceFile)).Name);
                     }
@@ -767,5 +786,6 @@ namespace ToolWorking.Views
             }
         }
         #endregion
+
     }
 }
