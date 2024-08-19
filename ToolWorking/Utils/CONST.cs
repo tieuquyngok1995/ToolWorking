@@ -19,6 +19,11 @@
 
         public const string STRING_EMPTY = "EMPTY";
         public const string STRING_TRUNK = "trunk";
+        public const string STRING_NULL = "NULL";
+        public const string STRING_NOT_NULL = "NOT NULL";
+
+        public const string STRING_FLAG = "FLG";
+        public const string STRING_JP_FLAG = "フラグ";
         #endregion
 
         #region String SQL 
@@ -35,6 +40,7 @@
         public const string SQL_TYPE_MONEY = "money";
         public const string SQL_TYPE_NUMERIC = "numeric";
         public const string SQL_TYPE_DECIMAL = "decimal";
+        public const string SQL_TYPE_BIT = "bit";
         #endregion
 
         #region String C Type 

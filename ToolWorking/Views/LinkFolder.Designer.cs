@@ -56,11 +56,13 @@ namespace ToolWorking.Views
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelCenterPath = new System.Windows.Forms.Panel();
+            this.lblNumCount = new System.Windows.Forms.Label();
             this.lblNumBefore = new System.Windows.Forms.Label();
             this.lblNumAfter = new System.Windows.Forms.Label();
             this.txtResultPathFile = new System.Windows.Forms.RichTextBox();
             this.txtListFile = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.btnCount = new System.Windows.Forms.Button();
             this.rbCopyBackup = new System.Windows.Forms.RadioButton();
             this.rbDelete = new System.Windows.Forms.RadioButton();
             this.rbCopy = new System.Windows.Forms.RadioButton();
@@ -111,6 +113,7 @@ namespace ToolWorking.Views
             this.txtPathBk.Name = "txtPathBk";
             this.txtPathBk.Size = new System.Drawing.Size(150, 24);
             this.txtPathBk.TabIndex = 17;
+            this.txtPathBk.Click += new System.EventHandler(this.txtPathBk_Click);
             this.txtPathBk.TextChanged += new System.EventHandler(this.txtPathBk_TextChanged);
             // 
             // btnOpenPath
@@ -167,6 +170,7 @@ namespace ToolWorking.Views
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(170, 24);
             this.txtPath.TabIndex = 5;
+            this.txtPath.Click += new System.EventHandler(this.txtPath_Click);
             this.txtPath.TextChanged += new System.EventHandler(this.txtPathRemove_TextChanged);
             // 
             // btnSearchPG
@@ -236,6 +240,8 @@ namespace ToolWorking.Views
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.Size = new System.Drawing.Size(170, 24);
             this.txtPathFolder.TabIndex = 0;
+            this.txtPathFolder.Click += new System.EventHandler(this.txtPathFolder_Click);
+            this.txtPathFolder.TextChanged += new System.EventHandler(this.txtPathFolder_TextChanged);
             // 
             // lblPath
             // 
@@ -326,6 +332,7 @@ namespace ToolWorking.Views
             // 
             // panelCenterPath
             // 
+            this.panelCenterPath.Controls.Add(this.lblNumCount);
             this.panelCenterPath.Controls.Add(this.lblNumBefore);
             this.panelCenterPath.Controls.Add(this.lblNumAfter);
             this.panelCenterPath.Controls.Add(this.txtResultPathFile);
@@ -335,6 +342,17 @@ namespace ToolWorking.Views
             this.panelCenterPath.Name = "panelCenterPath";
             this.panelCenterPath.Size = new System.Drawing.Size(660, 348);
             this.panelCenterPath.TabIndex = 10;
+            // 
+            // lblNumCount
+            // 
+            this.lblNumCount.AutoSize = true;
+            this.lblNumCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNumCount.Location = new System.Drawing.Point(467, 186);
+            this.lblNumCount.Name = "lblNumCount";
+            this.lblNumCount.Size = new System.Drawing.Size(150, 15);
+            this.lblNumCount.TabIndex = 25;
+            this.lblNumCount.Text = "Total file in folder Backup: ";
+            this.lblNumCount.Visible = false;
             // 
             // lblNumBefore
             // 
@@ -351,7 +369,7 @@ namespace ToolWorking.Views
             // 
             this.lblNumAfter.AutoSize = true;
             this.lblNumAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumAfter.Location = new System.Drawing.Point(478, 186);
+            this.lblNumAfter.Location = new System.Drawing.Point(217, 186);
             this.lblNumAfter.Name = "lblNumAfter";
             this.lblNumAfter.Size = new System.Drawing.Size(154, 15);
             this.lblNumAfter.TabIndex = 23;
@@ -381,6 +399,7 @@ namespace ToolWorking.Views
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.btnCount);
             this.panelBottom.Controls.Add(this.rbCopyBackup);
             this.panelBottom.Controls.Add(this.rbDelete);
             this.panelBottom.Controls.Add(this.btnCopyResult);
@@ -392,6 +411,20 @@ namespace ToolWorking.Views
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 11;
+            // 
+            // btnCount
+            // 
+            this.btnCount.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnCount.Image = ((System.Drawing.Image)(resources.GetObject("btnCount.Image")));
+            this.btnCount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCount.Location = new System.Drawing.Point(419, 0);
+            this.btnCount.Name = "btnCount";
+            this.btnCount.Size = new System.Drawing.Size(75, 25);
+            this.btnCount.TabIndex = 21;
+            this.btnCount.Text = "    Count";
+            this.btnCount.UseVisualStyleBackColor = true;
+            this.btnCount.Visible = false;
+            this.btnCount.Click += new System.EventHandler(this.btnCount_Click);
             // 
             // rbCopyBackup
             // 
@@ -504,5 +537,7 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Button btnOpenPathBk;
         private System.Windows.Forms.TextBox txtPathBk;
         private System.Windows.Forms.RadioButton rbCopyBackup;
+        private System.Windows.Forms.Button btnCount;
+        private System.Windows.Forms.Label lblNumCount;
     }
 }

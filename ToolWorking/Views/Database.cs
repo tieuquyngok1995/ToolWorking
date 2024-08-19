@@ -228,6 +228,17 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event select add text path folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtPathFolder_Click(object sender, EventArgs e)
+        {
+            txtPathFolder.SelectAll();
+            txtPathFolder.Focus();
+        }
+
+        /// <summary>
         /// Event Open Folder
         /// </summary>
         /// <param name="sender"></param>
@@ -432,27 +443,43 @@ namespace ToolWorking.Views
                             type = type + "(" + range + ")";
                         }
 
-                        string defaultValue = string.Empty;
-                        if (type.Contains(CONST.C_TYPE_STRING))
+                        string defaultValue = CONST.STRING_NULL;
+                        if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
                         {
-                            defaultValue = addValue(range, 0) + "1";
+                            if (type.Contains(CONST.C_TYPE_STRING))
+                            {
+                                defaultValue = addValue(range, 0) + "1";
+                            }
+                            else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                            {
+                                defaultValue = "SYSDATETIME()";
+                            }
+                            else if (type.Contains(CONST.C_TYPE_DOUBLE))
+                            {
+                                defaultValue = "1.0";
+                            }
+                            else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
+                            {
+                                defaultValue = CONST.STRING_NULL;
+                            }
+                            else if (type.Equals(CONST.C_TYPE_BOOL))
+                            {
+                                defaultValue = "0";
+                            }
+                            else
+                            {
+                                defaultValue = "1";
+                            }
                         }
-                        else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                        else if (type.Contains(CONST.C_TYPE_STRING))
                         {
-                            defaultValue = "SYSDATETIME()";
+                            if (name.Contains(CONST.STRING_JP_FLAG) || name.Contains(CONST.STRING_FLAG))
+                            {
+                                type = CONST.C_TYPE_BOOL;
+                                defaultValue = "0";
+                            }
                         }
-                        else if (type.Contains(CONST.C_TYPE_DOUBLE))
-                        {
-                            defaultValue = "1.0";
-                        }
-                        else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
-                        {
-                            defaultValue = "null";
-                        }
-                        else
-                        {
-                            defaultValue = "1";
-                        }
+                        else if (type.Equals(CONST.C_TYPE_BOOL)) defaultValue = "0";
 
                         lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
                         dicTypeInput.Add(no, type);
@@ -525,7 +552,7 @@ namespace ToolWorking.Views
 
                         if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
                         {
-                            result += "null, ";
+                            result += CONST.STRING_NULL + ", ";
                         }
                         else if (item.ToUpper().Equals(CONST.STRING_EMPTY) && type.Contains(CONST.C_TYPE_STRING))
                         {
@@ -718,7 +745,7 @@ namespace ToolWorking.Views
                         int numRow = Convert.ToInt32(txtNumRow.Text);
                         progressBarQuery.Maximum = numRow;
 
-                        for (int i = 1; i <= numRow; i++)
+                        for (int i = 0; i <= numRow; i++)
                         {
                             value = getValue(i);
                             if (string.IsNullOrEmpty(value)) return;
@@ -1101,7 +1128,7 @@ namespace ToolWorking.Views
             {
                 string name = row.Cells[1].Value.ToString();
                 string type = row.Cells[2].Value.ToString();
-                string value = row.Cells[3].Value != null ? row.Cells[3].Value.ToString() : "null";
+                string value = row.Cells[3].Value != null ? row.Cells[3].Value.ToString() : CONST.STRING_NULL;
                 int range = Convert.ToInt32(row.Cells[4].Value);
 
                 if (isValidate(type, value, range))
@@ -1112,21 +1139,35 @@ namespace ToolWorking.Views
 
                 if (type.Contains(CONST.C_TYPE_STRING))
                 {
-                    if (value.Equals("null"))
+                    if (value.Equals(CONST.STRING_NULL))
                     {
-                        result += "null, ";
+                        result += CONST.STRING_NULL + ", ";
                     }
                     else if (index.HasValue)
                     {
-                        if (value.Length <= range)
+                        int _value;
+                        if (int.TryParse(value, out _value))
                         {
-                            value = value + addValue(range - value.Length + 1, index.Value);
+                            _value++;
+
+                            if (value.Length > range)
+                            {
+                                value = CUtils.GenerateRandomNumber(range);
+                            }
+                            else
+                            {
+                                value = _value.ToString();
+                            }
+                        }
+
+                        if (value.Length < range)
+                        {
+                            int _range = range - value.Length;
+                            value = value + CUtils.GenerateRandomNumber(_range > 5 ? 5 : _range);
                         }
                         else
                         {
-                            if (range == 2) value = (index % 100).ToString();
-                            else if (range == 3) value = (index % 1000).ToString();
-                            else value = index.ToString();
+                            value = CUtils.GenerateRandomNumber(range);
                         }
 
                         result += "'" + value + "'" + ", ";
@@ -1138,9 +1179,9 @@ namespace ToolWorking.Views
                 }
                 else if (type.Equals(CONST.C_TYPE_DOUBLE))
                 {
-                    if (value.Equals("null"))
+                    if (value.Equals(CONST.STRING_NULL))
                     {
-                        result += "null, ";
+                        result += CONST.STRING_NULL + ", ";
                     }
                     else if (index.HasValue)
                     {
@@ -1151,19 +1192,19 @@ namespace ToolWorking.Views
                         result += value + ", ";
                     }
                 }
-                else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME) || type.Equals(CONST.C_TYPE_BOOL))
                 {
                     result += value + ", ";
                 }
                 else
                 {
-                    if (value.Equals("null"))
+                    if (value.Equals(CONST.STRING_NULL))
                     {
-                        result += "null, ";
+                        result += CONST.STRING_NULL + ", ";
                     }
                     else if (index.HasValue)
                     {
-                        result += index + ", ";
+                        result += int.Parse(value) + index + ", ";
                     }
                     else
                     {
@@ -1185,7 +1226,7 @@ namespace ToolWorking.Views
         {
             if (type.Contains(CONST.C_TYPE_STRING))
             {
-                if (isValidate(type, value, value.Length)) return "null";
+                if (isValidate(type, value, value.Length)) return CONST.STRING_NULL;
 
                 return "'" + value + "'";
             }
@@ -1195,7 +1236,7 @@ namespace ToolWorking.Views
             }
             else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
             {
-                return "null";
+                return CONST.STRING_NULL;
             }
             else
             {
@@ -1213,7 +1254,7 @@ namespace ToolWorking.Views
         /// <returns></returns>
         private bool isValidate(string type, string value, int range)
         {
-            if (value == "null") return false;
+            if (value == CONST.STRING_NULL) return false;
 
             if (type.Contains(CONST.C_TYPE_STRING))
             {
@@ -1229,7 +1270,7 @@ namespace ToolWorking.Views
             }
             else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
             {
-                return value != "null";
+                return value != CONST.STRING_NULL;
             }
             else
             {

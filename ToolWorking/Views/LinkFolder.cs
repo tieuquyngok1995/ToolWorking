@@ -122,6 +122,19 @@ namespace ToolWorking.Views
             Properties.Settings.Default.Save();
         }
 
+        private void txtPathFolder_Click(object sender, EventArgs e)
+        {
+            txtPathFolder.SelectAll();
+            txtPathFolder.Focus();
+        }
+
+        private void txtPathFolder_TextChanged(object sender, EventArgs e)
+        {
+            pathFolderSource = txtPathFolder.Text.Trim();
+            Properties.Settings.Default.pathFolder = pathFolderSource;
+            Properties.Settings.Default.Save();
+        }
+
         /// <summary>
         /// Event select folder source
         /// </summary>
@@ -240,6 +253,12 @@ namespace ToolWorking.Views
             }
         }
 
+        private void txtPathBk_Click(object sender, EventArgs e)
+        {
+            txtPathBk.SelectAll();
+            txtPathBk.Focus();
+        }
+
         /// <summary>
         /// Event change text path backup
         /// </summary>
@@ -247,7 +266,8 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtPathBk_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.pathFolderBk = txtPathBk.Text.Trim();
+            pathFolderBk = txtPathBk.Text.Trim();
+            Properties.Settings.Default.pathFolderBk = pathFolderBk;
             Properties.Settings.Default.Save();
         }
 
@@ -285,6 +305,12 @@ namespace ToolWorking.Views
             }
         }
 
+        private void txtPath_Click(object sender, EventArgs e)
+        {
+            txtPath.SelectAll();
+            txtPath.Focus();
+        }
+
         /// <summary>
         /// Event change text path remove
         /// </summary>
@@ -292,7 +318,8 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtPathRemove_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.pathFolderRemove = txtPath.Text.Trim();
+            pathFolder = txtPath.Text.Trim();
+            Properties.Settings.Default.pathFolderRemove = pathFolder;
             Properties.Settings.Default.Save();
         }
 
@@ -386,6 +413,7 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtListFile_TextChanged(object sender, EventArgs e)
         {
+            lblNumCount.Visible = false;
             if (string.IsNullOrEmpty(txtListFile.Text))
             {
                 txtResultPathFile.Text = string.Empty;
@@ -451,6 +479,8 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void rbCopy_CheckedChanged(object sender, EventArgs e)
         {
+            lblNumCount.Visible = false;
+            btnCount.Visible = false;
             btnCopyResult.Text = "    Copy";
         }
 
@@ -461,6 +491,8 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void rbCopyBackup_CheckedChanged(object sender, EventArgs e)
         {
+            lblNumCount.Visible = false;
+            btnCount.Visible = true;
             btnCopyResult.Text = "    Copy";
         }
 
@@ -471,7 +503,32 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void rbDelete_CheckedChanged(object sender, EventArgs e)
         {
+            lblNumCount.Visible = false;
+            btnCount.Visible = false;
             btnCopyResult.Text = "    Delete";
+        }
+
+        /// <summary>
+        /// Event count total file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCount_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(pathFolderBk)) return;
+
+                string[] files = Directory.GetFiles(pathFolderBk, "*.*", SearchOption.AllDirectories);
+                int fileCount = files.Length;
+
+                lblNumCount.Visible = true;
+                lblNumCount.Text = "Total file in folder Backup: " + fileCount;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -491,6 +548,7 @@ namespace ToolWorking.Views
                 }
                 else if (rbModePath.Checked)
                 {
+                    lblNumCount.Visible = false;
                     if (string.IsNullOrEmpty(txtPathFolder.Text) || !Directory.Exists(txtPathFolder.Text))
                     {
                         MessageBox.Show("Select path folder srouce!!!");
@@ -709,7 +767,13 @@ namespace ToolWorking.Views
         /// </summary>
         private void handelFile()
         {
+            string targetBk = string.Empty;
             txtResultPathFile.Text = string.Empty;
+
+            if (rbCopy.Checked || rbCopyBackup.Checked)
+            {
+                if (Directory.Exists(pathFolderBk)) Directory.Delete(pathFolderBk, true);
+            }
 
             foreach (string path in listFiles)
             {
@@ -722,11 +786,9 @@ namespace ToolWorking.Views
                     string sourceFile = txtPathFolder.Text + "/" + path.Replace("\"", "");
                     FileInfo fileInfo = new FileInfo(sourceFile);
 
-                    string targetBk = string.Empty;
                     string targetFileBk = string.Empty;
                     if (!string.IsNullOrEmpty(txtPathBk.Text))
                     {
-                        DateTime now = DateTime.Now;
                         targetBk = txtPathBk.Text + fileInfo.DirectoryName.Replace(txtPathFolder.Text, string.Empty);
                         targetFileBk = Path.Combine(targetBk, (new FileInfo(sourceFile)).Name);
                     }
@@ -785,7 +847,7 @@ namespace ToolWorking.Views
                 }
             }
         }
-        #endregion
 
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace ToolWorking.Utils
 {
@@ -51,6 +52,8 @@ namespace ToolWorking.Utils
                     return CONST.C_TYPE_TIME;
                 case CONST.SQL_TYPE_TIME_STAMP:
                     return CONST.C_TYPE_TIME_STAMP;
+                case CONST.SQL_TYPE_BIT:
+                    return CONST.C_TYPE_BOOL;
                 case CONST.SQL_TYPE_MONEY:
                 case CONST.SQL_TYPE_NUMERIC:
                 case CONST.SQL_TYPE_DECIMAL:
@@ -102,6 +105,26 @@ namespace ToolWorking.Utils
                 str = RemoveLastLineBlank(str);
             }
             return str;
+        }
+        #endregion
+
+        #region Util
+        public static string GenerateRandomNumber(int length)
+        {
+            byte[] randomNumber = new byte[length];
+
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomNumber);
+            }
+
+            char[] digits = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                digits[i] = (char)('0' + (randomNumber[i] % 10));
+            }
+
+            return new string(digits);
         }
         #endregion
     }

@@ -31,8 +31,8 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Database));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelQueryInput = new System.Windows.Forms.Panel();
             this.rbInputTable = new System.Windows.Forms.RadioButton();
@@ -255,6 +255,7 @@ namespace ToolWorking.Views
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.Size = new System.Drawing.Size(236, 24);
             this.txtPathFolder.TabIndex = 14;
+            this.txtPathFolder.Click += new System.EventHandler(this.txtPathFolder_Click);
             // 
             // txtPass
             // 
@@ -476,7 +477,7 @@ namespace ToolWorking.Views
             this.panelCenterScript.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCenterScript.Location = new System.Drawing.Point(0, 63);
             this.panelCenterScript.Name = "panelCenterScript";
-            this.panelCenterScript.Size = new System.Drawing.Size(660, 318);
+            this.panelCenterScript.Size = new System.Drawing.Size(660, 348);
             this.panelCenterScript.TabIndex = 4;
             // 
             // btnSearchScript
@@ -595,14 +596,14 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -616,14 +617,14 @@ namespace ToolWorking.Views
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridInputValue.Size = new System.Drawing.Size(357, 183);
@@ -699,9 +700,9 @@ namespace ToolWorking.Views
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(660, 411);
+            this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelCenterQuery);
             this.Controls.Add(this.panelCenterScript);
-            this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Database";
