@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace ToolWorking.Utils
 {
@@ -125,6 +127,39 @@ namespace ToolWorking.Utils
             }
 
             return new string(digits);
+        }
+
+        /// <summary>
+        /// Run command line update svn 
+        /// </summary>
+        /// <returns></returns>
+        public static void RunCommandUpdateSVN(string pathFolder)
+        {
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = "/C cd /d \"" + pathFolder + "\" && svn update \"" + pathFolder + "\"&& exit";
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+
+                using (Process process = Process.Start(startInfo))
+                {
+                    process.WaitForExit();
+
+                    if (process.ExitCode != 0)
+                    {
+                        MessageBox.Show("There was an error during processing.\r\nError detail: " + process.StandardError.ReadToEnd(), "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
         #endregion
     }

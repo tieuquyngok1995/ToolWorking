@@ -103,7 +103,7 @@ namespace ToolWorking.Views
                     index = 1;
                     listFiles.Clear();
 
-                    runCommandUpdateSVN();
+                    CUtils.RunCommandUpdateSVN(pathFolderDatabase);
 
                     // load folder
                     loadDirectory(txtPathFolder.Text);
@@ -368,39 +368,6 @@ namespace ToolWorking.Views
                 if (type.Equals(CONST.TYPE_05_CREATE_PROCEDURE)) return CONST.STRING_05;
             }
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Run command line update svn 
-        /// </summary>
-        /// <returns></returns>
-        private void runCommandUpdateSVN()
-        {
-            try
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C cd /d \"" + pathFolderDatabase + "\" && svn update \"" + pathFolderDatabase + "\"&& exit";
-                startInfo.RedirectStandardOutput = true;
-                startInfo.RedirectStandardError = true;
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
-
-                using (Process process = Process.Start(startInfo))
-                {
-                    process.WaitForExit();
-
-                    if (process.ExitCode != 0)
-                    {
-                        MessageBox.Show("There was an error during processing.\r\nError detail: " + process.StandardError.ReadToEnd(), "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
         }
         #endregion
 

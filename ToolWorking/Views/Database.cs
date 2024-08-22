@@ -152,6 +152,9 @@ namespace ToolWorking.Views
                 panelCenterScript.Visible = true;
                 panelCenterQuery.Visible = false;
                 chkMultiRow.Visible = false;
+                lblSearchScript.Visible = true;
+                txtSearchScript.Visible = true;
+                btnSearchScript.Visible = true;
                 lblNumRows.Visible = false;
                 txtNumRow.Visible = false;
                 btnRunScript.Enabled = false;
@@ -178,6 +181,9 @@ namespace ToolWorking.Views
                 panelCenterScript.Visible = false;
                 panelCenterQuery.Visible = true;
                 chkMultiRow.Visible = true;
+                lblSearchScript.Visible = false;
+                txtSearchScript.Visible = false;
+                btnSearchScript.Visible = false;
                 lblNumRows.Visible = chkMultiRow.Checked;
                 lblNumScript.Visible = false;
                 txtNumRow.Visible = chkMultiRow.Checked;
@@ -283,7 +289,7 @@ namespace ToolWorking.Views
                 toolTip.ShowAlways = true;
                 if (txtPathFolder.Text != "" && Directory.Exists(txtPathFolder.Text))
                 {
-                    runCommandUpdateSVN();
+                    CUtils.RunCommandUpdateSVN(pathFolderDatabase);
 
                     loadDirectory(txtPathFolder.Text);
                     txtResult.Text = string.Empty;
@@ -444,7 +450,21 @@ namespace ToolWorking.Views
                         }
 
                         string defaultValue = CONST.STRING_NULL;
-                        if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
+                        if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                        {
+                            defaultValue = "SYSDATETIME()";
+                        }
+                        else if (type.Equals(CONST.C_TYPE_BOOL))
+                        {
+                            defaultValue = "0";
+                        }
+                        else if (type.Contains(CONST.C_TYPE_STRING) && (name.Contains(CONST.STRING_JP_FLAG) || name.Contains(CONST.STRING_FLAG)))
+                        {
+                            type = CONST.C_TYPE_BOOL;
+                            defaultValue = "0";
+                        }
+                        else if (type.Equals(CONST.C_TYPE_BOOL)) defaultValue = "0";
+                        else if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
                         {
                             if (type.Contains(CONST.C_TYPE_STRING))
                             {
@@ -471,15 +491,6 @@ namespace ToolWorking.Views
                                 defaultValue = "1";
                             }
                         }
-                        else if (type.Contains(CONST.C_TYPE_STRING))
-                        {
-                            if (name.Contains(CONST.STRING_JP_FLAG) || name.Contains(CONST.STRING_FLAG))
-                            {
-                                type = CONST.C_TYPE_BOOL;
-                                defaultValue = "0";
-                            }
-                        }
-                        else if (type.Equals(CONST.C_TYPE_BOOL)) defaultValue = "0";
 
                         lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
                         dicTypeInput.Add(no, type);
@@ -1275,30 +1286,6 @@ namespace ToolWorking.Views
             else
             {
                 return !int.TryParse(value, out _);
-            }
-        }
-
-        /// <summary>
-        /// Run command line update svn 
-        /// </summary>
-        /// <returns></returns>
-        private void runCommandUpdateSVN()
-        {
-            try
-            {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C cd /d \"" + pathFolderDatabase + "\" && svn update \"" + pathFolderDatabase + "\"&& exit";
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
-                process.Close();
-            }
-            catch
-            {
-                throw;
             }
         }
         #endregion
