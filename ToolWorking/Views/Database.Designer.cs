@@ -743,8 +743,8 @@ namespace ToolWorking.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(660, 411);
             this.Controls.Add(this.panelBottom);
-            this.Controls.Add(this.panelCenterScript);
             this.Controls.Add(this.panelCenterQuery);
+            this.Controls.Add(this.panelCenterScript);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Database";
