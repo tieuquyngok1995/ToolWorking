@@ -155,6 +155,8 @@ namespace ToolWorking.Views
                 lblSearchScript.Visible = true;
                 txtSearchScript.Visible = true;
                 btnSearchScript.Visible = true;
+                chkCheckEncoding.Visible = true;
+                chkChangeEcoding.Visible = true;
                 lblNumRows.Visible = false;
                 txtNumRow.Visible = false;
                 btnRunScript.Enabled = false;
@@ -184,6 +186,8 @@ namespace ToolWorking.Views
                 lblSearchScript.Visible = false;
                 txtSearchScript.Visible = false;
                 btnSearchScript.Visible = false;
+                chkCheckEncoding.Visible = false;
+                chkChangeEcoding.Visible = false;
                 lblNumRows.Visible = chkMultiRow.Checked;
                 lblNumScript.Visible = false;
                 txtNumRow.Visible = chkMultiRow.Checked;
@@ -722,24 +726,44 @@ namespace ToolWorking.Views
                         {
                             if (!File.Exists(path))
                             {
-                                txtLog.Text += addLog(true, fileName) + "\r\nFile not exists.\r\n";
+                                txtLog.Text += addLogRunScript(true, fileName) + "File not exists.\r\n";
                                 continue;
                             }
 
-                            errMessage = DBUtils.ExecuteFileScript(path);
-                            if (string.IsNullOrEmpty(errMessage))
+                            if (chkCheckEncoding.Checked)
                             {
-                                txtLog.Text += addLog(false, fileName) + "\r\n";
+                                if (CUtils.CheckEcodingUTF8Bom(path))
+                                {
+                                    txtLog.Text += addLogCheckEncodingUTF8Bom(false, fileName);
+                                }
+                                else
+                                {
+                                    txtLog.Text += addLogCheckEncodingUTF8Bom(true, fileName);
+                                    if (chkChangeEcoding.Checked)
+                                    {
+                                        CUtils.ChangeEcodingToUTF8Bom(path);
+                                        txtLog.Text += "The encoding has been changed to UTF-8 with BOM.\r\n";
+                                    }
+                                }
                             }
                             else
                             {
-                                txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + errMessage + "\r\n";
+                                errMessage = DBUtils.ExecuteFileScript(path);
+                                if (string.IsNullOrEmpty(errMessage))
+                                {
+                                    txtLog.Text += addLogRunScript(false, fileName);
+                                }
+                                else
+                                {
+                                    txtLog.Text += addLogRunScript(true, fileName) + "Error detail: " + errMessage + "\r\n";
+                                }
                             }
+
                             updateProgressFolder();
                         }
                         catch (Exception ex)
                         {
-                            txtLog.Text += addLog(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
+                            txtLog.Text += addLogRunScript(true, fileName) + "\r\nError detail: " + ex.Message + "\r\n";
                         }
                     }
 
@@ -1093,15 +1117,34 @@ namespace ToolWorking.Views
         /// <param name="isError"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private string addLog(bool isError, string fileName)
+        private string addLogRunScript(bool isError, string fileName)
         {
             if (isError)
             {
-                return "Run Script \t" + fileName + "\t" + "Error";
+                return "The script file\t" + fileName + "\twas executed SUCCESSFULLY.\r\n";
             }
             else
             {
-                return "Run Script \t" + fileName + "\t" + "Done";
+                return "The script file\t" + fileName + "\twas executed FAILED.\r\n";
+            }
+        }
+
+
+        /// <summary>
+        /// Create log check encoding
+        /// </summary>
+        /// <param name="isError"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private string addLogCheckEncodingUTF8Bom(bool isError, string fileName)
+        {
+            if (isError)
+            {
+                return "The script file\t" + fileName + "\t is NOT UTF-8 Bom.\r\n";
+            }
+            else
+            {
+                return "The script file\t" + fileName + "\tis UTF-8 Bom.\r\n";
             }
         }
 

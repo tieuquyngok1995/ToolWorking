@@ -62,6 +62,10 @@
         public static string TITLE_DATABASE = "Database Handling";
         #endregion
 
+        #region Message 
+        public static string MESS_NOT_UTF8BOM = "The file is not in UTF-8 BOM format.";
+        #endregion
+
         #region Type Script SQL
         public static string TYPE_00_RESET_DATA = "00";
         public static string TYPE_01_TABLE_TYPE = "01TABLE";
@@ -80,5 +84,6 @@
         public static string STRING_04 = "04 Function";
         public static string STRING_05 = "05 Procedure";
         #endregion
+
     }
 }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ToolWorking.Utils
@@ -82,6 +84,90 @@ namespace ToolWorking.Utils
             else
             {
                 return fileName.Substring(index + 1);
+            }
+        }
+
+        /// <summary>
+        /// Check encoding file is UTF-8 Bom
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool CheckEcodingUTF8Bom(string filePath)
+        {
+            try
+            {
+                byte[] expectedBytes = new byte[] { 0xEF, 0xBB, 0xBF };
+
+                byte[] fileHeaderBytes = ReadFirstBytes(filePath, 3);
+
+                if (fileHeaderBytes.Length == expectedBytes.Length)
+                {
+                    bool isMatch = true;
+                    for (int i = 0; i < fileHeaderBytes.Length; i++)
+                    {
+                        if (fileHeaderBytes[i] != expectedBytes[i])
+                        {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+
+                    return isMatch;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Read first byte in file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="numberOfBytes"></param>
+        /// <returns></returns>
+        public static byte[] ReadFirstBytes(string filePath, int numberOfBytes)
+        {
+            byte[] bytes = new byte[numberOfBytes];
+
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                // Đọc số byte yêu cầu từ file
+                int bytesRead = fileStream.Read(bytes, 0, numberOfBytes);
+
+                // Nếu không đọc đủ số byte yêu cầu, điều chỉnh kích thước mảng
+                if (bytesRead < numberOfBytes)
+                {
+                    Array.Resize(ref bytes, bytesRead);
+                }
+            }
+
+            return bytes;
+        }
+
+        /// <summary>
+        /// Change Ecoding To UTF-8 Bom
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string ChangeEcodingToUTF8Bom(string filePath)
+        {
+            try
+            {
+                string content = File.ReadAllText(filePath, Encoding.UTF8);
+
+                File.WriteAllText(filePath, content, new UTF8Encoding(true));
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
         #endregion
