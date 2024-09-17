@@ -1121,11 +1121,11 @@ namespace ToolWorking.Views
         {
             if (isError)
             {
-                return "The script file\t" + fileName + "\twas executed SUCCESSFULLY.\r\n";
+                return "The script file\t" + fileName + "\twas executed FAILED.\r\n";
             }
             else
             {
-                return "The script file\t" + fileName + "\twas executed FAILED.\r\n";
+                return "The script file\t" + fileName + "\twas executed SUCCESSFULLY.\r\n";
             }
         }
 
