@@ -224,7 +224,7 @@ namespace ToolWorking.Utils
             try
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 startInfo.Arguments = "/C cd /d \"" + pathFolder + "\" && svn update \"" + pathFolder + "\"&& exit";
                 startInfo.RedirectStandardOutput = true;
@@ -234,12 +234,30 @@ namespace ToolWorking.Utils
 
                 using (Process process = Process.Start(startInfo))
                 {
+                    string errorOutput = string.Empty;
+                    process.ErrorDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            errorOutput += e.Data + Environment.NewLine;
+                        }
+                    };
+
+                    process.BeginErrorReadLine();
+
                     process.WaitForExit();
 
                     if (process.ExitCode != 0)
                     {
                         MessageBox.Show("There was an error during processing.\r\nError detail: " + process.StandardError.ReadToEnd(), "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+                    if (!process.HasExited)
+                    {
+                        process.Kill();
+                    }
+
+                    process.Close();
                 }
             }
             catch
