@@ -223,48 +223,54 @@ namespace ToolWorking.Utils
         {
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C cd /d \"" + pathFolder + "\" && svn update \"" + pathFolder + "\"&& exit";
-                startInfo.RedirectStandardOutput = true;
-                startInfo.RedirectStandardError = true;
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
-
-                using (Process process = Process.Start(startInfo))
+                ProcessStartInfo startInfo = new ProcessStartInfo
                 {
-                    string errorOutput = string.Empty;
+                    FileName = "cmd.exe",
+                    Arguments = $"/C cd /d \"{pathFolder}\" && svn update \"{pathFolder}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using (Process process = new Process { StartInfo = startInfo })
+                {
                     process.ErrorDataReceived += (sender, e) =>
                     {
                         if (!string.IsNullOrEmpty(e.Data))
                         {
-                            errorOutput += e.Data + Environment.NewLine;
+                            // Ghi lại đầu ra lỗi
+                            MessageBox.Show("Error: " + e.Data, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     };
 
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(e.Data))
+                        {
+                            // Bạn có thể ghi lại đầu ra thông thường nếu cần
+                            Console.WriteLine(e.Data);
+                        }
+                    };
+
+                    process.Start();
                     process.BeginErrorReadLine();
+                    process.BeginOutputReadLine();
 
                     process.WaitForExit();
 
                     if (process.ExitCode != 0)
                     {
-                        MessageBox.Show("There was an error during processing.\r\nError detail: " + process.StandardError.ReadToEnd(), "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("There was an error during processing. SVN command failed.", "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-
-                    if (!process.HasExited)
-                    {
-                        process.Kill();
-                    }
-
-                    process.Close();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                MessageBox.Show("An exception occurred: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
     }
 }

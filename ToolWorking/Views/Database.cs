@@ -22,6 +22,8 @@ namespace ToolWorking.Views
         private string nameTable;
         // Template insert
         private string tempInsert;
+        // List database 
+        private List<string> lstDatabase = new List<string>();
         // List column in script table
         private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
         private Dictionary<int, string> dicTypeInput = new Dictionary<int, string>();
@@ -54,10 +56,19 @@ namespace ToolWorking.Views
                 int mode = Properties.Settings.Default.modeDatabase;
 
                 txtServer.Text = !string.IsNullOrEmpty(settingServer) ? settingServer : string.Empty;
-                cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
                 txtUser.Text = !string.IsNullOrEmpty(settingUser) ? settingUser : string.Empty;
                 txtPass.Text = !string.IsNullOrEmpty(settingPass) ? settingPass : string.Empty;
                 txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderDatabase) ? pathFolderDatabase : string.Empty;
+
+                if (!string.IsNullOrEmpty(settingServer) && !string.IsNullOrEmpty(settingUser) && !string.IsNullOrEmpty(settingPass))
+                {
+                    lstDatabase = DBUtils.GetDatabase();
+
+                    cbDatabase.Items.Add("--None--");
+                    cbDatabase.Items.AddRange(lstDatabase.ToArray());
+
+                    cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
+                }
 
                 rbRunScript.Checked = true;
                 if (mode != 0)

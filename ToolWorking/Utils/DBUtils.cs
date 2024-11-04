@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -148,6 +149,25 @@ namespace ToolWorking.Utils
             connection.Close();
             return errMess;
         }
+
+        public static List<string> GetDatabase()
+        {
+            List<string> databases = new List<string>();
+            using (SqlConnection connection = GetDBConnection())
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SELECT name FROM sys.databases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb')", connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        databases.Add(reader["name"].ToString());
+                    }
+                }
+            }
+            return databases;
+        }
+
     }
 }
 
