@@ -23,11 +23,14 @@ namespace ToolWorking.Utils
         /// <returns></returns>
         public static SqlConnection GetDBConnection(string datasource, string database, string username, string password)
         {
-            //
-            // Data Source=TRAN-VMWARE\SQLEXPRESS;Initial Catalog=simplehr;Persist Security Info=True;User ID=sa;Password=12345
-            //
-            string connString = @"Data Source=" + datasource + ";Initial Catalog="
-                        + database + ";Persist Security Info=True;User ID=" + username + ";Password=" + password;
+            string connString = @"Data Source=" + datasource;
+
+            if (!string.IsNullOrEmpty(database))
+            {
+                connString += ";Initial Catalog=" + database;
+            }
+
+            connString += ";Persist Security Info=True;User ID=" + username + ";Password=" + password;
 
             SqlConnection conn = new SqlConnection(connString);
 
@@ -38,10 +41,10 @@ namespace ToolWorking.Utils
         ///  Get Database connection
         /// </summary>
         /// <returns></returns>
-        public static SqlConnection GetDBConnection()
+        public static SqlConnection GetDBConnection(bool isNullDatabase = false)
         {
             string datasource = Properties.Settings.Default.serverDatabse;
-            string database = Properties.Settings.Default.database;
+            string database = isNullDatabase ? null : Properties.Settings.Default.database;
             string username = Properties.Settings.Default.userDatabase;
             string password = Properties.Settings.Default.passDatabase;
 
@@ -153,7 +156,7 @@ namespace ToolWorking.Utils
         public static List<string> GetDatabase()
         {
             List<string> databases = new List<string>();
-            using (SqlConnection connection = GetDBConnection())
+            using (SqlConnection connection = GetDBConnection(true))
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("SELECT name FROM sys.databases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb')", connection))

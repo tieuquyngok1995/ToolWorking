@@ -64,7 +64,7 @@ namespace ToolWorking.Views
                 {
                     lstDatabase = DBUtils.GetDatabase();
 
-                    cbDatabase.Items.Add("--None--");
+                    cbDatabase.Items.Add("---None---");
                     cbDatabase.Items.AddRange(lstDatabase.ToArray());
 
                     cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
