@@ -57,6 +57,26 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event change Path Folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtPathFolder_TextChanged(object sender, EventArgs e)
+        {
+            pathFolderDatabase = txtPathFolder.Text.Trim();
+
+            if (!string.IsNullOrEmpty(pathFolderDatabase) && !Path.IsPathRooted(pathFolderDatabase))
+            {
+                MessageBox.Show("Invalid Input Folder Path!!!");
+                txtPathFolder.Text = string.Empty;
+                pathFolderDatabase = string.Empty;
+            }
+
+            Properties.Settings.Default.pathFolderSearch = pathFolderDatabase;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
         /// Event Open Folder
         /// </summary>
         /// <param name="sender"></param>

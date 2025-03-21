@@ -132,6 +132,12 @@ namespace ToolWorking.Views
         private void txtPathFolder_TextChanged(object sender, EventArgs e)
         {
             pathFolderSource = txtPathFolder.Text.Trim();
+            if (!string.IsNullOrEmpty(pathFolderSource) && !Path.IsPathRooted(pathFolderSource))
+            {
+                MessageBox.Show("Invalid Input Source Path!!!");
+                txtPathFolder.Text = string.Empty;
+                pathFolderSource = string.Empty;
+            }
             Properties.Settings.Default.pathFolder = pathFolderSource;
             Properties.Settings.Default.Save();
         }
@@ -268,6 +274,12 @@ namespace ToolWorking.Views
         private void txtPathBk_TextChanged(object sender, EventArgs e)
         {
             pathFolderBk = txtPathBk.Text.Trim();
+            if (!string.IsNullOrEmpty(pathFolderBk) && !Path.IsPathRooted(pathFolderBk))
+            {
+                MessageBox.Show("Invalid Input Backup Path!!!");
+                txtPathBk.Text = string.Empty;
+                pathFolderBk = string.Empty;
+            }
             Properties.Settings.Default.pathFolderBk = pathFolderBk;
             Properties.Settings.Default.Save();
         }
@@ -320,6 +332,13 @@ namespace ToolWorking.Views
         private void txtPathRemove_TextChanged(object sender, EventArgs e)
         {
             pathFolder = txtPath.Text.Trim();
+            if (!string.IsNullOrEmpty(pathFolder) && !Path.IsPathRooted(pathFolder))
+            {
+                string name = rbModeTree.Checked ? "Remove" : "Destination";
+                MessageBox.Show($"Invalid Input {name} Path!!!");
+                txtPath.Text = string.Empty;
+                pathFolder = string.Empty;
+            }
             Properties.Settings.Default.pathFolderRemove = pathFolder;
             Properties.Settings.Default.Save();
         }

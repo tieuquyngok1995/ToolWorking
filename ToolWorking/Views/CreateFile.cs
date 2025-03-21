@@ -72,6 +72,7 @@ namespace ToolWorking.Views
             if (!string.IsNullOrEmpty(pathFolderCreateFile) && !Path.IsPathRooted(pathFolderCreateFile))
             {
                 MessageBox.Show("Invalid Input Folder Path!!!");
+                txtPathFolder.Text = string.Empty;
                 pathFolderCreateFile = string.Empty;
             }
 
