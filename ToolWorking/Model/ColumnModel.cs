@@ -2,23 +2,35 @@
 {
     public class ColumnModel
     {
-        public int no { get; set; }
+        public int No { get; set; }
 
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public string type { get; set; }
+        public string Type { get; set; }
 
-        public string value { get; set; }
+        public string Value { get; set; }
 
-        public int range { get; set; }
+        public int Range { get; set; }
 
-        public ColumnModel(int _no, string _name, string _type, string _value, int _range)
+        public string ExcludeChars { get; set; }
+
+        public ColumnModel(int _No, string _Name, string _Type, string _Value, int _Range)
         {
-            no = _no;
-            name = _name;
-            type = _type;
-            value = _value;
-            range = _range;
+            No = _No;
+            Name = _Name;
+            Type = _Type;
+            Value = _Value;
+            Range = _Range;
+        }
+
+        public ColumnModel(int _No, string _Name, string _Type, string _Value, int _Range, string _ExcludeChars)
+        {
+            No = _No;
+            Name = _Name;
+            Type = _Type;
+            Value = _Value;
+            Range = _Range;
+            ExcludeChars = _ExcludeChars;
         }
     }
 }

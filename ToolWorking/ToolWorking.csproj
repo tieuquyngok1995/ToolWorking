@@ -59,6 +59,12 @@
     <Compile Include="Utils\CONST.cs" />
     <Compile Include="Utils\CUtils.cs" />
     <Compile Include="Utils\DBUtils.cs" />
+    <Compile Include="Views\CreateFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CreateFile.Designer.cs">
+      <DependentUpon>CreateFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Database.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Views\CreateFile.resx">
+      <DependentUpon>CreateFile.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Database.resx">
       <DependentUpon>Database.cs</DependentUpon>
     </EmbeddedResource>
