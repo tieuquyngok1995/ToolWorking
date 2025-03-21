@@ -80,6 +80,7 @@ namespace ToolWorking.Views
 
             lblAction.Visible = false;
             rbCopy.Visible = false;
+            rbCopyBackup.Visible = false;
             rbDelete.Visible = false;
             btnCopyResult.Text = "    Copy";
 

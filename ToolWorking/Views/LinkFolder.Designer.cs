@@ -93,15 +93,15 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 63);
+            this.panelTop.Size = new System.Drawing.Size(660, 68);
             this.panelTop.TabIndex = 0;
             // 
             // btnOpenPathBk
             // 
             this.btnOpenPathBk.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenPathBk.Image")));
-            this.btnOpenPathBk.Location = new System.Drawing.Point(265, 36);
+            this.btnOpenPathBk.Location = new System.Drawing.Point(265, 39);
             this.btnOpenPathBk.Name = "btnOpenPathBk";
-            this.btnOpenPathBk.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenPathBk.Size = new System.Drawing.Size(26, 26);
             this.btnOpenPathBk.TabIndex = 18;
             this.btnOpenPathBk.UseVisualStyleBackColor = true;
             this.btnOpenPathBk.Click += new System.EventHandler(this.btnOpenPathBk_Click);
@@ -109,7 +109,7 @@ namespace ToolWorking.Views
             // txtPathBk
             // 
             this.txtPathBk.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathBk.Location = new System.Drawing.Point(109, 36);
+            this.txtPathBk.Location = new System.Drawing.Point(109, 39);
             this.txtPathBk.Name = "txtPathBk";
             this.txtPathBk.Size = new System.Drawing.Size(150, 24);
             this.txtPathBk.TabIndex = 17;
@@ -119,9 +119,9 @@ namespace ToolWorking.Views
             // btnOpenPath
             // 
             this.btnOpenPath.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenPath.Image")));
-            this.btnOpenPath.Location = new System.Drawing.Point(596, 36);
+            this.btnOpenPath.Location = new System.Drawing.Point(596, 39);
             this.btnOpenPath.Name = "btnOpenPath";
-            this.btnOpenPath.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenPath.Size = new System.Drawing.Size(26, 26);
             this.btnOpenPath.TabIndex = 16;
             this.btnOpenPath.UseVisualStyleBackColor = true;
             this.btnOpenPath.Click += new System.EventHandler(this.btnOpenPath_Click);
@@ -130,7 +130,7 @@ namespace ToolWorking.Views
             // 
             this.rbModePath.AutoSize = true;
             this.rbModePath.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbModePath.Location = new System.Drawing.Point(189, 7);
+            this.rbModePath.Location = new System.Drawing.Point(189, 8);
             this.rbModePath.Name = "rbModePath";
             this.rbModePath.Size = new System.Drawing.Size(95, 21);
             this.rbModePath.TabIndex = 15;
@@ -144,7 +144,7 @@ namespace ToolWorking.Views
             this.rbModeTree.AutoSize = true;
             this.rbModeTree.Checked = true;
             this.rbModeTree.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbModeTree.Location = new System.Drawing.Point(80, 7);
+            this.rbModeTree.Location = new System.Drawing.Point(80, 8);
             this.rbModeTree.Name = "rbModeTree";
             this.rbModeTree.Size = new System.Drawing.Size(109, 21);
             this.rbModeTree.TabIndex = 14;
@@ -157,7 +157,7 @@ namespace ToolWorking.Views
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label4.Location = new System.Drawing.Point(6, 10);
+            this.label4.Location = new System.Drawing.Point(6, 11);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 17);
             this.label4.TabIndex = 9;
@@ -166,7 +166,7 @@ namespace ToolWorking.Views
             // txtPath
             // 
             this.txtPath.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPath.Location = new System.Drawing.Point(421, 36);
+            this.txtPath.Location = new System.Drawing.Point(420, 39);
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(170, 24);
             this.txtPath.TabIndex = 5;
@@ -176,9 +176,9 @@ namespace ToolWorking.Views
             // btnSearchPG
             // 
             this.btnSearchPG.Image = ((System.Drawing.Image)(resources.GetObject("btnSearchPG.Image")));
-            this.btnSearchPG.Location = new System.Drawing.Point(264, 36);
+            this.btnSearchPG.Location = new System.Drawing.Point(264, 39);
             this.btnSearchPG.Name = "btnSearchPG";
-            this.btnSearchPG.Size = new System.Drawing.Size(26, 24);
+            this.btnSearchPG.Size = new System.Drawing.Size(26, 26);
             this.btnSearchPG.TabIndex = 4;
             this.btnSearchPG.UseVisualStyleBackColor = true;
             this.btnSearchPG.Click += new System.EventHandler(this.btnSearchPG_Click);
@@ -186,7 +186,7 @@ namespace ToolWorking.Views
             // txtPGSearch
             // 
             this.txtPGSearch.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPGSearch.Location = new System.Drawing.Point(109, 36);
+            this.txtPGSearch.Location = new System.Drawing.Point(109, 39);
             this.txtPGSearch.Name = "txtPGSearch";
             this.txtPGSearch.Size = new System.Drawing.Size(150, 24);
             this.txtPGSearch.TabIndex = 3;
@@ -197,7 +197,7 @@ namespace ToolWorking.Views
             // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblSearch.Location = new System.Drawing.Point(6, 39);
+            this.lblSearch.Location = new System.Drawing.Point(6, 42);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(100, 17);
             this.lblSearch.TabIndex = 4;
@@ -208,7 +208,7 @@ namespace ToolWorking.Views
             this.btnReloadFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadFolder.Image")));
             this.btnReloadFolder.Location = new System.Drawing.Point(626, 6);
             this.btnReloadFolder.Name = "btnReloadFolder";
-            this.btnReloadFolder.Size = new System.Drawing.Size(26, 24);
+            this.btnReloadFolder.Size = new System.Drawing.Size(26, 26);
             this.btnReloadFolder.TabIndex = 2;
             this.btnReloadFolder.UseVisualStyleBackColor = true;
             this.btnReloadFolder.Click += new System.EventHandler(this.btnReloadFolder_Click);
@@ -217,7 +217,7 @@ namespace ToolWorking.Views
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(296, 10);
+            this.label1.Location = new System.Drawing.Point(296, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 17);
             this.label1.TabIndex = 2;
@@ -228,7 +228,7 @@ namespace ToolWorking.Views
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
             this.btnOpenFolder.Location = new System.Drawing.Point(596, 6);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
             this.btnOpenFolder.TabIndex = 1;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
@@ -236,7 +236,7 @@ namespace ToolWorking.Views
             // txtPathFolder
             // 
             this.txtPathFolder.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtPathFolder.Location = new System.Drawing.Point(421, 6);
+            this.txtPathFolder.Location = new System.Drawing.Point(420, 6);
             this.txtPathFolder.Name = "txtPathFolder";
             this.txtPathFolder.Size = new System.Drawing.Size(170, 24);
             this.txtPathFolder.TabIndex = 0;
@@ -247,7 +247,7 @@ namespace ToolWorking.Views
             // 
             this.lblPath.AutoSize = true;
             this.lblPath.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPath.Location = new System.Drawing.Point(296, 39);
+            this.lblPath.Location = new System.Drawing.Point(296, 42);
             this.lblPath.Name = "lblPath";
             this.lblPath.Size = new System.Drawing.Size(105, 17);
             this.lblPath.TabIndex = 8;
@@ -256,9 +256,9 @@ namespace ToolWorking.Views
             // 
             // progressBarFolder
             // 
-            this.progressBarFolder.Location = new System.Drawing.Point(9, 178);
+            this.progressBarFolder.Location = new System.Drawing.Point(9, 193);
             this.progressBarFolder.Name = "progressBarFolder";
-            this.progressBarFolder.Size = new System.Drawing.Size(642, 21);
+            this.progressBarFolder.Size = new System.Drawing.Size(642, 23);
             this.progressBarFolder.TabIndex = 1;
             // 
             // treeViewFolder
@@ -267,10 +267,10 @@ namespace ToolWorking.Views
             this.treeViewFolder.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.treeViewFolder.ImageIndex = 0;
             this.treeViewFolder.ImageList = this.imageListTree;
-            this.treeViewFolder.Location = new System.Drawing.Point(9, 3);
+            this.treeViewFolder.Location = new System.Drawing.Point(9, 4);
             this.treeViewFolder.Name = "treeViewFolder";
             this.treeViewFolder.SelectedImageIndex = 0;
-            this.treeViewFolder.Size = new System.Drawing.Size(642, 169);
+            this.treeViewFolder.Size = new System.Drawing.Size(642, 183);
             this.treeViewFolder.TabIndex = 6;
             this.treeViewFolder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFolder_AfterSelect);
             this.treeViewFolder.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewFolder_NodeMouseDoubleClick);
@@ -288,18 +288,18 @@ namespace ToolWorking.Views
             this.panelCenterTreeFolder.Controls.Add(this.treeViewFolder);
             this.panelCenterTreeFolder.Controls.Add(this.progressBarFolder);
             this.panelCenterTreeFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenterTreeFolder.Location = new System.Drawing.Point(0, 63);
+            this.panelCenterTreeFolder.Location = new System.Drawing.Point(0, 68);
             this.panelCenterTreeFolder.Name = "panelCenterTreeFolder";
-            this.panelCenterTreeFolder.Size = new System.Drawing.Size(660, 348);
+            this.panelCenterTreeFolder.Size = new System.Drawing.Size(660, 377);
             this.panelCenterTreeFolder.TabIndex = 3;
             // 
             // txtResult
             // 
             this.txtResult.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.txtResult.Location = new System.Drawing.Point(9, 205);
+            this.txtResult.Location = new System.Drawing.Point(9, 222);
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(642, 104);
+            this.txtResult.Size = new System.Drawing.Size(642, 111);
             this.txtResult.TabIndex = 7;
             this.txtResult.Text = "";
             // 
@@ -310,7 +310,7 @@ namespace ToolWorking.Views
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnClearResult.Location = new System.Drawing.Point(577, 0);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 27);
             this.btnClearResult.TabIndex = 9;
             this.btnClearResult.Text = "    Clear";
             this.btnClearResult.UseVisualStyleBackColor = true;
@@ -324,7 +324,7 @@ namespace ToolWorking.Views
             this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCopyResult.Location = new System.Drawing.Point(498, 0);
             this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 25);
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 27);
             this.btnCopyResult.TabIndex = 8;
             this.btnCopyResult.Text = "    Copy";
             this.btnCopyResult.UseVisualStyleBackColor = true;
@@ -338,16 +338,16 @@ namespace ToolWorking.Views
             this.panelCenterPath.Controls.Add(this.txtResultPathFile);
             this.panelCenterPath.Controls.Add(this.txtListFile);
             this.panelCenterPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenterPath.Location = new System.Drawing.Point(0, 63);
+            this.panelCenterPath.Location = new System.Drawing.Point(0, 68);
             this.panelCenterPath.Name = "panelCenterPath";
-            this.panelCenterPath.Size = new System.Drawing.Size(660, 348);
+            this.panelCenterPath.Size = new System.Drawing.Size(660, 345);
             this.panelCenterPath.TabIndex = 10;
             // 
             // lblNumCount
             // 
             this.lblNumCount.AutoSize = true;
             this.lblNumCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumCount.Location = new System.Drawing.Point(467, 186);
+            this.lblNumCount.Location = new System.Drawing.Point(467, 198);
             this.lblNumCount.Name = "lblNumCount";
             this.lblNumCount.Size = new System.Drawing.Size(150, 15);
             this.lblNumCount.TabIndex = 25;
@@ -358,7 +358,7 @@ namespace ToolWorking.Views
             // 
             this.lblNumBefore.AutoSize = true;
             this.lblNumBefore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumBefore.Location = new System.Drawing.Point(13, 186);
+            this.lblNumBefore.Location = new System.Drawing.Point(13, 198);
             this.lblNumBefore.Name = "lblNumBefore";
             this.lblNumBefore.Size = new System.Drawing.Size(148, 15);
             this.lblNumBefore.TabIndex = 24;
@@ -369,7 +369,7 @@ namespace ToolWorking.Views
             // 
             this.lblNumAfter.AutoSize = true;
             this.lblNumAfter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblNumAfter.Location = new System.Drawing.Point(217, 186);
+            this.lblNumAfter.Location = new System.Drawing.Point(217, 198);
             this.lblNumAfter.Name = "lblNumAfter";
             this.lblNumAfter.Size = new System.Drawing.Size(154, 15);
             this.lblNumAfter.TabIndex = 23;
@@ -379,19 +379,19 @@ namespace ToolWorking.Views
             // txtResultPathFile
             // 
             this.txtResultPathFile.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.txtResultPathFile.Location = new System.Drawing.Point(9, 205);
+            this.txtResultPathFile.Location = new System.Drawing.Point(9, 222);
             this.txtResultPathFile.Name = "txtResultPathFile";
             this.txtResultPathFile.ReadOnly = true;
-            this.txtResultPathFile.Size = new System.Drawing.Size(642, 104);
+            this.txtResultPathFile.Size = new System.Drawing.Size(642, 111);
             this.txtResultPathFile.TabIndex = 22;
             this.txtResultPathFile.Text = "";
             // 
             // txtListFile
             // 
             this.txtListFile.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtListFile.Location = new System.Drawing.Point(9, 3);
+            this.txtListFile.Location = new System.Drawing.Point(9, 4);
             this.txtListFile.Name = "txtListFile";
-            this.txtListFile.Size = new System.Drawing.Size(642, 182);
+            this.txtListFile.Size = new System.Drawing.Size(642, 185);
             this.txtListFile.TabIndex = 21;
             this.txtListFile.Text = "";
             this.txtListFile.Click += new System.EventHandler(this.txtListFile_Click);
@@ -407,9 +407,9 @@ namespace ToolWorking.Views
             this.panelBottom.Controls.Add(this.lblAction);
             this.panelBottom.Controls.Add(this.btnClearResult);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 381);
+            this.panelBottom.Location = new System.Drawing.Point(0, 413);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 30);
+            this.panelBottom.Size = new System.Drawing.Size(660, 32);
             this.panelBottom.TabIndex = 11;
             // 
             // btnCount
@@ -419,7 +419,7 @@ namespace ToolWorking.Views
             this.btnCount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCount.Location = new System.Drawing.Point(419, 0);
             this.btnCount.Name = "btnCount";
-            this.btnCount.Size = new System.Drawing.Size(75, 25);
+            this.btnCount.Size = new System.Drawing.Size(75, 27);
             this.btnCount.TabIndex = 21;
             this.btnCount.Text = "    Count";
             this.btnCount.UseVisualStyleBackColor = true;
@@ -480,11 +480,11 @@ namespace ToolWorking.Views
             // 
             // LinkFolder
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 411);
-            this.Controls.Add(this.panelBottom);
+            this.ClientSize = new System.Drawing.Size(660, 445);
             this.Controls.Add(this.panelCenterPath);
+            this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelCenterTreeFolder);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
