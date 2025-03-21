@@ -1,4 +1,15 @@
-/.vs/
-ToolWorking/bin/*
-ToolWorking/obj/*
-ToolWorking/App.config
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.cache
+*.dtbcache.json
+
+# Build output
+bin/
+obj/
+
+# NuGet
+packages/
+project.lock.json
+*.nupkg

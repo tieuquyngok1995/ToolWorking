@@ -50,6 +50,14 @@ namespace ToolWorking.Views
                     OpenChildForm(new SearchFile(), sender);
                     break;
                 case 2:
+                    panelSide.Height = btnCreateFile.Height;
+                    panelSide.Top = btnCreateFile.Top;
+                    panelBotSide.Top = btnCreateFile.Bottom - 2;
+                    labelTitle.Text = CONST.TITLE_CREATE_FILE;
+
+                    OpenChildForm(new CreateFile(), sender);
+                    break;
+                case 3:
                     panelSide.Height = btnDatabase.Height;
                     panelSide.Top = btnDatabase.Top;
                     panelBotSide.Top = btnDatabase.Bottom - 2;
@@ -152,13 +160,32 @@ namespace ToolWorking.Views
         }
 
         /// <summary>
+        /// Event click button Create File
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCreateFile_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.numTabOpen = 2;
+            Properties.Settings.Default.Save();
+
+            panelSide.Height = btnCreateFile.Height;
+            panelSide.Top = btnCreateFile.Top;
+            panelBotSide.Top = btnCreateFile.Bottom - 2;
+
+            labelTitle.Text = CONST.TITLE_CREATE_FILE;
+
+            OpenChildForm(new CreateFile(), sender);
+        }
+
+        /// <summary>
         /// Event click button Database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnDatabase_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.numTabOpen = 2;
+            Properties.Settings.Default.numTabOpen = 3;
             Properties.Settings.Default.Save();
 
             panelSide.Height = btnDatabase.Height;

@@ -3,11 +3,14 @@
     public static class CONST
     {
         public static string[] STRING_SEPARATORS = new string[] { STRING_NEW_LINE };
+        public static string[] STRING_SEPARATORS_COLUMN = new string[] { STRING_TAB };
         public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE, STRING_SPACE };
 
         #region String 
         public const string STRING_NEW_LINE = "\n";
+        public const string STRING_TAB = "\t";
         public const string STRING_COMMA = ",";
+        public const string STRING_SEMICOLON = ";";
         public const string STRING_DOT = ".";
         public const string STRING_SPACE = " ";
         public const string STRING_O_BRACKETS = "(";
@@ -16,6 +19,12 @@
         public const string STRING_C_O_SQU_BRACKETS_SPACE = "] [";
         public const string STRING_O_SQU_BRACKETS = "[";
         public const string STRING_C_SQU_BRACKETS = "]";
+
+        public const string STRING_TEXT1 = "text1";
+        public const string STRING_TEXT2 = "text2";
+        public const string STRING_TEXT_1BYTE = "String(1 Byte)";
+        public const string STRING_TEXT_2BYTE = "String(2 Byte)";
+        public const string STRING_NUMBER = "number";
 
         public const string STRING_EMPTY = "EMPTY";
         public const string STRING_TRUNK = "trunk";
@@ -57,9 +66,10 @@
         #endregion
 
         #region String title
-        public static string TITLE_FILE_FOLDER = "Get Link File and Folder";
-        public static string TITLE_SEARCH_FILE = "Search Files in the Folder";
-        public static string TITLE_DATABASE = "Database Handling";
+        public static string TITLE_FILE_FOLDER = "Get File Info from Folder";
+        public static string TITLE_SEARCH_FILE = "Search for Files in a Folder";
+        public static string TITLE_CREATE_FILE = "Create File Based on User Settings";
+        public static string TITLE_DATABASE = "Database Operations";
         #endregion
 
         #region Message 

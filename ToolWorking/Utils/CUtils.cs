@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ToolWorking.Utils
 {
     public static class CUtils
     {
+        private static readonly char[] SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:'\",.<>?/".ToCharArray();
+        private static readonly char[] ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".Concat(SPECIAL_CHARS).ToArray();
+        private static readonly char[] UNICODE_CHARS = "あいうえおアイウエオ漢字测试文字符号".Concat(ASCII_CHARS).ToArray();
+
+        private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
+
         #region Layout 
-        private static Random random = new Random();
         public static Color createColor()
         {
+            Random random = new Random();
             return Color.FromArgb((int)(0xFF << 24 ^ (random.Next(0xFFFFFF) & 0x7F7F7F))); ;
         }
 
@@ -215,6 +223,39 @@ namespace ToolWorking.Utils
             return new string(digits);
         }
 
+        public static string GenerateRandomValue(ref string type, int range, string excludeChars)
+        {
+            if (range <= 0) return "";
+
+            Random rand = random.Value; 
+            HashSet<char> excludeSet = new HashSet<char>(excludeChars);
+            switch (type.ToLower())
+            {
+                case CONST.STRING_TEXT1:
+                case "string(1 byte)":
+                    type = CONST.STRING_TEXT_1BYTE;
+                    return new string(Enumerable.Range(0, range)
+                        .Select(_ => GetRandomChar(rand, ASCII_CHARS, excludeSet))
+                        .ToArray());
+
+                case CONST.STRING_TEXT2:
+                case "string(2 byte)":
+                    type = CONST.STRING_TEXT_2BYTE;
+                    return new string(Enumerable.Range(0, range)
+                        .Select(_ => GetRandomChar(rand, UNICODE_CHARS, excludeSet))
+                        .ToArray());
+
+                case CONST.STRING_NUMBER:
+                    type = "Number";
+                    return string.Concat(Enumerable.Range(0, range)
+                        .Select(_ => GetRandomChar(rand, "0123456789".ToArray(), excludeSet))
+                        .ToArray());
+
+                default:
+                    return "";
+            }
+        }
+
         /// <summary>
         /// Run command line update svn 
         /// </summary>
@@ -239,17 +280,7 @@ namespace ToolWorking.Utils
                     {
                         if (!string.IsNullOrEmpty(e.Data))
                         {
-                            // Ghi lại đầu ra lỗi
-                            MessageBox.Show("Error: " + e.Data, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    };
-
-                    process.OutputDataReceived += (sender, e) =>
-                    {
-                        if (!string.IsNullOrEmpty(e.Data))
-                        {
-                            // Bạn có thể ghi lại đầu ra thông thường nếu cần
-                            Console.WriteLine(e.Data);
+                            return;
                         }
                     };
 
@@ -262,6 +293,7 @@ namespace ToolWorking.Utils
                     if (process.ExitCode != 0)
                     {
                         MessageBox.Show("There was an error during processing. SVN command failed.", "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
                 }
             }
@@ -271,6 +303,16 @@ namespace ToolWorking.Utils
             }
         }
 
+        private static char GetRandomChar(Random rand, char[] charSet, HashSet<char> excludeSet)
+        {
+            char c;
+            do
+            {
+                c = charSet[rand.Next(charSet.Length)];
+            } while (excludeSet.Contains(c)); 
+
+            return c;
+        }
         #endregion
     }
 }
