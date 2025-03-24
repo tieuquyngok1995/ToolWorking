@@ -13,7 +13,7 @@ namespace ToolWorking.Utils
 {
     public static class CUtils
     {
-        private static readonly char[] SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:'\",.<>?/".ToCharArray();
+        private static readonly char[] SPECIAL_CHARS = "!@#$%^&*_+-=;,.<>?/".ToCharArray();
         private static readonly char[] ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".Concat(SPECIAL_CHARS).ToArray();
         private static readonly char[] UNICODE_CHARS = "あいうえおアイウエオ漢字测试文字符号".Concat(ASCII_CHARS).ToArray();
 
