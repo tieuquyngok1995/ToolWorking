@@ -252,22 +252,17 @@ namespace ToolWorking.Utils
                         .ToArray());
 
                 default:
-                    var parts = type.Split('|');
-                    if (parts.Length == 2 && int.TryParse(parts[1], out int number))
+                    int randNum = rand.Next(0, 200);
+                    if (randNum == 0 || randNum % 3 == 0)
                     {
-                        int randNum = rand.Next(0, number + 1);
-                        if (randNum == 0 || randNum % 2 == 0)
-                        {
-                            return type;
-                        }
-                        else
-                        {
-                            return new string(Enumerable.Range(0, range)
-                                .Select(_ => GetRandomChar(rand, ASCII_CHARS, excludeSet))
-                                .ToArray());
-                        }
+                        return type;
                     }
-                    return type;
+                    else
+                    {
+                        return new string(Enumerable.Range(0, range)
+                            .Select(_ => GetRandomChar(rand, ASCII_CHARS, excludeSet))
+                            .ToArray());
+                    }
             }
         }
 
