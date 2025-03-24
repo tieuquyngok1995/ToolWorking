@@ -221,6 +221,8 @@ namespace ToolWorking.Views
             int numRows = !string.IsNullOrEmpty(txtNumRow.Text) ? int.Parse(txtNumRow.Text) : 1;
             string filePath = Path.Combine(pathFolderCreateFile, fileNameCreate);
 
+            progressBar.Maximum = numRows;
+
             try
             {
                 if (fileType == 0)
@@ -242,10 +244,9 @@ namespace ToolWorking.Views
                             }).ToArray();
 
                             writer.WriteLine(string.Join(delimiter, rowValues));
+                            updateProgress();
                         }
                     }
-
-                    MessageBox.Show($"CSV file created successfully!\nPath: {filePath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -265,5 +266,23 @@ namespace ToolWorking.Views
         }
 
         #endregion
+
+        /// <summary>
+        /// Update processing progress
+        /// </summary>
+        private void updateProgress()
+        {
+            if (progressBar.InvokeRequired)
+            {
+                progressBar.Invoke(new Action(updateProgress));
+                return;
+            }
+
+            if (progressBar.Value < progressBar.Maximum)
+            {
+                progressBar.Value++;
+                progressBar.Refresh();
+            }
+        }
     }
 }

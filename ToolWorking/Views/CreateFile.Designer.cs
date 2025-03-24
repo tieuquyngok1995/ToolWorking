@@ -1,4 +1,6 @@
 ﻿
+using ToolWorking.Extension;
+
 namespace ToolWorking.Views
 {
     partial class CreateFile
@@ -30,9 +32,9 @@ namespace ToolWorking.Views
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateFile));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
             this.cbFileType = new System.Windows.Forms.ComboBox();
             this.lblPathFolder = new System.Windows.Forms.Label();
@@ -46,19 +48,20 @@ namespace ToolWorking.Views
             this.txtSetting = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.gridInputValue = new System.Windows.Forms.DataGridView();
-            this.panelBottom = new System.Windows.Forms.Panel();
-            this.txtNumRow = new System.Windows.Forms.TextBox();
-            this.btnClearResult = new System.Windows.Forms.Button();
-            this.btnCreate = new System.Windows.Forms.Button();
-            this.lblNumRows = new System.Windows.Forms.Label();
             this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExcludeChars = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelBottom = new System.Windows.Forms.Panel();
             this.cbDelimiter = new System.Windows.Forms.ComboBox();
             this.lblDelimiter = new System.Windows.Forms.Label();
+            this.txtNumRow = new System.Windows.Forms.TextBox();
+            this.btnClearResult = new System.Windows.Forms.Button();
+            this.btnCreate = new System.Windows.Forms.Button();
+            this.lblNumRows = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.panelTop.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -156,6 +159,7 @@ namespace ToolWorking.Views
             // panelCenterQuery
             // 
             this.panelCenterQuery.BackColor = System.Drawing.SystemColors.Control;
+            this.panelCenterQuery.Controls.Add(this.progressBar);
             this.panelCenterQuery.Controls.Add(this.groupBox1);
             this.panelCenterQuery.Controls.Add(this.groupBox2);
             this.panelCenterQuery.Dock = System.Windows.Forms.DockStyle.Top;
@@ -170,7 +174,7 @@ namespace ToolWorking.Views
             this.groupBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupBox1.Location = new System.Drawing.Point(9, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(642, 149);
+            this.groupBox1.Size = new System.Drawing.Size(642, 117);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input Setting";
@@ -181,16 +185,17 @@ namespace ToolWorking.Views
             this.txtSetting.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSetting.Location = new System.Drawing.Point(3, 19);
             this.txtSetting.Name = "txtSetting";
-            this.txtSetting.Size = new System.Drawing.Size(636, 127);
+            this.txtSetting.Size = new System.Drawing.Size(636, 95);
             this.txtSetting.TabIndex = 20;
             this.txtSetting.Text = "";
+            this.txtSetting.WordWrap = false;
             this.txtSetting.TextChanged += new System.EventHandler(this.txtSetting_TextChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.gridInputValue);
             this.groupBox2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupBox2.Location = new System.Drawing.Point(9, 149);
+            this.groupBox2.Location = new System.Drawing.Point(9, 117);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(642, 219);
             this.groupBox2.TabIndex = 22;
@@ -205,14 +210,14 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -227,18 +232,69 @@ namespace ToolWorking.Views
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridInputValue.Size = new System.Drawing.Size(636, 197);
             this.gridInputValue.TabIndex = 11;
+            // 
+            // no
+            // 
+            this.no.DataPropertyName = "No";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.no.DefaultCellStyle = dataGridViewCellStyle5;
+            this.no.Frozen = true;
+            this.no.HeaderText = "No.";
+            this.no.Name = "no";
+            this.no.ReadOnly = true;
+            this.no.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.no.Width = 30;
+            // 
+            // name
+            // 
+            this.name.DataPropertyName = "Name";
+            this.name.Frozen = true;
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Width = 150;
+            // 
+            // type
+            // 
+            this.type.DataPropertyName = "Type";
+            this.type.HeaderText = "Type";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
+            this.type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.type.Width = 90;
+            // 
+            // value
+            // 
+            this.value.DataPropertyName = "Value";
+            this.value.HeaderText = "Value";
+            this.value.Name = "value";
+            this.value.Width = 348;
+            // 
+            // Range
+            // 
+            this.Range.DataPropertyName = "Range";
+            this.Range.HeaderText = "Range";
+            this.Range.Name = "Range";
+            this.Range.Visible = false;
+            // 
+            // ExcludeChars
+            // 
+            this.ExcludeChars.DataPropertyName = "ExcludeChars";
+            this.ExcludeChars.HeaderText = "ExcludeChars";
+            this.ExcludeChars.Name = "ExcludeChars";
+            this.ExcludeChars.Visible = false;
             // 
             // panelBottom
             // 
@@ -253,6 +309,29 @@ namespace ToolWorking.Views
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(660, 32);
             this.panelBottom.TabIndex = 11;
+            // 
+            // cbDelimiter
+            // 
+            this.cbDelimiter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDelimiter.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.cbDelimiter.Items.AddRange(new object[] {
+            "Tab",
+            "Comma",
+            "Semicolon"});
+            this.cbDelimiter.Location = new System.Drawing.Point(250, 1);
+            this.cbDelimiter.Name = "cbDelimiter";
+            this.cbDelimiter.Size = new System.Drawing.Size(90, 25);
+            this.cbDelimiter.TabIndex = 26;
+            // 
+            // lblDelimiter
+            // 
+            this.lblDelimiter.AutoSize = true;
+            this.lblDelimiter.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblDelimiter.Location = new System.Drawing.Point(184, 4);
+            this.lblDelimiter.Name = "lblDelimiter";
+            this.lblDelimiter.Size = new System.Drawing.Size(65, 17);
+            this.lblDelimiter.TabIndex = 25;
+            this.lblDelimiter.Text = "Delimiter";
             // 
             // txtNumRow
             // 
@@ -301,79 +380,12 @@ namespace ToolWorking.Views
             this.lblNumRows.TabIndex = 24;
             this.lblNumRows.Text = "Num Rows";
             // 
-            // no
+            // progressBar
             // 
-            this.no.DataPropertyName = "No";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.no.DefaultCellStyle = dataGridViewCellStyle8;
-            this.no.Frozen = true;
-            this.no.HeaderText = "No.";
-            this.no.Name = "no";
-            this.no.ReadOnly = true;
-            this.no.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.no.Width = 30;
-            // 
-            // name
-            // 
-            this.name.DataPropertyName = "Name";
-            this.name.Frozen = true;
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Width = 150;
-            // 
-            // type
-            // 
-            this.type.DataPropertyName = "Type";
-            this.type.HeaderText = "Type";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
-            this.type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.type.Width = 90;
-            // 
-            // value
-            // 
-            this.value.DataPropertyName = "Value";
-            this.value.HeaderText = "Value";
-            this.value.Name = "value";
-            this.value.Width = 348;
-            // 
-            // Range
-            // 
-            this.Range.DataPropertyName = "Range";
-            this.Range.HeaderText = "Range";
-            this.Range.Name = "Range";
-            this.Range.Visible = false;
-            // 
-            // ExcludeChars
-            // 
-            this.ExcludeChars.DataPropertyName = "ExcludeChars";
-            this.ExcludeChars.HeaderText = "ExcludeChars";
-            this.ExcludeChars.Name = "ExcludeChars";
-            this.ExcludeChars.Visible = false;
-            // 
-            // cbDelimiter
-            // 
-            this.cbDelimiter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDelimiter.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.cbDelimiter.Items.AddRange(new object[] {
-            "Tab",
-            "Comma",
-            "Semicolon"});
-            this.cbDelimiter.Location = new System.Drawing.Point(250, 1);
-            this.cbDelimiter.Name = "cbDelimiter";
-            this.cbDelimiter.Size = new System.Drawing.Size(90, 25);
-            this.cbDelimiter.TabIndex = 26;
-            // 
-            // lblDelimiter
-            // 
-            this.lblDelimiter.AutoSize = true;
-            this.lblDelimiter.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblDelimiter.Location = new System.Drawing.Point(184, 4);
-            this.lblDelimiter.Name = "lblDelimiter";
-            this.lblDelimiter.Size = new System.Drawing.Size(65, 17);
-            this.lblDelimiter.TabIndex = 25;
-            this.lblDelimiter.Text = "Delimiter";
+            this.progressBar.Location = new System.Drawing.Point(9, 344);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(642, 23);
+            this.progressBar.TabIndex = 25;
             // 
             // CreateFile
             // 
@@ -427,5 +439,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.DataGridViewTextBoxColumn ExcludeChars;
         private System.Windows.Forms.ComboBox cbDelimiter;
         private System.Windows.Forms.Label lblDelimiter;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
