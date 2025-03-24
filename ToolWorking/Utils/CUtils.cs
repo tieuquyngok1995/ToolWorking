@@ -255,7 +255,8 @@ namespace ToolWorking.Utils
                     var parts = type.Split('|');
                     if (parts.Length == 2 && int.TryParse(parts[1], out int number))
                     {
-                        if (number % 2 == 0)
+                        int randNum = rand.Next(0, number + 1);
+                        if (randNum == 0 || randNum % 2 == 0)
                         {
                             return type;
                         }
