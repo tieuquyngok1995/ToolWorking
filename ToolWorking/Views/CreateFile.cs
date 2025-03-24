@@ -51,7 +51,7 @@ namespace ToolWorking.Views
                 txtNumRow.Enabled = false;
                 lblDelimiter.Visible = fileType == 0;
                 cbDelimiter.Visible = fileType == 0;
-                cbDelimiter.SelectedIndex =  0;
+                cbDelimiter.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -138,14 +138,14 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtFileName_Leave(object sender, EventArgs e)
         {
-            string fileName = txtFileName.Text;
-            if (!string.IsNullOrEmpty(fileName))
+            fileNameCreate = txtFileName.Text;
+            if (!string.IsNullOrEmpty(fileNameCreate))
             {
                 string fileType = "." + cbFileType.SelectedItem.ToString().ToLower();
-                fileName = Path.GetFileNameWithoutExtension(fileName) + fileType;
+                fileNameCreate = Path.GetFileNameWithoutExtension(fileNameCreate) + fileType;
 
-                txtFileName.Text = fileName;
-                Properties.Settings.Default.fileNameCreate = fileName;
+                txtFileName.Text = fileNameCreate;
+                Properties.Settings.Default.fileNameCreate = fileNameCreate;
                 Properties.Settings.Default.Save();
             }
         }
@@ -248,7 +248,7 @@ namespace ToolWorking.Views
 
         private void btnClearResult_Click(object sender, EventArgs e)
         {
-            txtSetting.Text =    string.Empty;
+            txtSetting.Text = string.Empty;
             lstSetting.Clear();
             bindingSource.ResetBindings(false);
             txtNumRow.Text = string.Empty;
