@@ -227,7 +227,7 @@ namespace ToolWorking.Utils
         {
             if (range <= 0) return "";
 
-            Random rand = random.Value; 
+            Random rand = random.Value;
             HashSet<char> excludeSet = new HashSet<char>(excludeChars);
             switch (type.ToLower())
             {
@@ -248,7 +248,7 @@ namespace ToolWorking.Utils
                 case CONST.STRING_NUMBER:
                     type = "Number";
                     return string.Concat(Enumerable.Range(0, range)
-                        .Select(_ => GetRandomChar(rand, "0123456789".ToArray(), excludeSet))
+                        .Select(_ => GetRandomChar(rand, "0123456789*#".ToArray(), excludeSet))
                         .ToArray());
 
                 default:
@@ -309,7 +309,7 @@ namespace ToolWorking.Utils
             do
             {
                 c = charSet[rand.Next(charSet.Length)];
-            } while (excludeSet.Contains(c)); 
+            } while (excludeSet.Contains(c));
 
             return c;
         }

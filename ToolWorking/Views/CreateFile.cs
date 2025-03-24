@@ -122,11 +122,13 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void cbFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (fileType != cbFileType.SelectedIndex) txtFileName_Leave(sender, e);
+
             fileType = cbFileType.SelectedIndex;
             lblDelimiter.Visible = fileType == 0;
             cbDelimiter.Visible = fileType == 0;
             cbDelimiter.SelectedIndex = 0;
-            txtFileName_Leave(sender, e);
+
             Properties.Settings.Default.modeCreateFile = fileType;
             Properties.Settings.Default.Save();
         }
@@ -138,14 +140,20 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtFileName_Leave(object sender, EventArgs e)
         {
-            fileNameCreate = txtFileName.Text;
-            if (!string.IsNullOrEmpty(fileNameCreate))
+            string fileName = txtFileName.Text;
+            if (!string.IsNullOrEmpty(fileName))
             {
                 string fileType = "." + cbFileType.SelectedItem.ToString().ToLower();
-                fileNameCreate = Path.GetFileNameWithoutExtension(fileNameCreate) + fileType;
+                fileName = Path.GetFileNameWithoutExtension(fileName) + fileType;
 
-                txtFileName.Text = fileNameCreate;
-                Properties.Settings.Default.fileNameCreate = fileNameCreate;
+                txtFileName.Text = fileName;
+                fileNameCreate = fileName;
+                Properties.Settings.Default.fileNameCreate = fileName;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Properties.Settings.Default.fileNameCreate = string.Empty;
                 Properties.Settings.Default.Save();
             }
         }
