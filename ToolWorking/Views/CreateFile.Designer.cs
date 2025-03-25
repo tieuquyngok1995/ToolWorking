@@ -32,9 +32,9 @@ namespace ToolWorking.Views
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateFile));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
             this.cbFileType = new System.Windows.Forms.ComboBox();
             this.lblPathFolder = new System.Windows.Forms.Label();
@@ -44,6 +44,7 @@ namespace ToolWorking.Views
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelCenterQuery = new System.Windows.Forms.Panel();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtSetting = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -61,7 +62,6 @@ namespace ToolWorking.Views
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
             this.lblNumRows = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.panelTop.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -82,7 +82,7 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 34);
+            this.panelTop.Size = new System.Drawing.Size(660, 31);
             this.panelTop.TabIndex = 1;
             // 
             // cbFileType
@@ -102,7 +102,7 @@ namespace ToolWorking.Views
             // 
             this.lblPathFolder.AutoSize = true;
             this.lblPathFolder.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblPathFolder.Location = new System.Drawing.Point(6, 11);
+            this.lblPathFolder.Location = new System.Drawing.Point(6, 10);
             this.lblPathFolder.Name = "lblPathFolder";
             this.lblPathFolder.Size = new System.Drawing.Size(107, 17);
             this.lblPathFolder.TabIndex = 17;
@@ -113,7 +113,7 @@ namespace ToolWorking.Views
             this.btnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFolder.Image")));
             this.btnOpenFolder.Location = new System.Drawing.Point(291, 6);
             this.btnOpenFolder.Name = "btnOpenFolder";
-            this.btnOpenFolder.Size = new System.Drawing.Size(26, 26);
+            this.btnOpenFolder.Size = new System.Drawing.Size(26, 24);
             this.btnOpenFolder.TabIndex = 15;
             this.btnOpenFolder.UseVisualStyleBackColor = true;
             this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
@@ -131,7 +131,7 @@ namespace ToolWorking.Views
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label2.Location = new System.Drawing.Point(449, 11);
+            this.label2.Location = new System.Drawing.Point(449, 10);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 17);
             this.label2.TabIndex = 9;
@@ -150,7 +150,7 @@ namespace ToolWorking.Views
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(322, 11);
+            this.label1.Location = new System.Drawing.Point(322, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 17);
             this.label1.TabIndex = 2;
@@ -163,10 +163,17 @@ namespace ToolWorking.Views
             this.panelCenterQuery.Controls.Add(this.groupBox1);
             this.panelCenterQuery.Controls.Add(this.groupBox2);
             this.panelCenterQuery.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCenterQuery.Location = new System.Drawing.Point(0, 34);
+            this.panelCenterQuery.Location = new System.Drawing.Point(0, 31);
             this.panelCenterQuery.Name = "panelCenterQuery";
-            this.panelCenterQuery.Size = new System.Drawing.Size(660, 377);
+            this.panelCenterQuery.Size = new System.Drawing.Size(660, 348);
             this.panelCenterQuery.TabIndex = 10;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(9, 318);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(642, 21);
+            this.progressBar.TabIndex = 25;
             // 
             // groupBox1
             // 
@@ -174,7 +181,7 @@ namespace ToolWorking.Views
             this.groupBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupBox1.Location = new System.Drawing.Point(9, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(642, 117);
+            this.groupBox1.Size = new System.Drawing.Size(642, 120);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input Setting";
@@ -182,10 +189,11 @@ namespace ToolWorking.Views
             // txtSetting
             // 
             this.txtSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSetting.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSetting.Font = new System.Drawing.Font("MS Gothic", 9F);
             this.txtSetting.Location = new System.Drawing.Point(3, 19);
             this.txtSetting.Name = "txtSetting";
-            this.txtSetting.Size = new System.Drawing.Size(636, 95);
+            this.txtSetting.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
+            this.txtSetting.Size = new System.Drawing.Size(636, 98);
             this.txtSetting.TabIndex = 20;
             this.txtSetting.Text = "";
             this.txtSetting.WordWrap = false;
@@ -195,9 +203,9 @@ namespace ToolWorking.Views
             // 
             this.groupBox2.Controls.Add(this.gridInputValue);
             this.groupBox2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupBox2.Location = new System.Drawing.Point(9, 117);
+            this.groupBox2.Location = new System.Drawing.Point(9, 120);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(642, 219);
+            this.groupBox2.Size = new System.Drawing.Size(642, 190);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input Value ";
@@ -210,14 +218,14 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -232,24 +240,24 @@ namespace ToolWorking.Views
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle24;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridInputValue.Size = new System.Drawing.Size(636, 197);
+            this.gridInputValue.Size = new System.Drawing.Size(636, 168);
             this.gridInputValue.TabIndex = 11;
             // 
             // no
             // 
             this.no.DataPropertyName = "No";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.no.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.no.DefaultCellStyle = dataGridViewCellStyle23;
             this.no.Frozen = true;
             this.no.HeaderText = "No.";
             this.no.Name = "no";
@@ -305,9 +313,9 @@ namespace ToolWorking.Views
             this.panelBottom.Controls.Add(this.btnCreate);
             this.panelBottom.Controls.Add(this.lblNumRows);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 413);
+            this.panelBottom.Location = new System.Drawing.Point(0, 381);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 32);
+            this.panelBottom.Size = new System.Drawing.Size(660, 30);
             this.panelBottom.TabIndex = 11;
             // 
             // cbDelimiter
@@ -350,7 +358,7 @@ namespace ToolWorking.Views
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnClearResult.Location = new System.Drawing.Point(577, 0);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 27);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
             this.btnClearResult.TabIndex = 9;
             this.btnClearResult.Text = "    Clear";
             this.btnClearResult.UseVisualStyleBackColor = true;
@@ -364,7 +372,7 @@ namespace ToolWorking.Views
             this.btnCreate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCreate.Location = new System.Drawing.Point(493, 0);
             this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(80, 27);
+            this.btnCreate.Size = new System.Drawing.Size(80, 25);
             this.btnCreate.TabIndex = 8;
             this.btnCreate.Text = "    Create";
             this.btnCreate.UseVisualStyleBackColor = true;
@@ -380,18 +388,11 @@ namespace ToolWorking.Views
             this.lblNumRows.TabIndex = 24;
             this.lblNumRows.Text = "Num Rows";
             // 
-            // progressBar
-            // 
-            this.progressBar.Location = new System.Drawing.Point(9, 344);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(642, 23);
-            this.progressBar.TabIndex = 25;
-            // 
             // CreateFile
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 445);
+            this.ClientSize = new System.Drawing.Size(660, 411);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelCenterQuery);
             this.Controls.Add(this.panelTop);
