@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -148,6 +147,7 @@ namespace ToolWorking.Views
 
                 txtFileName.Text = fileName;
                 fileNameCreate = fileName;
+                progressBar.Value = 0;
                 Properties.Settings.Default.fileNameCreate = fileName;
                 Properties.Settings.Default.Save();
             }
@@ -205,6 +205,7 @@ namespace ToolWorking.Views
                 bindingSource.ResetBindings(false);
                 txtNumRow.Enabled = true;
                 btnCreate.Enabled = true;
+                progressBar.Value = 0;
             }
         }
 
@@ -220,7 +221,7 @@ namespace ToolWorking.Views
         {
             int numRows = !string.IsNullOrEmpty(txtNumRow.Text) ? int.Parse(txtNumRow.Text) : 1;
             string filePath = Path.Combine(pathFolderCreateFile, fileNameCreate);
-
+            progressBar.Value = 0;
             progressBar.Maximum = numRows;
 
             try
