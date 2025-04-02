@@ -219,6 +219,12 @@ namespace ToolWorking.Views
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(pathFolderCreateFile))
+            {
+                MessageBox.Show("Invalid Input Folder Path!!!");
+                return;
+            }
+
             int numRows = !string.IsNullOrEmpty(txtNumRow.Text) ? int.Parse(txtNumRow.Text) : 1;
             string filePath = Path.Combine(pathFolderCreateFile, fileNameCreate);
             progressBar.Value = 0;
