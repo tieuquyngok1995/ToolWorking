@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace ToolWorking.Utils
@@ -92,7 +93,7 @@ namespace ToolWorking.Utils
             streamReader.Close();
 
             // Handel text script
-            string[] arrScript = System.Text.RegularExpressions.Regex.Split(scripts, "\r\n[\t ]*GO");
+            string[] arrScript = Regex.Split(scripts, @"^\s*GO\s*$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
             // Open connection
             connection = GetDBConnection();
