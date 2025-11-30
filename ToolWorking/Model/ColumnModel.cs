@@ -14,23 +14,16 @@
 
         public string ExcludeChars { get; set; }
 
-        public ColumnModel(int _No, string _Name, string _Type, string _Value, int _Range)
+        public ColumnModel(int no, string name, string type, string value, int range, string excludeChars = null)
         {
-            No = _No;
-            Name = _Name;
-            Type = _Type;
-            Value = _Value;
-            Range = _Range;
-        }
+            No = no;
+            Name = name;
+            Type = type;
+            Value = value;
+            Range = range;
 
-        public ColumnModel(int _No, string _Name, string _Type, string _Value, int _Range, string _ExcludeChars)
-        {
-            No = _No;
-            Name = _Name;
-            Type = _Type;
-            Value = _Value;
-            Range = _Range;
-            ExcludeChars = _ExcludeChars;
+            if (!string.IsNullOrEmpty(excludeChars))
+                ExcludeChars = excludeChars;
         }
     }
 }

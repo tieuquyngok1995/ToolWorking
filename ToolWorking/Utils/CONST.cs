@@ -3,6 +3,7 @@
     public static class CONST
     {
         public static string[] STRING_SEPARATORS = new string[] { STRING_NEW_LINE };
+        public static string[] STRING_SEPARATORS_ROWS = new string[] { "\r\n", "\r", "\n" };
         public static string[] STRING_SEPARATORS_COLUMN = new string[] { STRING_TAB };
         public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE, STRING_SPACE };
 
@@ -44,23 +45,26 @@
         public const string SQL_TYPE_TIME_STAMP = "timestamp";
         public const string SQL_TYPE_DATE_TIME = "datetime";
         public const string SQL_TYPE_TIME = "time";
+        public const string SQL_TYPE_INT = "int";
         public const string SQL_TYPE_BIGINT = "bigint";
         public const string SQL_TYPE_SMALLINT = "smallint";
         public const string SQL_TYPE_MONEY = "money";
         public const string SQL_TYPE_NUMERIC = "numeric";
         public const string SQL_TYPE_DECIMAL = "decimal";
         public const string SQL_TYPE_BIT = "bit";
+        public const string SQL_TYPE_DECLARE = "DECLARE";
         #endregion
 
         #region String C Type 
         public const string C_TYPE_STRING = "string";
-        public const string C_TYPE_BOOL = "bool";
+        public const string C_TYPE_BIT = "bit";
         public const string C_TYPE_DATE_TIME = "DateTime";
         public const string C_TYPE_TIME = "Time";
         public const string C_TYPE_TIME_STAMP = "timestamp";
         public const string C_TYPE_SHORT = "short";
         public const string C_TYPE_INT = "int";
         public const string C_TYPE_LONG = "long";
+        public const string C_TYPE_NUMERIC = "numeric";
         public const string C_TYPE_DECIMAL = "decimal";
         public const string C_TYPE_DOUBLE = "double";
         #endregion
@@ -70,6 +74,7 @@
         public static string TITLE_SEARCH_FILE = "Search for Files in a Folder";
         public static string TITLE_CREATE_FILE = "Create File Based on User Settings";
         public static string TITLE_DATABASE = "Database Operations";
+        public static string TITLE_FORMAT = "Source Structure Format";
         #endregion
 
         #region Message 

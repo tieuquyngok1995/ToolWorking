@@ -36,6 +36,7 @@ namespace ToolWorking.Views
             this.btnLinkFolder = new System.Windows.Forms.Button();
             this.panelLogo = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnFormat = new System.Windows.Forms.Button();
             this.btnDatabase = new System.Windows.Forms.Button();
             this.btnSearchFile = new System.Windows.Forms.Button();
             this.btnCreateFile = new System.Windows.Forms.Button();
@@ -63,6 +64,7 @@ namespace ToolWorking.Views
             this.panelLeft.Controls.Add(this.btnDatabase);
             this.panelLeft.Controls.Add(this.btnSearchFile);
             this.panelLeft.Controls.Add(this.btnCreateFile);
+            this.panelLeft.Controls.Add(this.btnFormat);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
             this.panelLeft.Name = "panelLeft";
@@ -140,6 +142,23 @@ namespace ToolWorking.Views
             this.btnDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnDatabase.UseVisualStyleBackColor = true;
             this.btnDatabase.Click += new System.EventHandler(this.btnDatabase_Click);
+            // 
+            // btnFormat
+            // 
+            this.btnFormat.FlatAppearance.BorderSize = 0;
+            this.btnFormat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFormat.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnFormat.ForeColor = System.Drawing.Color.White;
+            this.btnFormat.Image = ((System.Drawing.Image)(resources.GetObject("btnFormat.Image")));
+            this.btnFormat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFormat.Location = new System.Drawing.Point(0, 234);
+            this.btnFormat.Name = "btnFormat";
+            this.btnFormat.Size = new System.Drawing.Size(140, 46);
+            this.btnFormat.TabIndex = 23;
+            this.btnFormat.Text = "Format     ";
+            this.btnFormat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnFormat.UseVisualStyleBackColor = true;
+            this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
             // 
             // btnSearchFile
             // 
@@ -315,5 +334,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.Panel panelBotSide;
         private System.Windows.Forms.Button btnDatabase;
         private System.Windows.Forms.Button btnCreateFile;
+        private System.Windows.Forms.Button btnFormat;
     }
 }

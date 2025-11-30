@@ -56,9 +56,9 @@ namespace ToolWorking.Utils
         /// Check connection
         /// </summary>
         /// <returns></returns>
-        public static bool IsConnection()
+        public static bool IsConnection(string database)
         {
-            connection = GetDBConnection();
+            connection = GetDBConnection(database.Contains("None"));
             try
             {
                 if (connection != null)
@@ -125,6 +125,47 @@ namespace ToolWorking.Utils
         }
 
         /// <summary>
+        /// Execute script sql with batches
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static string ExecuteScriptWithBatches(string query)
+        {
+            string errMess = string.Empty;
+
+            // Handel text script
+            string[] arrScript = Regex.Split(query, @"^\s*GO\s*$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+            // Open connection
+            connection = GetDBConnection();
+            SqlCommand command = new SqlCommand(String.Empty, connection);
+            connection.Open();
+
+            // Run Script
+            foreach (string script in arrScript)
+            {
+                try
+                {
+                    if (script.Trim() == string.Empty) continue;
+                    if ((script.Length >= 3) && (script.Substring(0, 3).ToUpper() == "USE"))
+                    {
+                        throw new Exception("Create-script contains USE-statement. Please provide non-database specific create-scripts!");
+                    }
+                    command.CommandText = script;
+                    command.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    errMess += ex.Message + "\r\n";
+                }
+            }
+
+            connection.Close();
+            return errMess;
+        }
+
+        /// <summary>
         /// Execute script sql
         /// </summary>
         /// <param name="query"></param>
@@ -153,6 +194,7 @@ namespace ToolWorking.Utils
             connection.Close();
             return errMess;
         }
+
 
         public static List<string> GetDatabase()
         {

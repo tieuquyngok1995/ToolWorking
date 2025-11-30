@@ -31,10 +31,12 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Database));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelQueryInput = new System.Windows.Forms.Panel();
+            this.rbCreateScript = new System.Windows.Forms.RadioButton();
             this.rbInputTable = new System.Windows.Forms.RadioButton();
             this.rbInputExcel = new System.Windows.Forms.RadioButton();
             this.cbDatabase = new System.Windows.Forms.ComboBox();
@@ -83,13 +85,14 @@ namespace ToolWorking.Views
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtInputExcel = new System.Windows.Forms.RichTextBox();
             this.gridInputValue = new System.Windows.Forms.DataGridView();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtResultQuery = new System.Windows.Forms.RichTextBox();
             this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtResultQuery = new System.Windows.Forms.RichTextBox();
+            this.ExcludeChars = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelTop.SuspendLayout();
             this.panelQueryInput.SuspendLayout();
             this.panelBottom.SuspendLayout();
@@ -131,6 +134,7 @@ namespace ToolWorking.Views
             // 
             // panelQueryInput
             // 
+            this.panelQueryInput.Controls.Add(this.rbCreateScript);
             this.panelQueryInput.Controls.Add(this.rbInputTable);
             this.panelQueryInput.Controls.Add(this.rbInputExcel);
             this.panelQueryInput.Location = new System.Drawing.Point(246, 38);
@@ -138,6 +142,18 @@ namespace ToolWorking.Views
             this.panelQueryInput.Size = new System.Drawing.Size(411, 29);
             this.panelQueryInput.TabIndex = 25;
             this.panelQueryInput.Visible = false;
+            // 
+            // rbCreateScript
+            // 
+            this.rbCreateScript.AutoSize = true;
+            this.rbCreateScript.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.rbCreateScript.Location = new System.Drawing.Point(210, 2);
+            this.rbCreateScript.Name = "rbCreateScript";
+            this.rbCreateScript.Size = new System.Drawing.Size(109, 21);
+            this.rbCreateScript.TabIndex = 25;
+            this.rbCreateScript.Text = "Create Table";
+            this.rbCreateScript.UseVisualStyleBackColor = true;
+            this.rbCreateScript.CheckedChanged += new System.EventHandler(this.rbCreateScript_CheckedChanged);
             // 
             // rbInputTable
             // 
@@ -606,7 +622,7 @@ namespace ToolWorking.Views
             this.groupBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupBox1.Location = new System.Drawing.Point(9, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(642, 145);
+            this.groupBox1.Size = new System.Drawing.Size(642, 133);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input Script Table";
@@ -617,7 +633,7 @@ namespace ToolWorking.Views
             this.txtScriptTable.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtScriptTable.Location = new System.Drawing.Point(3, 19);
             this.txtScriptTable.Name = "txtScriptTable";
-            this.txtScriptTable.Size = new System.Drawing.Size(636, 123);
+            this.txtScriptTable.Size = new System.Drawing.Size(636, 111);
             this.txtScriptTable.TabIndex = 20;
             this.txtScriptTable.Text = "";
             this.txtScriptTable.Click += new System.EventHandler(this.txtScriptTable_Click);
@@ -628,9 +644,9 @@ namespace ToolWorking.Views
             this.groupBox2.Controls.Add(this.txtInputExcel);
             this.groupBox2.Controls.Add(this.gridInputValue);
             this.groupBox2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupBox2.Location = new System.Drawing.Point(9, 145);
+            this.groupBox2.Location = new System.Drawing.Point(9, 133);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(363, 160);
+            this.groupBox2.Size = new System.Drawing.Size(436, 175);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input Value ";
@@ -642,7 +658,7 @@ namespace ToolWorking.Views
             this.txtInputExcel.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtInputExcel.Location = new System.Drawing.Point(3, 19);
             this.txtInputExcel.Name = "txtInputExcel";
-            this.txtInputExcel.Size = new System.Drawing.Size(357, 138);
+            this.txtInputExcel.Size = new System.Drawing.Size(430, 153);
             this.txtInputExcel.TabIndex = 21;
             this.txtInputExcel.Text = "";
             this.txtInputExcel.Visible = false;
@@ -657,44 +673,69 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
             this.name,
             this.type,
             this.value,
-            this.Range});
+            this.Range,
+            this.ExcludeChars});
             this.gridInputValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridInputValue.EnableHeadersVisualStyles = false;
             this.gridInputValue.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridInputValue.Size = new System.Drawing.Size(357, 138);
+            this.gridInputValue.Size = new System.Drawing.Size(430, 153);
             this.gridInputValue.TabIndex = 11;
             this.gridInputValue.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridInputValue_CurrentCellDirtyStateChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.txtResultQuery);
+            this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.groupBox3.Location = new System.Drawing.Point(451, 133);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(200, 175);
+            this.groupBox3.TabIndex = 23;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Result Query";
+            // 
+            // txtResultQuery
+            // 
+            this.txtResultQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtResultQuery.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtResultQuery.Location = new System.Drawing.Point(3, 19);
+            this.txtResultQuery.Name = "txtResultQuery";
+            this.txtResultQuery.ReadOnly = true;
+            this.txtResultQuery.Size = new System.Drawing.Size(194, 153);
+            this.txtResultQuery.TabIndex = 21;
+            this.txtResultQuery.Text = "";
             // 
             // no
             // 
             this.no.DataPropertyName = "no";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.no.DefaultCellStyle = dataGridViewCellStyle11;
             this.no.Frozen = true;
             this.no.HeaderText = "No.";
             this.no.Name = "no";
@@ -709,52 +750,41 @@ namespace ToolWorking.Views
             this.name.HeaderText = "Name";
             this.name.Name = "name";
             this.name.ReadOnly = true;
-            this.name.Width = 95;
+            this.name.Width = 134;
             // 
             // type
             // 
             this.type.DataPropertyName = "type";
+            this.type.Frozen = true;
             this.type.HeaderText = "Type";
             this.type.Name = "type";
             this.type.ReadOnly = true;
             this.type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.type.Width = 80;
+            this.type.Width = 103;
             // 
             // value
             // 
             this.value.DataPropertyName = "value";
+            this.value.Frozen = true;
             this.value.HeaderText = "Value";
             this.value.Name = "value";
-            this.value.Width = 134;
+            this.value.Width = 145;
             // 
             // Range
             // 
             this.Range.DataPropertyName = "range";
+            this.Range.Frozen = true;
             this.Range.HeaderText = "Range";
             this.Range.Name = "Range";
             this.Range.Visible = false;
             // 
-            // groupBox3
+            // ExcludeChars
             // 
-            this.groupBox3.Controls.Add(this.txtResultQuery);
-            this.groupBox3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupBox3.Location = new System.Drawing.Point(378, 145);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(273, 160);
-            this.groupBox3.TabIndex = 23;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Result Query";
-            // 
-            // txtResultQuery
-            // 
-            this.txtResultQuery.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtResultQuery.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtResultQuery.Location = new System.Drawing.Point(3, 19);
-            this.txtResultQuery.Name = "txtResultQuery";
-            this.txtResultQuery.ReadOnly = true;
-            this.txtResultQuery.Size = new System.Drawing.Size(267, 138);
-            this.txtResultQuery.TabIndex = 21;
-            this.txtResultQuery.Text = "";
+            this.ExcludeChars.DataPropertyName = "excludeChars";
+            this.ExcludeChars.HeaderText = "ExcludeChars";
+            this.ExcludeChars.Name = "ExcludeChars";
+            this.ExcludeChars.Visible = false;
+            this.ExcludeChars.Width = 5;
             // 
             // Database
             // 
@@ -824,11 +854,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RichTextBox txtResultQuery;
         private System.Windows.Forms.DataGridView gridInputValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn no;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Range;
         private System.Windows.Forms.CheckBox chkMultiRow;
         private System.Windows.Forms.Label lblNumRows;
         private System.Windows.Forms.TextBox txtNumRow;
@@ -846,5 +871,12 @@ namespace ToolWorking.Views
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox chkCheckEncoding;
         private System.Windows.Forms.CheckBox chkChangeEcoding;
+        private System.Windows.Forms.RadioButton rbCreateScript;
+        private System.Windows.Forms.DataGridViewTextBoxColumn no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Range;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExcludeChars;
     }
 }

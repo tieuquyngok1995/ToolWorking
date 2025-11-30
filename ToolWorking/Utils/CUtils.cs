@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -13,9 +14,22 @@ namespace ToolWorking.Utils
 {
     public static class CUtils
     {
-        private static readonly char[] SPECIAL_CHARS = "!@#$%^&*_+-=;,.<>?/".ToCharArray();
+        private static readonly char[] SPECIAL_CHARS = "!@#$%^&*_+-=;,.<>?".ToCharArray();
         private static readonly char[] ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".Concat(SPECIAL_CHARS).ToArray();
-        private static readonly char[] UNICODE_CHARS = "あいうえおアイウエオ漢字测试文字符号".Concat(ASCII_CHARS).ToArray();
+        private static readonly char[] UNICODE_CHARS = Enumerable.Range(0x3040, 0x60).Select(i => (char)i).Concat(SPECIAL_CHARS).ToArray();
+
+        private static readonly string[] sqlKeywords = new string[]
+        {
+            "DECLARE", "PRINT", "BEGIN", "END", "IF", "ELSE", "WHILE", "RETURN", "EXECUTE",
+            "SELECT", "FROM", "WHERE", "AND", "OR", "ON", "AS", "IS", "NOT", "NULL", "ORDER", "BY",
+            "ADD", "UPDATE", "INSERT", "DELETE", "SET", "VALUES", "ALL", "ALTER", "ANY", "ASC", "BACKUP", "BETWEEN", "CASE",
+            "CHECK", "COLUMN", "CONSTRAINT", "CREATE", "DATABASE", "DEFAULT",  "DESC",
+            "DISTINCT", "DROP", "EXEC", "EXISTS", "FOREIGN", "FULL", "GROUP", "HAVING",
+            "IN", "INDEX", "INNER",  "INTO", "JOIN", "LEFT", "LIKE", "LIMIT",
+             "OUTER", "PRIMARY", "PROCEDURE", "RIGHT", "ROWNUM",
+              "TABLE", "TOP", "TRUNCATE", "UNION", "UNIQUE",
+            "VIEW",
+        };
 
         private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
 
@@ -56,8 +70,7 @@ namespace ToolWorking.Utils
                 case var varchar when type.Contains(CONST.SQL_TYPE_VARCHAR):
                 case var nvarchar when type.Contains(CONST.SQL_TYPE_NVARCHAR):
                     return CONST.C_TYPE_STRING;
-                case var nvarchar when type.Contains(CONST.SQL_TYPE_DATE):
-                    return CONST.C_TYPE_DATE_TIME;
+                case var date when type.Contains(CONST.SQL_TYPE_DATE):
                 case CONST.SQL_TYPE_DATE_TIME:
                     return CONST.C_TYPE_DATE_TIME;
                 case CONST.SQL_TYPE_TIME:
@@ -65,14 +78,74 @@ namespace ToolWorking.Utils
                 case CONST.SQL_TYPE_TIME_STAMP:
                     return CONST.C_TYPE_TIME_STAMP;
                 case CONST.SQL_TYPE_BIT:
-                    return CONST.C_TYPE_BOOL;
+                    return CONST.C_TYPE_BIT;
                 case CONST.SQL_TYPE_MONEY:
-                case CONST.SQL_TYPE_NUMERIC:
-                case CONST.SQL_TYPE_DECIMAL:
                     return CONST.C_TYPE_DOUBLE;
+                case CONST.SQL_TYPE_NUMERIC:
+                    return CONST.C_TYPE_NUMERIC;
+                case CONST.SQL_TYPE_DECIMAL:
+                    return CONST.C_TYPE_DECIMAL;
                 default:
                     return CONST.C_TYPE_INT;
             }
+        }
+
+        public static string ConvertTypeJPToEN(string typeJP)
+        {
+            switch (typeJP)
+            {
+                case "文字":
+                case "文字型":
+                    return CONST.SQL_TYPE_CHAR; // CHAR(n)
+                case "文字型可変長":
+                    return CONST.SQL_TYPE_VARCHAR; // VARCHAR(n)
+                case "文字型大容量":
+                    return CONST.SQL_TYPE_NVARCHAR; // NVARCHAR(n)
+
+                // Số
+                case "数値型":
+                    return CONST.SQL_TYPE_NUMERIC; // INT, NUMERIC, DECIMAL
+                case "整数型":
+                    return CONST.SQL_TYPE_INT; // INT
+                case "大きい整数型":
+                    return CONST.SQL_TYPE_BIGINT; // BIGINT
+                case "小さい整数型":
+                    return CONST.SQL_TYPE_SMALLINT; // SMALLINT
+                case "固定小数型":
+                    return CONST.SQL_TYPE_DECIMAL; // DECIMAL(p,s)
+
+                // Ngày/giờ
+                case "日付型":
+                    return CONST.SQL_TYPE_DATE; // DATE
+                case "時刻型":
+                    return CONST.SQL_TYPE_TIME; // TIME
+                case "日時型":
+                    return CONST.SQL_TYPE_DATE_TIME; // DATETIME
+                case "タイムスタンプ型":
+                    return CONST.SQL_TYPE_TIME_STAMP; // TIMESTAMP
+
+                // Logic
+                case "論理型":
+                    return CONST.SQL_TYPE_BIT; // BIT, BOOLEAN
+
+                default:
+                    return typeJP;
+            }
+        }
+
+        /// <summary>
+        /// Convert SQL keywords to lower case
+        /// </summary>
+        /// <param name="keySQL"></param>
+        /// <returns></returns>
+        public static string toLowerKeySQL(string keySQL)
+        {
+            foreach (var keyword in sqlKeywords)
+            {
+                // Regex \b để chỉ thay các từ nguyên vẹn, ignore case
+                keySQL = Regex.Replace(keySQL, $@"\b{keyword}\b", keyword.ToLower(), RegexOptions.IgnoreCase);
+            }
+            return keySQL;
         }
         #endregion
 
@@ -202,6 +275,17 @@ namespace ToolWorking.Utils
             }
             return str;
         }
+
+        /// <summary>
+        /// Remove consecutive tabs, keep only 1 tab
+        /// </summary>
+        public static string NormalizeTabs(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            return Regex.Replace(input, @"\t+", "\t");
+        }
         #endregion
 
         #region Util
@@ -223,7 +307,7 @@ namespace ToolWorking.Utils
             return new string(digits);
         }
 
-        public static string GenerateRandomValue(ref string type, int range, string excludeChars)
+        public static string GenerateRandomValue(ref string type, int range, string excludeChars = "")
         {
             if (range <= 0) return "";
 
@@ -248,7 +332,7 @@ namespace ToolWorking.Utils
                 case CONST.STRING_NUMBER:
                     type = "Number";
                     return string.Concat(Enumerable.Range(0, range)
-                        .Select(_ => GetRandomChar(rand, "0123456789*#".ToArray(), excludeSet))
+                        .Select(_ => GetRandomChar(rand, "0123456789".ToArray(), excludeSet))
                         .ToArray());
 
                 default:
@@ -322,6 +406,64 @@ namespace ToolWorking.Utils
             } while (excludeSet.Contains(c));
 
             return c;
+        }
+        #endregion
+
+        #region Template 
+        /// <summary>
+        /// Create template script table
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public static string TemplateCreateScriptTable(string tableName)
+        {
+            return
+                $"IF OBJECT_ID(N'dbo.{tableName}', N'U') IS NOT NULL" + CONST.STRING_NEW_LINE +
+                "BEGIN" + CONST.STRING_NEW_LINE +
+                $"    DROP TABLE dbo.{tableName};" + CONST.STRING_NEW_LINE +
+                "END" + CONST.STRING_NEW_LINE +
+                "GO" + CONST.STRING_NEW_LINE +
+                "" + CONST.STRING_NEW_LINE +
+                $"CREATE TABLE dbo.{tableName}" + CONST.STRING_NEW_LINE +
+                "(" + CONST.STRING_NEW_LINE +
+                "{0}" + CONST.STRING_NEW_LINE +
+                "    CONSTRAINT PK_" + tableName + " PRIMARY KEY ({1})" + CONST.STRING_NEW_LINE +
+                ");" + CONST.STRING_NEW_LINE +
+                "GO" + CONST.STRING_NEW_LINE +
+                "" + CONST.STRING_NEW_LINE +
+                $"CREATE INDEX IX_{tableName}" + CONST.STRING_NEW_LINE +
+                "    ON dbo." + tableName + "({1});" + CONST.STRING_NEW_LINE +
+                "GO";
+        }
+
+        /// <summary>
+        /// create template column script
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <param name="columnType"></param>
+        /// <param name="rangeP"></param>
+        /// <param name="rangeS"></param>
+        /// <param name="isNotNull"></param>
+        /// <returns></returns>
+        public static string TemplateColumnScript(string columnName, string columnType, int rangeP, int rangeS = 0, bool isNotNull = false)
+        {
+            string typeWithRange = columnType;
+            if (columnType.ToLower().Contains(CONST.SQL_TYPE_CHAR) ||
+                columnType.ToLower().Contains(CONST.SQL_TYPE_VARCHAR) ||
+                columnType.ToLower().Contains(CONST.SQL_TYPE_NVARCHAR))
+            {
+                typeWithRange += rangeP == 0 ? "(max)" : $"({rangeP})";
+            }
+            else if (columnType.ToLower().Contains(CONST.SQL_TYPE_DECIMAL))
+            {
+                typeWithRange += $"({rangeP}, {rangeS})";
+            }
+            else if (columnType.ToLower().Contains(CONST.SQL_TYPE_NUMERIC))
+            {
+                typeWithRange += rangeS > 0 ? $"({rangeP}, {rangeS})" : $"({rangeP})";
+            }
+
+            return $"    {columnName} {typeWithRange.ToLower()} {(isNotNull ? "NOT NULL" : "NULL")},";
         }
         #endregion
     }

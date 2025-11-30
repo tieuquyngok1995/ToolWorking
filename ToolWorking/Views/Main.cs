@@ -65,6 +65,15 @@ namespace ToolWorking.Views
 
                     OpenChildForm(new Database(), sender);
                     break;
+
+                case 4:
+                    panelSide.Height = btnFormat.Height;
+                    panelSide.Top = btnFormat.Top;
+                    panelBotSide.Top = btnFormat.Bottom - 2;
+                    labelTitle.Text = CONST.TITLE_FORMAT;
+
+                    OpenChildForm(new Format(), sender);
+                    break;
             }
         }
 
@@ -196,6 +205,25 @@ namespace ToolWorking.Views
 
             OpenChildForm(new Database(), sender);
         }
+
+        /// <summary>
+        /// Event click button Format
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnFormat_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.numTabOpen = 4;
+            Properties.Settings.Default.Save();
+
+            panelSide.Height = btnFormat.Height;
+            panelSide.Top = btnFormat.Top;
+            panelBotSide.Top = btnFormat.Bottom - 2;
+
+            labelTitle.Text = CONST.TITLE_FORMAT;
+
+            OpenChildForm(new Format(), sender);
+        }
         #endregion
 
         #region Function
@@ -234,6 +262,5 @@ namespace ToolWorking.Views
             panelLeft.BackColor = panelColor;
         }
         #endregion
-
     }
 }

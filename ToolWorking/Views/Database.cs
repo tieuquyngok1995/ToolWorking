@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ToolWorking.Model;
 using ToolWorking.Utils;
@@ -11,22 +14,29 @@ namespace ToolWorking.Views
     public partial class Database : Form
     {
         // Database connection
-        string database;
-        // Path folder
-        string pathFolderDatabase;
-        // Dictionary result
-        private Dictionary<string, string> dicResult;
-        // Tree node
-        private TreeNode nodeSelected;
+        private string database;
+        // Default database
+        private string defaultDatabase;
         // Name Table 
         private string nameTable;
+        // Boby script table
+        private string bodyScriptTable;
+        // Primary Key
+        private string primaryKey;
         // Template insert
         private string tempInsert;
+        // Path folder
+        private string pathFolderDatabase;
+        // Tree node
+        private TreeNode nodeSelected;
+        // Dictionary result
+        private Dictionary<string, string> dicResult;
+        // Dictionary type input
+        private Dictionary<int, string> dicTypeInput = new Dictionary<int, string>();
         // List database 
         private List<string> lstDatabase = new List<string>();
         // List column in script table
         private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
-        private Dictionary<int, string> dicTypeInput = new Dictionary<int, string>();
         // List value input excel
         private List<string> lstInputExcel = new List<string>();
 
@@ -35,6 +45,7 @@ namespace ToolWorking.Views
             InitializeComponent();
 
             dicResult = new Dictionary<string, string>();
+            defaultDatabase = "---None---";
             tempInsert = "INSERT INTO [dbo].[{0}] VALUES ( {1} )";
         }
 
@@ -64,7 +75,7 @@ namespace ToolWorking.Views
                 {
                     lstDatabase = DBUtils.GetDatabase();
 
-                    cbDatabase.Items.Add("---None---");
+                    cbDatabase.Items.Add(defaultDatabase);
                     cbDatabase.Items.AddRange(lstDatabase.ToArray());
 
                     cbDatabase.SelectedIndex = !string.IsNullOrEmpty(database) ? cbDatabase.Items.IndexOf(database) : 0;
@@ -139,9 +150,9 @@ namespace ToolWorking.Views
             {
                 txtResult.Text = string.Empty;
                 txtLog.Text = string.Empty;
-                if (DBUtils.IsConnection())
+                if (DBUtils.IsConnection(defaultDatabase))
                 {
-                    MessageBox.Show("Connection database: " + database + " is success.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Connection database is success.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -226,6 +237,11 @@ namespace ToolWorking.Views
             txtNumRow.Visible = chkMultiRow.Checked;
             lblNumRows.Visible = chkMultiRow.Checked;
 
+            gridInputValue.DataSource = new List<ColumnModel>();
+            btnRunScript.Enabled = false;
+            btnCopyResult.Enabled = false;
+            txtResultQuery.Text = string.Empty;
+
             if (!string.IsNullOrEmpty(txtScriptTable.Text))
             {
                 txtScriptTable_TextChanged(sender, e);
@@ -241,11 +257,38 @@ namespace ToolWorking.Views
         {
             gridInputValue.Visible = false;
             txtInputExcel.Visible = true;
+            txtInputExcel.Enabled = false;
             txtInputExcel.Text = string.Empty;
 
             chkMultiRow.Visible = false;
             txtNumRow.Visible = false;
             lblNumRows.Visible = false;
+
+            btnRunScript.Enabled = false;
+            btnCopyResult.Enabled = false;
+            txtResultQuery.Text = string.Empty;
+        }
+
+        /// <summary>
+        /// Event show create script table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbCreateScript_CheckedChanged(object sender, EventArgs e)
+        {
+            txtScriptTable.Text = string.Empty;
+            gridInputValue.Visible = false;
+            txtInputExcel.Visible = true;
+            txtInputExcel.Enabled = true;
+            txtInputExcel.Text = string.Empty;
+
+            chkMultiRow.Visible = false;
+            txtNumRow.Visible = false;
+            lblNumRows.Visible = false;
+
+            btnRunScript.Enabled = false;
+            btnCopyResult.Enabled = false;
+            txtResultQuery.Text = string.Empty;
         }
 
         /// <summary>
@@ -430,117 +473,149 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtScriptTable_TextChanged(object sender, EventArgs e)
         {
-            int no = 1;
-            string[] arrTable = txtScriptTable.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+            if (string.IsNullOrEmpty(txtScriptTable.Text)) return;
 
-            // handle data input
-            if (arrTable.Length > 0)
+            if (rbCreateScript.Checked)
             {
-                lstColumnTable = new List<ColumnModel>();
-                dicTypeInput = new Dictionary<int, string>();
-                foreach (var item in arrTable)
+                nameTable = txtScriptTable.Text.Trim();
+                txtInputExcel.Enabled = true;
+                btnRunScript.Enabled = true;
+                return;
+            }
+            try
+            {
+                int no = 1;
+                string[] arrTable = txtScriptTable.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
+                // handle data input
+                if (arrTable.Length > 0)
                 {
-                    if (string.IsNullOrEmpty(item) || item.ToLower().Contains("primary key")) continue;
-
-                    string[] arrItem;
-
-                    if (item.ToUpper().Contains(CONST.SQL_CREATE_TABLE))
+                    lstColumnTable = new List<ColumnModel>();
+                    dicTypeInput = new Dictionary<int, string>();
+                    foreach (var item in arrTable)
                     {
-                        arrItem = item.Replace(CONST.STRING_DOT, string.Empty).Replace(CONST.STRING_C_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_O_BRACKETS, string.Empty)
-                            .Split(new string[] { CONST.STRING_O_SQU_BRACKETS }, StringSplitOptions.None);
-                        nameTable = arrItem.Length > 2 ? arrItem[2].Trim() : null;
-                        continue;
-                    }
+                        if (string.IsNullOrEmpty(item) || item.ToLower().Contains("primary key")) continue;
 
-                    arrItem = item.Replace(CONST.STRING_COMMA, string.Empty).Trim().Replace(CONST.STRING_C_O_SQU_BRACKETS_SPACE, CONST.STRING_C_SQU_BRACKETS_SPACE)
-                                  .Split(CONST.STRING_SEPARATORS_TABLE, StringSplitOptions.None);
-                    if (arrItem.Length > 1)
-                    {
-                        string name = arrItem[0].Replace(CONST.STRING_O_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_COMMA, string.Empty).Trim();
-                        string type = arrItem[1];
+                        string[] arrItem;
 
-                        int index = type.LastIndexOf(CONST.STRING_C_SQU_BRACKETS);
-                        if (index != -1) type = type.Substring(0, index);
-
-                        index = type.LastIndexOf(CONST.STRING_O_BRACKETS);
-                        if (index != -1) type = type.Substring(0, index);
-
-                        type = CUtils.ConvertSQLToCType(type);
-                        int range = 0;
-                        if (type.Equals(CONST.C_TYPE_STRING))
+                        if (item.ToUpper().Contains(CONST.SQL_CREATE_TABLE))
                         {
-                            string[] arr = arrItem[1].Split(new string[] { CONST.STRING_O_BRACKETS, CONST.STRING_C_BRACKETS }, StringSplitOptions.None);
-                            range = 0;
-                            if (arr.Length > 1)
+                            var match = Regex.Match(item,
+                                @"CREATE\s+TABLE\s+(?:\S+\.)*(?:\[?)(?<name>[^\]\s\.]+)(?:\]?)", RegexOptions.IgnoreCase);
+
+                            if (match.Success)
                             {
-                                if (arr[1].ToUpper().Equals("MAX")) range = 255;
-                                else range = Convert.ToInt32(arr[1]);
+                                nameTable = match.Groups["name"].Value.Trim();
                             }
-                            type = type + "(" + range + ")";
+                            continue;
                         }
 
-                        string defaultValue = CONST.STRING_NULL;
-                        if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                        arrItem = item.Replace(CONST.STRING_COMMA, string.Empty).Trim().Replace(CONST.STRING_C_O_SQU_BRACKETS_SPACE, CONST.STRING_C_SQU_BRACKETS_SPACE)
+                                      .Split(CONST.STRING_SEPARATORS_TABLE, StringSplitOptions.None);
+                        if (arrItem.Length > 1)
                         {
-                            defaultValue = "SYSDATETIME()";
-                        }
-                        else if (type.Equals(CONST.C_TYPE_BOOL))
-                        {
-                            defaultValue = "0";
-                        }
-                        else if (type.Contains(CONST.C_TYPE_STRING) && (name.Contains(CONST.STRING_JP_FLAG) || name.Contains(CONST.STRING_FLAG)))
-                        {
-                            type = CONST.C_TYPE_BOOL;
-                            defaultValue = "0";
-                        }
-                        else if (type.Equals(CONST.C_TYPE_BOOL)) defaultValue = "0";
-                        else if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
-                        {
-                            if (type.Contains(CONST.C_TYPE_STRING))
+                            string name = arrItem[0].Replace(CONST.STRING_O_SQU_BRACKETS, string.Empty).Replace(CONST.STRING_COMMA, string.Empty).Trim();
+                            string type = arrItem[1];
+
+                            int index = type.LastIndexOf(CONST.STRING_C_SQU_BRACKETS);
+                            if (index != -1) type = type.Substring(0, index);
+
+                            index = type.LastIndexOf(CONST.STRING_O_BRACKETS);
+                            if (index != -1) type = type.Substring(0, index);
+
+                            type = CUtils.ConvertSQLToCType(type);
+                            int range = 0;
+                            if (type.Equals(CONST.C_TYPE_STRING))
                             {
-                                defaultValue = addValue(range, 0) + "1";
+                                string[] arr = arrItem[1].Split(new string[] { CONST.STRING_O_BRACKETS, CONST.STRING_C_BRACKETS }, StringSplitOptions.None);
+                                range = 0;
+                                if (arr.Length > 1)
+                                {
+                                    if (arr[1].ToUpper().Equals("MAX")) range = 255;
+                                    else range = Convert.ToInt32(arr[1]);
+                                }
+                                type = type + "(" + range + ")";
                             }
-                            else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+
+                            string defaultValue = CONST.STRING_NULL;
+                            if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
                             {
                                 defaultValue = "SYSDATETIME()";
                             }
-                            else if (type.Contains(CONST.C_TYPE_DOUBLE))
-                            {
-                                defaultValue = "1.0";
-                            }
-                            else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
-                            {
-                                defaultValue = CONST.STRING_NULL;
-                            }
-                            else if (type.Equals(CONST.C_TYPE_BOOL))
+                            else if (type.Equals(CONST.C_TYPE_BIT))
                             {
                                 defaultValue = "0";
                             }
-                            else
+                            else if (type.Contains(CONST.C_TYPE_STRING) && (name.Contains(CONST.STRING_JP_FLAG) || name.Contains(CONST.STRING_FLAG)))
                             {
-                                defaultValue = "1";
+                                type = CONST.C_TYPE_BIT;
+                                defaultValue = "0";
                             }
-                        }
+                            else if (type.Equals(CONST.C_TYPE_BIT)) defaultValue = "0";
+                            else if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
+                            {
+                                if (type.Contains(CONST.C_TYPE_STRING))
+                                {
+                                    defaultValue = addValue(range, 0) + "1";
+                                }
+                                else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME))
+                                {
+                                    defaultValue = "SYSDATETIME()";
+                                }
+                                else if (type.Contains(CONST.C_TYPE_DOUBLE))
+                                {
+                                    defaultValue = "1.0";
+                                }
+                                else if (type.Contains(CONST.C_TYPE_NUMERIC))
+                                {
+                                    int.TryParse(arrItem[1].Trim().Split('(')[1].Replace(")", string.Empty), out range);
+                                    type = type + "(" + range + ")";
+                                    defaultValue = "1";
+                                }
+                                else if (type.Contains(CONST.C_TYPE_DECIMAL))
+                                {
+                                    type = arrItem[1].Trim() + "," + arrItem[2].Trim();
+                                    defaultValue = "1.0";
+                                }
+                                else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
+                                {
+                                    defaultValue = CONST.STRING_NULL;
+                                }
+                                else if (type.Equals(CONST.C_TYPE_BIT))
+                                {
+                                    defaultValue = "0";
+                                }
+                                else
+                                {
+                                    defaultValue = "1";
+                                }
+                            }
 
-                        lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
-                        dicTypeInput.Add(no, type);
-                        no++;
+                            lstColumnTable.Add(new ColumnModel(no, name, type, defaultValue, range));
+                            dicTypeInput.Add(no, type);
+                            no++;
+                        }
                     }
                 }
-            }
 
-            // add data to grid 
-            if (lstColumnTable.Count > 0)
-            {
-                gridInputValue.DataSource = lstColumnTable;
-                txtInputExcel.Enabled = true;
-                btnRunScript.Enabled = true;
+                // add data to grid 
+                if (lstColumnTable.Count > 0)
+                {
+                    gridInputValue.DataSource = lstColumnTable;
+                    txtInputExcel.Enabled = true;
+                    btnRunScript.Enabled = true;
+                }
+                else
+                {
+                    gridInputValue.DataSource = new List<ColumnModel>();
+                    txtInputExcel.Enabled = false;
+                    btnRunScript.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                gridInputValue.DataSource = new List<ColumnModel>();
-                txtInputExcel.Enabled = false;
-                btnRunScript.Enabled = false;
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -563,51 +638,87 @@ namespace ToolWorking.Views
         private void txtInputExcel_TextChanged(object sender, EventArgs e)
         {
             int numItem = lstColumnTable.Count;
+            string columnType = string.Empty;
+
+            string result = string.Empty;
             string[] arrTable = txtInputExcel.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
-
-            // handle data input
-            if (arrTable.Length > 0)
+            try
             {
-                Cursor.Current = Cursors.WaitCursor;
-                lstInputExcel = new List<string>();
-                foreach (var row in arrTable)
+                // handle data input
+                if (arrTable.Length > 0)
                 {
-                    if (string.IsNullOrEmpty(row)) continue;
+                    Cursor.Current = Cursors.WaitCursor;
 
-                    string[] arrRow = row.Split('\t');
-                    if (arrRow.Length < numItem)
+                    bodyScriptTable = string.Empty;
+                    primaryKey = string.Empty;
+
+                    lstInputExcel = new List<string>();
+                    foreach (var row in arrTable)
                     {
-                        lstInputExcel.Add(string.Empty);
-                        continue;
-                    }
+                        if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row.Replace("\t", ""))) continue;
 
-                    string result = string.Empty;
-                    for (int i = 0; i < arrRow.Length; i++)
-                    {
-                        string item = arrRow[i];
-                        string type = string.Empty;
-                        if (dicTypeInput.Count >= i + 1)
+                        string[] arrRow = row.Split('\t');
+                        if (rbCreateScript.Checked)
                         {
-                            type = dicTypeInput[i + 1];
-                        }
+                            if (arrRow.Length < 16)
+                            {
+                                if (arrRow.Length > 1)
+                                {
+                                    bodyScriptTable += "-- Insufficient parameters, please check the following line: " + row;
+                                    bodyScriptTable += CONST.STRING_NEW_LINE;
+                                }
+                                continue;
+                            }
 
-                        if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
-                        {
-                            result += CONST.STRING_NULL + ", ";
-                        }
-                        else if (item.ToUpper().Equals(CONST.STRING_EMPTY) && type.Contains(CONST.C_TYPE_STRING))
-                        {
-                            result += "'', ";
+                            columnType = CUtils.ConvertTypeJPToEN(arrRow[11].Trim().ToLower());
+                            int.TryParse(arrRow[13].Trim(), out int rangeP);
+                            int.TryParse(arrRow[14].Trim(), out int rangeS);
+                            bool isNotNull = string.IsNullOrEmpty(arrRow[15]);
+                            primaryKey += !string.IsNullOrEmpty(arrRow[16]) ? arrRow[6].Trim() + "," : "";
+                            bodyScriptTable += CUtils.TemplateColumnScript(arrRow[6].Trim(), columnType, rangeP, rangeS, isNotNull);
+                            bodyScriptTable += CONST.STRING_NEW_LINE;
                         }
                         else
                         {
-                            result += createValue(type, item.Trim()) + ", ";
-                        }
-                    }
+                            if (arrRow.Length < numItem)
+                            {
+                                lstInputExcel.Add(string.Empty);
+                                continue;
+                            }
 
-                    lstInputExcel.Add(CUtils.RemoveLastCommaSpace(result));
+                            for (int i = 0; i < arrRow.Length; i++)
+                            {
+                                string item = arrRow[i];
+                                string type = string.Empty;
+                                if (dicTypeInput.Count >= i + 1)
+                                {
+                                    type = dicTypeInput[i + 1];
+                                }
+
+                                if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
+                                {
+                                    result += CONST.STRING_NULL + ", ";
+                                }
+                                else if (item.ToUpper().Equals(CONST.STRING_EMPTY) && type.Contains(CONST.C_TYPE_STRING))
+                                {
+                                    result += "'', ";
+                                }
+                                else
+                                {
+                                    result += createValue(type, item.Trim()) + ", ";
+                                }
+                            }
+                        }
+
+                        lstInputExcel.Add(CUtils.RemoveLastCommaSpace(result));
+                    }
+                    Cursor.Current = Cursors.Default;
                 }
+            }
+            catch (Exception ex)
+            {
                 Cursor.Current = Cursors.Default;
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -801,7 +912,7 @@ namespace ToolWorking.Views
                     txtResultQuery.Text = string.Empty;
 
                     string value = string.Empty;
-                    if (chkMultiRow.Checked)
+                    if (rbInputTable.Checked && chkMultiRow.Checked)
                     {
                         int numRow = Convert.ToInt32(txtNumRow.Text);
                         progressBarQuery.Maximum = numRow;
@@ -814,7 +925,7 @@ namespace ToolWorking.Views
                             value = string.Format(tempInsert, nameTable, value);
                             txtResultQuery.Text += value + "\r\n";
 
-                            if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                            if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
 
                             updateProgressQuery();
 
@@ -825,7 +936,7 @@ namespace ToolWorking.Views
                             MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             progressBarQuery.Value = 0;
                         }
-                        else if (cbDatabase.SelectedIndex != 0)
+                        else if (cbDatabase.SelectedIndex > 0)
                         {
                             MessageBox.Show("Execute inserting " + numRow + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -845,7 +956,7 @@ namespace ToolWorking.Views
                             value = string.Format(tempInsert, nameTable, value);
                             txtResultQuery.Text += value + "\r\n";
 
-                            if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                            if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
 
                             updateProgressQuery();
 
@@ -857,9 +968,24 @@ namespace ToolWorking.Views
                             MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             progressBarQuery.Value = 0;
                         }
-                        else if (cbDatabase.SelectedIndex != 0)
+                        else if (cbDatabase.SelectedIndex > 0)
                         {
                             MessageBox.Show("Execute inserting " + lstInputExcel.Count + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else if (rbCreateScript.Checked)
+                    {
+                        value = string.Format(CUtils.TemplateCreateScriptTable(nameTable), bodyScriptTable, primaryKey.TrimEnd(','));
+                        txtResultQuery.Text = value;
+
+                        if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScriptWithBatches(value);
+                        if (!string.IsNullOrEmpty(errMessage))
+                        {
+                            MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (cbDatabase.SelectedIndex > 0)
+                        {
+                            MessageBox.Show($"The script to create table {nameTable} has been successfully created and executed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     else
@@ -870,12 +996,12 @@ namespace ToolWorking.Views
                         value = string.Format(tempInsert, nameTable, value);
                         txtResultQuery.Text = value;
 
-                        if (cbDatabase.SelectedIndex != 0) errMessage = DBUtils.ExecuteScript(value);
+                        if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
                         if (!string.IsNullOrEmpty(errMessage))
                         {
                             MessageBox.Show("An error occurred during SQL script execution.\r\nError detail: " + errMessage, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        else if (cbDatabase.SelectedIndex != 0)
+                        else if (cbDatabase.SelectedIndex > 0)
                         {
                             MessageBox.Show("Execute inserting " + 1 + " line of data successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -1203,6 +1329,7 @@ namespace ToolWorking.Views
         /// <returns></returns>
         private string getValue(int? index)
         {
+            Random rnd = new Random();
             string result = string.Empty;
             foreach (DataGridViewRow row in gridInputValue.Rows)
             {
@@ -1219,60 +1346,111 @@ namespace ToolWorking.Views
 
                 if (type.Contains(CONST.C_TYPE_STRING))
                 {
-                    if (value.Equals(CONST.STRING_NULL))
+                    if (value.ToUpper().Equals(CONST.STRING_NULL))
                     {
-                        result += CONST.STRING_NULL + ", ";
+                        result += "null, ";
                     }
                     else if (index.HasValue)
                     {
-                        int _value;
-                        if (int.TryParse(value, out _value))
+                        string _type = CONST.STRING_TEXT2;
+                        if (value.Contains("X"))
                         {
-                            _value++;
-
-                            if (value.Length > range)
+                            int numInput = value.Count(c => c == 'X');
+                            if (string.IsNullOrEmpty(value.Replace("X", string.Empty).Replace("0", string.Empty)))
                             {
-                                value = CUtils.GenerateRandomNumber(range);
+                                value = value.Replace("X", string.Empty) + CUtils.GenerateRandomNumber(numInput);
                             }
                             else
                             {
-                                value = _value.ToString();
+                                value = value.Replace("X", string.Empty) + CUtils.GenerateRandomValue(ref _type, numInput);
                             }
                         }
-
-                        if (value.Length < range)
+                        else if (value.Contains("|"))
                         {
-                            int _range = range - value.Length;
-                            value = value + CUtils.GenerateRandomNumber(_range > 5 ? 5 : _range);
+                            value += "|''|null";
+                            string[] arrValue = value.Split('|');
+                            value = arrValue[rnd.Next(arrValue.Length)];
                         }
                         else
                         {
-                            value = CUtils.GenerateRandomNumber(range);
+                            if (!int.TryParse(value, out _))
+                            {
+                                value = CUtils.GenerateRandomValue(ref _type, range > 20 ? 20 : range);
+                            }
+                            else
+                            {
+                                value = CUtils.GenerateRandomNumber(range > 9 ? 9 : range);
+                            }
                         }
-
-                        result += "'" + value + "'" + ", ";
                     }
-                    else
-                    {
-                        result += "'" + value + "'" + ", ";
-                    }
+                    result += $"'{value}', ";
                 }
                 else if (type.Equals(CONST.C_TYPE_DOUBLE))
                 {
                     if (value.Equals(CONST.STRING_NULL))
                     {
-                        result += CONST.STRING_NULL + ", ";
+                        result += "null, ";
                     }
                     else if (index.HasValue)
                     {
-                        result += index + "." + (index % 10).ToString() + ", ";
+                        result += $"{index}.{(index % 10).ToString()}, ";
                     }
                     else
                     {
-                        result += value + ", ";
+                        result += $"'{value}', ";
                     }
                 }
-                else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Equals(CONST.C_TYPE_TIME) || type.Equals(CONST.C_TYPE_BOOL))
+                else if (type.Equals(CONST.C_TYPE_NUMERIC))
+                {
+                    if (value.Equals(CONST.STRING_NULL))
+                    {
+                        result += "null, ";
+                    }
+                    else if (index.HasValue)
+                    {
+                        if (value.Contains("|"))
+                        {
+                            string[] arrValue = value.Split('|');
+                            result += $"{arrValue[rnd.Next(arrValue.Length)]}, ";
+                        }
+                        else
+                        {
+                            result += $"{CUtils.GenerateRandomNumber(range)}, ";
+                        }
+                    }
+                    else
+                    {
+                        result += $"'{value}', ";
+                    }
+                }
+                else if (type.Contains(CONST.C_TYPE_DECIMAL))
+                {
+                    if (value.Equals(CONST.STRING_NULL))
+                    {
+                        result += "null, ";
+                    }
+                    else if (index.HasValue)
+                    {
+                        string[] arrRange = type.Split('(')[1].Replace(")", string.Empty).Split(',');
+                        int _rangeS = Convert.ToInt32(arrRange[0]);
+                        int _rangeP = Convert.ToInt32(arrRange[1]);
+
+                        result += $"{CUtils.GenerateRandomNumber(_rangeS > 5 ? 5 : _rangeS)}.{(_rangeP != 0 ? CUtils.GenerateRandomNumber(_rangeP > 5 ? 5 : _rangeP) : "0")}, ";
+                    }
+                    else
+                    {
+                        result += $"'{value}', ";
+                    }
+                }
+                else if (type.Contains(CONST.C_TYPE_DATE_TIME))
+                {
+                    result += $"'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}', ";
+                }
+                else if (type.Equals(CONST.C_TYPE_TIME))
+                {
+                    result += $"'{DateTime.Now.ToString("HH:mm:ss")}', ";
+                }
+                else if (type.Equals(CONST.C_TYPE_BIT))
                 {
                     result += value + ", ";
                 }
@@ -1280,15 +1458,31 @@ namespace ToolWorking.Views
                 {
                     if (value.Equals(CONST.STRING_NULL))
                     {
-                        result += CONST.STRING_NULL + ", ";
+                        result += "null, ";
                     }
                     else if (index.HasValue)
                     {
-                        result += int.Parse(value) + index + ", ";
+                        if (type.Equals(CONST.C_TYPE_INT))
+                        {
+                            if (value.Contains("|"))
+                            {
+                                string[] arrValue = value.Split('|');
+                                result += $"{arrValue[rnd.Next(arrValue.Length)]}, ";
+                            }
+                            else
+                            {
+                                range = range == 0 ? 9 : range;
+                                result += $"{CUtils.GenerateRandomNumber(range > 9 ? 9 : range)}, ";
+                            }
+                        }
+                        else
+                        {
+                            result += $"{CUtils.GenerateRandomNumber(range > 9 ? 9 : range)}, ";
+                        }
                     }
                     else
                     {
-                        result += value + ", ";
+                        result += $"'{value}', ";
                     }
                 }
             }
@@ -1342,11 +1536,24 @@ namespace ToolWorking.Views
             }
             else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
             {
-                return value != "SYSDATETIME()";
+                if (value == "SYSDATETIME()")
+                    return false;
+                return DateTime.TryParse(value, out _) || TimeSpan.TryParse(value, out _);
             }
             else if (type.Contains(CONST.C_TYPE_DOUBLE))
             {
                 return !Double.TryParse(value, out _);
+            }
+            else if (type.Contains(CONST.C_TYPE_NUMERIC))
+            {
+                return value.Length > range;
+            }
+            else if (type.Contains(CONST.C_TYPE_DECIMAL))
+            {
+                string[] arrRange = type.Split('(')[1].Replace(")", string.Empty).Split(',');
+                string[] arrValue = value.Split('.');
+                return (Convert.ToInt32(arrRange[0]) < arrValue[0].Length ||
+                    (arrValue.Length > 1 && Convert.ToInt32(arrRange[1]) < arrValue[1].Length));
             }
             else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
             {
@@ -1358,6 +1565,5 @@ namespace ToolWorking.Views
             }
         }
         #endregion
-
     }
 }

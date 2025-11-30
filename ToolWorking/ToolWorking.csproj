@@ -59,6 +59,12 @@
     <Compile Include="Utils\CONST.cs" />
     <Compile Include="Utils\CUtils.cs" />
     <Compile Include="Utils\DBUtils.cs" />
+    <Compile Include="Views\Format.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Format.Designer.cs">
+      <DependentUpon>Format.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateFile.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,8 +108,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Views\Format.resx">
+      <DependentUpon>Format.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\CreateFile.resx">
       <DependentUpon>CreateFile.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Database.resx">
       <DependentUpon>Database.cs</DependentUpon>
@@ -135,14 +146,23 @@
     <Content Include="icon-logo.ico" />
     <Content Include="Resources\icon-clear-16x16.png" />
     <Content Include="Resources\icon-close.png" />
+    <Content Include="Resources\icon-connected-16x16.png" />
     <Content Include="Resources\icon-copy-16x16.png" />
+    <Content Include="Resources\icon-count-16x16.png" />
+    <Content Include="Resources\icon-create-16x16.png" />
+    <Content Include="Resources\icon-create-file.png" />
+    <Content Include="Resources\icon-database.png" />
+    <Content Include="Resources\icon-execute-16x16.png" />
     <Content Include="Resources\icon-file-16x16.png" />
     <Content Include="Resources\icon-folder-16x16.png" />
+    <Content Include="Resources\icon-folder-2-16x16.png" />
     <Content Include="Resources\icon-folder.png" />
     <Content Include="Resources\icon-logo.ico" />
     <Content Include="Resources\icon-minisize.png" />
     <Content Include="Resources\icon-reload-16x16.png" />
     <Content Include="Resources\icon-search-16x16.png" />
+    <Content Include="Resources\icon-search.png" />
+    <Content Include="Resources\open-file-16x16.png" />
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
