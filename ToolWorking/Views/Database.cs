@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ToolWorking.Model;
@@ -153,6 +152,16 @@ namespace ToolWorking.Views
                 if (DBUtils.IsConnection(defaultDatabase))
                 {
                     MessageBox.Show($"Connection database is success.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    lstDatabase.Clear();
+                    lstDatabase = DBUtils.GetDatabase();
+
+                    cbDatabase.Items.Clear();
+                    cbDatabase.Items.Add(defaultDatabase);
+                    cbDatabase.Items.AddRange(lstDatabase.ToArray());
+
+
+                    cbDatabase.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
@@ -258,6 +267,10 @@ namespace ToolWorking.Views
             gridInputValue.Visible = false;
             txtInputExcel.Visible = true;
             txtInputExcel.Enabled = false;
+            if (!string.IsNullOrEmpty(txtScriptTable.Text))
+            {
+                txtInputExcel.Enabled = true;
+            }
             txtInputExcel.Text = string.Empty;
 
             chkMultiRow.Visible = false;
