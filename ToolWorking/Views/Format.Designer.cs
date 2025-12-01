@@ -48,7 +48,8 @@ namespace ToolWorking.Views
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.btnClearResult = new System.Windows.Forms.Button();
-            this.btnCreate = new System.Windows.Forms.Button();
+            this.btnFormat = new System.Windows.Forms.Button();
+            this.btnCopyResult = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -209,8 +210,9 @@ namespace ToolWorking.Views
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.btnCopyResult);
             this.panelBottom.Controls.Add(this.btnClearResult);
-            this.panelBottom.Controls.Add(this.btnCreate);
+            this.panelBottom.Controls.Add(this.btnFormat);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 413);
             this.panelBottom.Name = "panelBottom";
@@ -230,19 +232,33 @@ namespace ToolWorking.Views
             this.btnClearResult.UseVisualStyleBackColor = true;
             this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
             // 
-            // btnCreate
+            // btnFormat
             // 
-            this.btnCreate.Enabled = false;
-            this.btnCreate.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.btnCreate.Image = ((System.Drawing.Image)(resources.GetObject("btnCreate.Image")));
-            this.btnCreate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCreate.Location = new System.Drawing.Point(493, 0);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(80, 27);
-            this.btnCreate.TabIndex = 8;
-            this.btnCreate.Text = "    Format";
-            this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
+            this.btnFormat.Enabled = false;
+            this.btnFormat.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnFormat.Image = ((System.Drawing.Image)(resources.GetObject("btnFormat.Image")));
+            this.btnFormat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFormat.Location = new System.Drawing.Point(408, 0);
+            this.btnFormat.Name = "btnFormat";
+            this.btnFormat.Size = new System.Drawing.Size(80, 27);
+            this.btnFormat.TabIndex = 8;
+            this.btnFormat.Text = "    Format";
+            this.btnFormat.UseVisualStyleBackColor = true;
+            this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
+            // 
+            // btnCopyResult
+            // 
+            this.btnCopyResult.Enabled = false;
+            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
+            this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCopyResult.Location = new System.Drawing.Point(495, 0);
+            this.btnCopyResult.Name = "btnCopyResult";
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 27);
+            this.btnCopyResult.TabIndex = 10;
+            this.btnCopyResult.Text = "    Copy";
+            this.btnCopyResult.UseVisualStyleBackColor = true;
+            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
             // 
             // Format
             // 
@@ -282,8 +298,9 @@ namespace ToolWorking.Views
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Button btnClearResult;
-        private System.Windows.Forms.Button btnCreate;
+        private System.Windows.Forms.Button btnFormat;
         private System.Windows.Forms.Button btnLoadFile;
         private System.Windows.Forms.RichTextBox txtResult;
+        private System.Windows.Forms.Button btnCopyResult;
     }
 }

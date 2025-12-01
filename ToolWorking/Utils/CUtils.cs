@@ -30,6 +30,10 @@ namespace ToolWorking.Utils
               "TABLE", "TOP", "TRUNCATE", "UNION", "UNIQUE",
             "VIEW",
         };
+        private static readonly string[] sqlKeywordsUpper = new string[]
+        {
+            ""
+        };
 
         private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
 
@@ -145,6 +149,17 @@ namespace ToolWorking.Utils
                 // Regex \b để chỉ thay các từ nguyên vẹn, ignore case
                 keySQL = Regex.Replace(keySQL, $@"\b{keyword}\b", keyword.ToLower(), RegexOptions.IgnoreCase);
             }
+
+            foreach (var keywordUpper in sqlKeywordsUpper)
+            {
+                keySQL = Regex.Replace(
+                    keySQL,
+                    $@"\b{Regex.Escape(keywordUpper)}\b",
+                    match => keywordUpper,
+                    RegexOptions.IgnoreCase
+                );
+            }
+
             return keySQL;
         }
         #endregion

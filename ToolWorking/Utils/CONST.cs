@@ -32,6 +32,9 @@
         public const string STRING_NULL = "NULL";
         public const string STRING_NOT_NULL = "NOT NULL";
 
+        public const string STRING_BEGIIN = "BEGIN";
+        public const string STRING_END = "END";
+
         public const string STRING_FLAG = "FLG";
         public const string STRING_JP_FLAG = "フラグ";
         #endregion

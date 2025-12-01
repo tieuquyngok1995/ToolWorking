@@ -11,6 +11,7 @@ namespace ToolWorking.Views
 {
     public partial class Format : Form
     {
+        private Encoding sjis = Encoding.GetEncoding("Shift_JIS");
         // Path folder
         int modeFormatFile;
         string pathFolderFormatFile;
@@ -197,7 +198,8 @@ namespace ToolWorking.Views
                 string setting = txtSource.Text.Trim();
                 if (string.IsNullOrEmpty(setting))
                 {
-                    btnCreate.Enabled = false;
+                    btnFormat.Enabled = false;
+                    btnCopyResult.Enabled = false;
                     return;
                 }
 
@@ -212,7 +214,7 @@ namespace ToolWorking.Views
                 string[] lines = setting.Split(CONST.STRING_SEPARATORS_ROWS, StringSplitOptions.None);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    string line = lines[i];
+                    string line = lines[i].Trim();
                     if (line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE))
                     {
                         string comment = "";
@@ -250,7 +252,8 @@ namespace ToolWorking.Views
                         maxDec = Math.Max(maxDec, dec.Length);
                         maxVar = Math.Max(maxVar, var.Length);
                         maxType = Math.Max(maxType, type.Length);
-                        maxAssign = Math.Max(maxAssign, assign.Length);
+
+                        maxAssign = Math.Max(maxAssign, sjis.GetByteCount(assign));
                     }
                     else
                     {
@@ -289,7 +292,7 @@ namespace ToolWorking.Views
                     }
                     rowNum++;
                 }
-                btnCreate.Enabled = true;
+                btnFormat.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -298,23 +301,38 @@ namespace ToolWorking.Views
             }
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private void btnFormat_Click(object sender, EventArgs e)
         {
             try
             {
+                int indentLevel = 0;
                 string result = string.Empty;
                 string _line = string.Empty;
+                string tab = "    ";
 
                 foreach (var line in listContent)
                 {
                     if (modeFormatFile == 0)
                     {
-                        _line = CUtils.toLowerKeySQL(line);
-                        result += _line + Environment.NewLine;
+                        _line = CUtils.toLowerKeySQL(line).Trim();
+
+                        if (_line.ToUpper().StartsWith(CONST.STRING_END))
+                        {
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+
+                        string indentedLine = new string(' ', indentLevel * 4) + _line;
+                        result += indentedLine + Environment.NewLine;
+
+                        if (_line.ToUpper().StartsWith(CONST.STRING_BEGIIN))
+                        {
+                            indentLevel++;
+                        }
                     }
                 }
 
                 txtResult.Text = result;
+                btnCopyResult.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -322,12 +340,21 @@ namespace ToolWorking.Views
             }
         }
 
+        private void btnCopyResult_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtResult.Text)) return;
+
+            Clipboard.SetText(txtResult.Text);
+        }
+
         private void btnClearResult_Click(object sender, EventArgs e)
         {
             txtSource.Text = string.Empty;
             txtResult.Text = string.Empty;
-            btnCreate.Enabled = false;
+            btnFormat.Enabled = false;
+            btnCopyResult.Enabled = false;
         }
         #endregion
+
     }
 }
