@@ -45,7 +45,7 @@ namespace ToolWorking.Views
 
             dicResult = new Dictionary<string, string>();
             defaultDatabase = "---None---";
-            tempInsert = "INSERT INTO [dbo].[{0}] VALUES ( {1} )";
+            tempInsert = "INSERT INTO [dbo].[{0}] VALUES {1};";
         }
 
         #region Event
@@ -716,7 +716,7 @@ namespace ToolWorking.Views
 
                                 if (string.IsNullOrEmpty(item) && !type.Contains(CONST.C_TYPE_DATE_TIME) && !type.Contains(CONST.C_TYPE_TIME))
                                 {
-                                    result += CONST.STRING_NULL + ", ";
+                                    result += "NULL, ";
                                 }
                                 else if (item.ToUpper().Equals(CONST.STRING_EMPTY) && type.Contains(CONST.C_TYPE_STRING))
                                 {
@@ -726,15 +726,15 @@ namespace ToolWorking.Views
                                 {
                                     if (type.Contains(CONST.C_TYPE_STRING))
                                     {
-                                        result += "'" + item.Trim() + "'";
+                                        result += $"'{item.Trim()}', ";
                                     }
                                     else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
                                     {
-                                        result += "SYSDATETIME()";
+                                        result += "SYSDATETIME(), ";
                                     }
                                     else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
                                     {
-                                        result += CONST.STRING_NULL;
+                                        result += "NULL, ";
                                     }
                                     else
                                     {
@@ -743,9 +743,9 @@ namespace ToolWorking.Views
 
                                 }
                             }
+                            lstInputExcel.Add(result.TrimEnd(' ').TrimEnd(','));
+                            result = string.Empty;
                         }
-
-                        lstInputExcel.Add(CUtils.RemoveLastCommaSpace(result));
                     }
                     Cursor.Current = Cursors.Default;
 
@@ -948,21 +948,27 @@ namespace ToolWorking.Views
                 {
                     txtResultQuery.Text = string.Empty;
 
+                    int numRow = 0;
                     string value = string.Empty;
                     if (rbInputTable.Checked && chkMultiRow.Checked)
                     {
-                        int numRow = Convert.ToInt32(txtNumRow.Text);
+                        numRow = Convert.ToInt32(txtNumRow.Text) - 1;
                         progressBarQuery.Maximum = numRow;
 
                         for (int i = 0; i <= numRow; i++)
                         {
-                            value = getValue(i);
-                            if (string.IsNullOrEmpty(value)) return;
+                            string row = getValue(i);
+                            if (string.IsNullOrEmpty(row)) return;
+                            value += $"\r\n({row}),";
 
-                            value = string.Format(tempInsert, nameTable, value);
-                            txtResultQuery.Text += value + "\r\n";
+                            if ((i + 1) % 100 == 0 || i == numRow)
+                            {
+                                string valInsert = string.Format(tempInsert, nameTable, value.TrimEnd(',')) + "\r\n";
+                                txtResultQuery.Text += valInsert;
 
-                            if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
+                                if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(valInsert);
+                                value = string.Empty;
+                            }
 
                             updateProgressQuery();
 
@@ -982,40 +988,41 @@ namespace ToolWorking.Views
                     {
                         progressBarQuery.Maximum = lstInputExcel.Count;
 
-                        int numRow = lstInputExcel.Count - 1;
+                        numRow = lstInputExcel.Count - 1;
 
-                        if (numRow == 1)
+                        if (numRow == 0)
                         {
-                            value = string.Format(tempInsert, nameTable, lstInputExcel[0]);
+                            value = string.Format(tempInsert, nameTable, $"({lstInputExcel[0]})");
                             txtResultQuery.Text += value + "\r\n";
 
                             if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
 
                             updateProgressQuery();
                         }
-
-                        string valInsert = string.Empty;
-                        for (int i = 0; i < lstInputExcel.Count; i++)
+                        else
                         {
-                            value += lstInputExcel[i];
-                            if (string.IsNullOrEmpty(value))
+                            for (int i = 0; i < lstInputExcel.Count; i++)
                             {
-                                txtResultQuery.Text += "Data line " + i + 1 + " entered the wrong format" + "\r\n";
-                                continue;
+                                if (string.IsNullOrEmpty(value))
+                                {
+                                    txtResultQuery.Text += $"Data line {i + 1} entered the wrong format.\r\n";
+                                    continue;
+                                }
+                                value += $"\r\n({lstInputExcel[i]}),";
+
+                                if ((i + 1) % 100 == 0 || i == numRow)
+                                {
+                                    string valInsert = string.Format(tempInsert, nameTable, value.TrimEnd(',')) + "\r\n";
+                                    txtResultQuery.Text += valInsert;
+
+                                    if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(valInsert);
+                                    value = string.Empty;
+                                }
+
+                                updateProgressQuery();
+
+                                if (!string.IsNullOrEmpty(errMessage)) break;
                             }
-
-                            if (i % 100 == 0 || i == numRow)
-                            {
-                                valInsert = string.Format(tempInsert, nameTable, value);
-                                txtResultQuery.Text += valInsert + "\r\n";
-
-                                if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(valInsert);
-                                value = string.Empty;
-                            }
-
-                            updateProgressQuery();
-
-                            if (!string.IsNullOrEmpty(errMessage)) break;
                         }
 
                         if (!string.IsNullOrEmpty(errMessage))
@@ -1048,7 +1055,7 @@ namespace ToolWorking.Views
                         value = getValue(null);
                         if (string.IsNullOrEmpty(value)) return;
 
-                        value = string.Format(tempInsert, nameTable, value);
+                        value = string.Format(tempInsert, nameTable, $"\r\n({value.TrimEnd(',')})");
                         txtResultQuery.Text = value;
 
                         if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
@@ -1411,7 +1418,7 @@ namespace ToolWorking.Views
                         if (value.Contains("X"))
                         {
                             int numInput = value.Count(c => c == 'X');
-                            if (string.IsNullOrEmpty(value.Replace("X", string.Empty).Replace("0", string.Empty)))
+                            if (int.TryParse(value.Replace("X", string.Empty), out _))
                             {
                                 value = value.Replace("X", string.Empty) + CUtils.GenerateRandomNumber(numInput);
                             }
@@ -1425,17 +1432,6 @@ namespace ToolWorking.Views
                             value += "|''|null";
                             string[] arrValue = value.Split('|');
                             value = arrValue[rnd.Next(arrValue.Length)];
-                        }
-                        else
-                        {
-                            if (!int.TryParse(value, out _))
-                            {
-                                value = CUtils.GenerateRandomValue(ref _type, range > 20 ? 20 : range);
-                            }
-                            else
-                            {
-                                value = CUtils.GenerateRandomNumber(range > 9 ? 9 : range);
-                            }
                         }
                     }
                     result += $"'{value}', ";
@@ -1494,7 +1490,7 @@ namespace ToolWorking.Views
                     }
                     else
                     {
-                        result += $"'{value}', ";
+                        result += $"{value}, ";
                     }
                 }
                 else if (type.Contains(CONST.C_TYPE_DATE_TIME))
@@ -1537,7 +1533,7 @@ namespace ToolWorking.Views
                     }
                     else
                     {
-                        result += $"'{value}', ";
+                        result += $"{value}, ";
                     }
                 }
             }
@@ -1578,6 +1574,8 @@ namespace ToolWorking.Views
             {
                 string[] arrRange = type.Split('(')[1].Replace(")", string.Empty).Split(',');
                 string[] arrValue = value.Split('.');
+                if (arrValue.Length > 1 && arrValue[1].Length == 1 && arrValue[1] == "0") return false;
+
                 return (Convert.ToInt32(arrRange[0]) < arrValue[0].Length ||
                     (arrValue.Length > 1 && Convert.ToInt32(arrRange[1]) < arrValue[1].Length));
             }
