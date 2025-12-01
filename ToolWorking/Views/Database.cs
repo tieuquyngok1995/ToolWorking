@@ -569,6 +569,17 @@ namespace ToolWorking.Views
                                 defaultValue = "0";
                             }
                             else if (type.Equals(CONST.C_TYPE_BIT)) defaultValue = "0";
+                            else if (type.Contains(CONST.C_TYPE_NUMERIC))
+                            {
+                                int.TryParse(arrItem[1].Trim().Split('(')[1].Replace(")", string.Empty), out range);
+                                type = type + "(" + range + ")";
+                                defaultValue = "1";
+                            }
+                            else if (type.Contains(CONST.C_TYPE_DECIMAL))
+                            {
+                                type = arrItem[1].Trim() + "," + arrItem[2].Trim();
+                                defaultValue = "1.0";
+                            }
                             else if (item.ToUpper().Contains(CONST.STRING_NOT_NULL))
                             {
                                 if (type.Contains(CONST.C_TYPE_STRING))
@@ -581,17 +592,6 @@ namespace ToolWorking.Views
                                 }
                                 else if (type.Contains(CONST.C_TYPE_DOUBLE))
                                 {
-                                    defaultValue = "1.0";
-                                }
-                                else if (type.Contains(CONST.C_TYPE_NUMERIC))
-                                {
-                                    int.TryParse(arrItem[1].Trim().Split('(')[1].Replace(")", string.Empty), out range);
-                                    type = type + "(" + range + ")";
-                                    defaultValue = "1";
-                                }
-                                else if (type.Contains(CONST.C_TYPE_DECIMAL))
-                                {
-                                    type = arrItem[1].Trim() + "," + arrItem[2].Trim();
                                     defaultValue = "1.0";
                                 }
                                 else if (type.Equals(CONST.C_TYPE_TIME_STAMP))
@@ -724,7 +724,23 @@ namespace ToolWorking.Views
                                 }
                                 else
                                 {
-                                    result += createValue(type, item.Trim()) + ", ";
+                                    if (type.Contains(CONST.C_TYPE_STRING))
+                                    {
+                                        result += "'" + item.Trim() + "'";
+                                    }
+                                    else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
+                                    {
+                                        result += "SYSDATETIME()";
+                                    }
+                                    else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
+                                    {
+                                        result += CONST.STRING_NULL;
+                                    }
+                                    else
+                                    {
+                                        result += item.Trim() + ", ";
+                                    }
+
                                 }
                             }
                         }
@@ -732,6 +748,8 @@ namespace ToolWorking.Views
                         lstInputExcel.Add(CUtils.RemoveLastCommaSpace(result));
                     }
                     Cursor.Current = Cursors.Default;
+
+                    btnRunScript.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -963,19 +981,37 @@ namespace ToolWorking.Views
                     else if (rbInputExcel.Checked)
                     {
                         progressBarQuery.Maximum = lstInputExcel.Count;
+
+                        int numRow = lstInputExcel.Count - 1;
+
+                        if (numRow == 1)
+                        {
+                            value = string.Format(tempInsert, nameTable, lstInputExcel[0]);
+                            txtResultQuery.Text += value + "\r\n";
+
+                            if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
+
+                            updateProgressQuery();
+                        }
+
+                        string valInsert = string.Empty;
                         for (int i = 0; i < lstInputExcel.Count; i++)
                         {
-                            value = lstInputExcel[i];
+                            value += lstInputExcel[i];
                             if (string.IsNullOrEmpty(value))
                             {
                                 txtResultQuery.Text += "Data line " + i + 1 + " entered the wrong format" + "\r\n";
                                 continue;
                             }
 
-                            value = string.Format(tempInsert, nameTable, value);
-                            txtResultQuery.Text += value + "\r\n";
+                            if (i % 100 == 0 || i == numRow)
+                            {
+                                valInsert = string.Format(tempInsert, nameTable, value);
+                                txtResultQuery.Text += valInsert + "\r\n";
 
-                            if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(value);
+                                if (cbDatabase.SelectedIndex > 0) errMessage = DBUtils.ExecuteScript(valInsert);
+                                value = string.Empty;
+                            }
 
                             updateProgressQuery();
 
@@ -1507,35 +1543,6 @@ namespace ToolWorking.Views
             }
 
             return result.Trim().TrimEnd(',');
-        }
-
-        /// <summary>
-        /// Create value in data excel
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private string createValue(string type, string value)
-        {
-            if (type.Contains(CONST.C_TYPE_STRING))
-            {
-                if (isValidate(type, value, value.Length)) return CONST.STRING_NULL;
-
-                return "'" + value + "'";
-            }
-            else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
-            {
-                return "SYSDATETIME()";
-            }
-            else if (type.Contains(CONST.C_TYPE_TIME_STAMP))
-            {
-                return CONST.STRING_NULL;
-            }
-            else
-            {
-                if (isValidate(type, value, value.Length)) return "0";
-                return value;
-            }
         }
 
         /// <summary>
