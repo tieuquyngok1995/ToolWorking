@@ -226,6 +226,7 @@ namespace ToolWorking.Views
                 btnRunScript.Text = "    Run Query";
 
                 txtResultQuery.Text = string.Empty;
+                progressBarQuery.Value = 0;
 
                 Properties.Settings.Default.modeDatabase = 1;
                 Properties.Settings.Default.Save();
@@ -250,6 +251,7 @@ namespace ToolWorking.Views
             btnRunScript.Enabled = false;
             btnCopyResult.Enabled = false;
             txtResultQuery.Text = string.Empty;
+            progressBarQuery.Value = 0;
 
             if (!string.IsNullOrEmpty(txtScriptTable.Text))
             {
@@ -280,6 +282,7 @@ namespace ToolWorking.Views
             btnRunScript.Enabled = false;
             btnCopyResult.Enabled = false;
             txtResultQuery.Text = string.Empty;
+            progressBarQuery.Value = 0;
         }
 
         /// <summary>
@@ -302,6 +305,7 @@ namespace ToolWorking.Views
             btnRunScript.Enabled = false;
             btnCopyResult.Enabled = false;
             txtResultQuery.Text = string.Empty;
+            progressBarQuery.Value = 0;
         }
 
         /// <summary>
