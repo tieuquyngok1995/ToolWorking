@@ -655,6 +655,7 @@ namespace ToolWorking.Views
         private void txtInputExcel_TextChanged(object sender, EventArgs e)
         {
             int numItem = lstColumnTable.Count;
+            string columnName = string.Empty;
             string columnType = string.Empty;
 
             string result = string.Empty;
@@ -687,12 +688,13 @@ namespace ToolWorking.Views
                                 continue;
                             }
 
+                            columnName = $"[{arrRow[6].Trim()}]";
                             columnType = CUtils.ConvertTypeJPToEN(arrRow[11].Trim().ToLower());
                             int.TryParse(arrRow[13].Trim(), out int rangeP);
                             int.TryParse(arrRow[14].Trim(), out int rangeS);
                             bool isNotNull = string.IsNullOrEmpty(arrRow[15]);
                             primaryKey += !string.IsNullOrEmpty(arrRow[16]) ? arrRow[6].Trim() + "," : "";
-                            bodyScriptTable += CUtils.TemplateColumnScript(arrRow[6].Trim(), columnType, rangeP, rangeS, isNotNull);
+                            bodyScriptTable += CUtils.TemplateColumnScript(columnName, columnType, rangeP, rangeS, isNotNull);
                             bodyScriptTable += CONST.STRING_NEW_LINE;
                         }
                         else
