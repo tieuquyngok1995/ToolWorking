@@ -211,6 +211,8 @@ namespace ToolWorking.Views
             if (rbRunQuery.Checked)
             {
                 panelQueryInput.Visible = true;
+                groupInputS.Text = "Input Script Table";
+                groupInputV.Text = "Input Value";
                 panelCenterScript.Visible = false;
                 panelCenterQuery.Visible = true;
                 chkMultiRow.Visible = true;
@@ -243,6 +245,9 @@ namespace ToolWorking.Views
             gridInputValue.Visible = true;
             txtInputExcel.Visible = false;
 
+            groupInputS.Text = "Input Script Table";
+            groupInputV.Text = "Input Setting Value";
+
             chkMultiRow.Visible = true;
             txtNumRow.Visible = chkMultiRow.Checked;
             lblNumRows.Visible = chkMultiRow.Checked;
@@ -267,6 +272,10 @@ namespace ToolWorking.Views
         private void rbInputExcel_CheckedChanged(object sender, EventArgs e)
         {
             gridInputValue.Visible = false;
+
+            groupInputS.Text = "Input Script Table";
+            groupInputV.Text = "Input Excel Value";
+
             txtInputExcel.Visible = true;
             txtInputExcel.Enabled = false;
             if (!string.IsNullOrEmpty(txtScriptTable.Text))
@@ -293,6 +302,10 @@ namespace ToolWorking.Views
         private void rbCreateScript_CheckedChanged(object sender, EventArgs e)
         {
             txtScriptTable.Text = string.Empty;
+
+            groupInputS.Text = "Input Name Table";
+            groupInputV.Text = "Input Setting Table";
+
             gridInputValue.Visible = false;
             txtInputExcel.Visible = true;
             txtInputExcel.Enabled = true;
@@ -654,14 +667,16 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void txtInputExcel_TextChanged(object sender, EventArgs e)
         {
-            int numItem = lstColumnTable.Count;
-            string columnName = string.Empty;
-            string columnType = string.Empty;
-
-            string result = string.Empty;
-            string[] arrTable = txtInputExcel.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
             try
             {
+                int numItem = lstColumnTable.Count;
+                string columnName = string.Empty;
+                string columnType = string.Empty;
+
+                string result = string.Empty;
+                string[] arrRow = null;
+                string[] arrTable = txtInputExcel.Text.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+
                 // handle data input
                 if (arrTable.Length > 0)
                 {
@@ -671,14 +686,65 @@ namespace ToolWorking.Views
                     primaryKey = string.Empty;
 
                     lstInputExcel = new List<string>();
-                    foreach (var row in arrTable)
-                    {
-                        if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row.Replace("\t", ""))) continue;
 
-                        string[] arrRow = row.Split('\t');
-                        if (rbCreateScript.Checked)
+                    if (rbCreateScript.Checked)
+                    {
+                        int idxColumnName = -1;
+                        int idxDataType = -1;
+                        int idxDigit = -1;
+                        int idxPrecision = -1;
+                        int idxNotNull = -1;
+                        int idxPK = -1;
+
+                        arrRow = arrTable[0].Split('\t');
+                        if (arrTable[0].Contains(CONST.STRING_COLUMN_NAME) && arrTable[0].Contains(CONST.STRING_DATA_TYPE))
                         {
-                            if (arrRow.Length < 16)
+                            for (int i = 0; i < arrRow.Length; i++)
+                            {
+                                var col = arrRow[i];
+                                switch (col.Trim().ToUpper())
+                                {
+                                    case CONST.STRING_COLUMN_NAME:
+                                        idxColumnName = i;
+                                        break;
+                                    case CONST.STRING_DATA_TYPE:
+                                        idxDataType = i;
+                                        break;
+                                    case CONST.STRING_NUMBER_OF_DIGITS:
+                                        idxDigit = i;
+                                        break;
+                                    case CONST.STRING_PRECISION:
+                                        idxPrecision = i;
+                                        break;
+                                    case "NULL":
+                                        idxNotNull = i;
+                                        break;
+                                    case "PK":
+                                        idxPK = i;
+                                        break;
+                                    default:
+                                        continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(
+                                "Header information containing the column position in the table is missing.",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
+                            return;
+                        }
+
+                        foreach (var row in arrTable.Skip(1))
+                        {
+                            if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row.Replace("\t", ""))) continue;
+
+                            arrRow = row.Split('\t');
+
+                            if (arrRow.Length < idxPK)
                             {
                                 if (arrRow.Length > 1)
                                 {
@@ -688,17 +754,23 @@ namespace ToolWorking.Views
                                 continue;
                             }
 
-                            columnName = $"[{arrRow[6].Trim()}]";
-                            columnType = CUtils.ConvertTypeJPToEN(arrRow[11].Trim().ToLower());
-                            int.TryParse(arrRow[13].Trim(), out int rangeP);
-                            int.TryParse(arrRow[14].Trim(), out int rangeS);
-                            bool isNotNull = string.IsNullOrEmpty(arrRow[15]);
-                            primaryKey += !string.IsNullOrEmpty(arrRow[16]) ? arrRow[6].Trim() + "," : "";
+                            columnName = $"[{arrRow[idxColumnName].Trim()}]";
+                            columnType = CUtils.ConvertTypeJPToEN(arrRow[idxDataType].Trim().ToLower());
+                            int.TryParse(arrRow[idxDigit].Trim(), out int rangeP);
+                            int.TryParse(arrRow[idxPrecision].Trim(), out int rangeS);
+                            bool isNotNull = string.IsNullOrEmpty(arrRow[idxNotNull]);
+                            primaryKey += !string.IsNullOrEmpty(arrRow[idxPK]) ? arrRow[6].Trim() + "," : "";
                             bodyScriptTable += CUtils.TemplateColumnScript(columnName, columnType, rangeP, rangeS, isNotNull);
                             bodyScriptTable += CONST.STRING_NEW_LINE;
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (var row in arrTable)
                         {
+                            if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row.Replace("\t", ""))) continue;
+
+                            arrRow = row.Split('\t');
                             if (arrRow.Length < numItem)
                             {
                                 lstInputExcel.Add(string.Empty);
@@ -1434,6 +1506,46 @@ namespace ToolWorking.Views
                             string[] arrValue = value.Split('|');
                             value = arrValue[rnd.Next(arrValue.Length)];
                         }
+                        else if (value.ToUpper().Equals("YYYYMMDD") || value.ToUpper().Equals("YYYY/MM/DD"))
+                        {
+                            DateTime start = new DateTime(1990, 1, 1);
+                            if (value.ToUpper().Equals("YYYY/MM/DD"))
+                            {
+                                value = start.AddDays(rnd.Next((DateTime.Today - start).Days)).ToString("yyyy/MM/dd");
+                            }
+                            else
+                            {
+                                value = start.AddDays(rnd.Next((DateTime.Today - start).Days)).ToString("yyyyMMdd");
+                            }
+                        }
+                        else if (value.ToUpper().Equals("YYYYMMDDHHMMSS"))
+                        {
+                            DateTime start = new DateTime(1990, 1, 1);
+                            value = start.AddDays(rnd.Next((DateTime.Now - start).Days))
+                                .AddHours(rnd.Next(0, 24))
+                                .AddMinutes(rnd.Next(0, 60))
+                                .AddSeconds(rnd.Next(0, 60)).ToString("yyyyMMddHHmmss");
+                        }
+                    }
+                    if (value.ToUpper().Equals("YYYYMMDD") || value.ToUpper().Equals("YYYY/MM/DD"))
+                    {
+                        DateTime start = new DateTime(1990, 1, 1);
+                        if (value.ToUpper().Equals("YYYY/MM/DD"))
+                        {
+                            value = start.AddDays(rnd.Next((DateTime.Today - start).Days)).ToString("yyyy/MM/dd");
+                        }
+                        else
+                        {
+                            value = start.AddDays(rnd.Next((DateTime.Today - start).Days)).ToString("yyyyMMdd");
+                        }
+                    }
+                    else if (value.ToUpper().Equals("YYYYMMDDHHMMSS"))
+                    {
+                        DateTime start = new DateTime(1990, 1, 1);
+                        value = start.AddDays(rnd.Next((DateTime.Now - start).Days))
+                            .AddHours(rnd.Next(0, 24))
+                            .AddMinutes(rnd.Next(0, 60))
+                            .AddSeconds(rnd.Next(0, 60)).ToString("yyyyMMddHHmmss");
                     }
                     result += $"'{value}', ";
                 }

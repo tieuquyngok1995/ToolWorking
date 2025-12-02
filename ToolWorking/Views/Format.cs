@@ -314,7 +314,7 @@ namespace ToolWorking.Views
                 {
                     if (modeFormatFile == 0)
                     {
-                        _line = CUtils.toLowerKeySQL(line).Trim();
+                        _line = CUtils.toUpperKeySQL(line).Trim();
 
                         if (_line.ToUpper().StartsWith(CONST.STRING_END))
                         {

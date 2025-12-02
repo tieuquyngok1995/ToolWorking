@@ -1,4 +1,7 @@
-﻿namespace ToolWorking.Utils
+﻿using System.Collections.Generic;
+using System.Data.Common;
+
+namespace ToolWorking.Utils
 {
     public static class CONST
     {
@@ -37,6 +40,11 @@
 
         public const string STRING_FLAG = "FLG";
         public const string STRING_JP_FLAG = "フラグ";
+
+        public const string STRING_COLUMN_NAME = "カラム名";
+        public const string STRING_DATA_TYPE = "データ型";
+        public const string STRING_NUMBER_OF_DIGITS = "桁数";
+        public const string STRING_PRECISION = "精度";
         #endregion
 
         #region String SQL 
@@ -93,7 +101,6 @@
         public static string TYPE_04_CREATE_FUNCTION = "04";
         public static string TYPE_05_CREATE_PROCEDURE = "05";
 
-
         public static string STRING_00 = "00 Reset";
         public static string STRING_01_TYPE = "01 Type";
         public static string STRING_01_ADD = "01 Table";
@@ -103,5 +110,13 @@
         public static string STRING_05 = "05 Procedure";
         #endregion
 
+        #region 
+        public static string STRING_SET_Q = "SET QUOTED_IDENTIFIER ON";
+        public static string STRING_SET_A = "SET ANSI_NULLS ON";
+        public static string STRING_IF_E = "IF EXISTS (";
+        public static string STRING_SET_N = "SET NOCOUNT ON;";
+        public static string STRING_SET_QO = "SET QUOTED_IDENTIFIER OFF";
+
+        #endregion
     }
 }

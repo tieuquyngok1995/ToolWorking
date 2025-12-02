@@ -32,7 +32,18 @@ namespace ToolWorking.Utils
         };
         private static readonly string[] sqlKeywordsUpper = new string[]
         {
-            ""
+            "GO", "SET QUOTED_IDENTIFIER ON", "SET ANSI_NULLS ON", "CREATE PROCEDURE", "IF EXISTS",
+            "SET NOCOUNT ON;", "SET QUOTED_IDENTIFIER OFF",
+            "VARCHAR", "INT", "DATE", "CHAR", "NUMERIC", "DECIMAL", "BIT",
+            "DECLARE", "PRINT", "BEGIN", "END", "IF", "ELSE", "WHILE", "RETURN", "EXECUTE",
+            "SELECT", "FROM", "WHERE", "AND", "OR", "ON", "AS", "IS", "NOT", "NULL", "ORDER", "BY",
+            "ADD", "UPDATE", "INSERT", "DELETE", "SET", "VALUES", "ALL", "ALTER", "ANY", "ASC", "BACKUP", "BETWEEN", "CASE",
+            "CHECK", "COLUMN", "CONSTRAINT", "CREATE", "DATABASE", "DEFAULT",  "DESC",
+            "DISTINCT", "DROP", "EXEC", "EXISTS", "FOREIGN", "FULL", "GROUP", "HAVING",
+            "IN", "INDEX", "INNER",  "INTO", "JOIN", "LEFT", "LIKE", "LIMIT",
+            "OUTER", "PRIMARY", "PROCEDURE", "RIGHT", "ROWNUM",
+            "TABLE", "TOP", "TRUNCATE", "UNION", "UNIQUE",
+            "VIEW",
         };
 
         private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
@@ -106,7 +117,7 @@ namespace ToolWorking.Utils
                 case "文字型大容量":
                     return CONST.SQL_TYPE_NVARCHAR; // NVARCHAR(n)
 
-                // Số
+                // Number
                 case "数値型":
                     return CONST.SQL_TYPE_NUMERIC; // INT, NUMERIC, DECIMAL
                 case "整数型":
@@ -118,7 +129,7 @@ namespace ToolWorking.Utils
                 case "固定小数型":
                     return CONST.SQL_TYPE_DECIMAL; // DECIMAL(p,s)
 
-                // Ngày/giờ
+                // Datetime
                 case "日付型":
                     return CONST.SQL_TYPE_DATE; // DATE
                 case "時刻型":
@@ -138,26 +149,16 @@ namespace ToolWorking.Utils
         }
 
         /// <summary>
-        /// Convert SQL keywords to lower case
+        /// Convert SQL keywords to upper case
         /// </summary>
         /// <param name="keySQL"></param>
         /// <returns></returns>
-        public static string toLowerKeySQL(string keySQL)
+        public static string toUpperKeySQL(string keySQL)
         {
-            foreach (var keyword in sqlKeywords)
-            {
-                // Regex \b để chỉ thay các từ nguyên vẹn, ignore case
-                keySQL = Regex.Replace(keySQL, $@"\b{keyword}\b", keyword.ToLower(), RegexOptions.IgnoreCase);
-            }
 
-            foreach (var keywordUpper in sqlKeywordsUpper)
+            foreach (var keyword in sqlKeywordsUpper)
             {
-                keySQL = Regex.Replace(
-                    keySQL,
-                    $@"\b{Regex.Escape(keywordUpper)}\b",
-                    match => keywordUpper,
-                    RegexOptions.IgnoreCase
-                );
+                keySQL = Regex.Replace(keySQL, $@"\b{keyword}\b", keyword.ToUpper(), RegexOptions.IgnoreCase);
             }
 
             return keySQL;
