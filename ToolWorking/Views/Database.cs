@@ -1003,12 +1003,13 @@ namespace ToolWorking.Views
                         {
                             for (int i = 0; i < lstInputExcel.Count; i++)
                             {
-                                if (string.IsNullOrEmpty(value))
+                                string row = lstInputExcel[i];
+                                if (string.IsNullOrEmpty(row))
                                 {
                                     txtResultQuery.Text += $"Data line {i + 1} entered the wrong format.\r\n";
                                     continue;
                                 }
-                                value += $"\r\n({lstInputExcel[i]}),";
+                                value += $"\r\n({row}),";
 
                                 if ((i + 1) % 100 == 0 || i == numRow)
                                 {
