@@ -1483,7 +1483,7 @@ namespace ToolWorking.Views
                 {
                     if (value.ToUpper().Equals(CONST.STRING_NULL))
                     {
-                        result += "null, ";
+                        value = "null, ";
                     }
                     else if (index.HasValue)
                     {
@@ -1547,7 +1547,10 @@ namespace ToolWorking.Views
                             .AddMinutes(rnd.Next(0, 60))
                             .AddSeconds(rnd.Next(0, 60)).ToString("yyyyMMddHHmmss");
                     }
-                    result += $"'{value}', ";
+                    else
+                    {
+                        result += $"'{value}', ";
+                    }
                 }
                 else if (type.Equals(CONST.C_TYPE_DOUBLE))
                 {
@@ -1564,7 +1567,7 @@ namespace ToolWorking.Views
                         result += $"'{value}', ";
                     }
                 }
-                else if (type.Equals(CONST.C_TYPE_NUMERIC))
+                else if (type.Contains(CONST.C_TYPE_NUMERIC))
                 {
                     if (value.Equals(CONST.STRING_NULL))
                     {
@@ -1577,9 +1580,14 @@ namespace ToolWorking.Views
                             string[] arrValue = value.Split('|');
                             result += $"{arrValue[rnd.Next(arrValue.Length)]}, ";
                         }
+                        else if (value.Contains("~"))
+                        {
+                            int _range = Convert.ToInt32(value.Replace("~", string.Empty));
+                            result += $"{CUtils.GenerateRandomNumber(_range == 0 ? range : _range)}, ";
+                        }
                         else
                         {
-                            result += $"{CUtils.GenerateRandomNumber(range)}, ";
+                            result += $"{value}, ";
                         }
                     }
                     else
@@ -1633,6 +1641,11 @@ namespace ToolWorking.Views
                                 string[] arrValue = value.Split('|');
                                 result += $"{arrValue[rnd.Next(arrValue.Length)]}, ";
                             }
+                            else if (value.Contains("~"))
+                            {
+                                int _range = Convert.ToInt32(value.Replace("~", string.Empty));
+                                result += $"{CUtils.GenerateRandomNumber(_range == 0 ? range : _range)}, ";
+                            }
                             else
                             {
                                 range = range == 0 ? 9 : range;
@@ -1681,7 +1694,7 @@ namespace ToolWorking.Views
             }
             else if (type.Contains(CONST.C_TYPE_NUMERIC))
             {
-                return value.Length > range;
+                return value.Replace("~", string.Empty).Length > range;
             }
             else if (type.Contains(CONST.C_TYPE_DECIMAL))
             {
