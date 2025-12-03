@@ -773,7 +773,7 @@ namespace ToolWorking.Views
                             arrRow = row.Split('\t');
                             if (arrRow.Length < numItem)
                             {
-                                lstInputExcel.Add(string.Empty);
+                                lstInputExcel.Add($"The number of Excel input columns does not match the number of table columns ({arrRow.Length}/{numItem})");
                                 continue;
                             }
 
