@@ -185,6 +185,12 @@ namespace ToolWorking.Views
             }
         }
 
+        private void txtSource_Click(object sender, EventArgs e)
+        {
+            txtSource.SelectAll();
+            txtSource.Focus();
+        }
+
         /// <summary>
         /// Event change text setting
         /// </summary>
@@ -214,7 +220,8 @@ namespace ToolWorking.Views
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string line = lines[i].Trim();
-                    if (line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE))
+                    if (line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE) &&
+                        !line.ToUpper().Contains("TABLE"))
                     {
                         string comment = "";
                         int commentIdx = line.IndexOf("--");
@@ -243,7 +250,11 @@ namespace ToolWorking.Views
                             type = string.Join(" ", parts.Skip(2));
                         }
 
-                        type = type.TrimEnd(';');
+                        type = type.Replace(" ", string.Empty);
+                        if (string.IsNullOrEmpty(comment))
+                        {
+                            type = type.TrimEnd(';') + ";";
+                        }
 
                         dict.Add($"row{i}", (dec, var, type, assign, comment));
                         result.Add($"row{i}");
@@ -251,7 +262,6 @@ namespace ToolWorking.Views
                         maxDec = Math.Max(maxDec, dec.Length);
                         maxVar = Math.Max(maxVar, var.Length);
                         maxType = Math.Max(maxType, type.Length);
-
                         maxAssign = Math.Max(maxAssign, sjis.GetByteCount(assign));
                     }
                     else
@@ -273,17 +283,21 @@ namespace ToolWorking.Views
                         string var = item.var.TrimEnd().PadRight(maxVar + 1);
                         string type = item.type.TrimEnd().PadRight(maxType + 1);
 
-                        string assign = string.IsNullOrEmpty(item.assign)
+                        string assign = maxAssign == 0
                             ? ""
                             : item.assign.TrimEnd().PadRight(maxAssign + 1);
 
                         string comment = string.IsNullOrEmpty(item.comment)
                             ? ""
-                            : " " + item.comment;
+                            : item.comment;
 
                         listContent.Add((assign.Length > 0
                             ? $"{dec}{var}{type}{assign}{comment}"
                             : $"{dec}{var}{type}{comment}").TrimEnd());
+                    }
+                    else if (string.IsNullOrWhiteSpace(line))
+                    {
+                        listContent.Add(string.Empty);
                     }
                     else
                     {
@@ -304,6 +318,12 @@ namespace ToolWorking.Views
         {
             try
             {
+                bool isCreatePr = false;
+                bool isSelect = false;
+                bool isFrom = false;
+                bool isJoin = false;
+                bool isWhere = false;
+
                 int indentLevel = 0;
                 string result = string.Empty;
                 string _line = string.Empty;
@@ -315,16 +335,72 @@ namespace ToolWorking.Views
                     {
                         _line = CUtils.toUpperKeySQL(line).Trim();
 
-                        if (_line.ToUpper().StartsWith(CONST.STRING_END))
+                        if (_line.StartsWith("END"))
                         {
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (_line.StartsWith("DROP PROCEDURE"))
+                        {
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (isCreatePr && _line.Trim().Equals("AS"))
+                        {
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (isSelect && _line.Contains("INTO"))
+                        {
+                            isSelect = false;
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (isSelect && _line.Contains("FROM"))
+                        {
+                            isSelect = false;
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (isJoin && _line.Contains("WHERE"))
+                        {
+                            isJoin = false;
+                            indentLevel = Math.Max(0, indentLevel - 1);
+                        }
+                        else if (isWhere && _line.Contains("GROUP BY") ||
+                            isWhere && _line.Trim().Equals(")") ||
+                            isWhere && !_line.Contains("AND"))
+                        {
+                            isWhere = false;
                             indentLevel = Math.Max(0, indentLevel - 1);
                         }
 
                         string indentedLine = new string(' ', indentLevel * 4) + _line;
                         result += indentedLine + Environment.NewLine;
 
-                        if (_line.ToUpper().StartsWith(CONST.STRING_BEGIIN))
+                        if (_line.StartsWith("BEGIN") || _line.StartsWith("IF EXISTS"))
                         {
+                            indentLevel++;
+                        }
+                        else if (_line.StartsWith("CREATE PROCEDURE"))
+                        {
+                            isCreatePr = true;
+                            indentLevel++;
+                        }
+                        else if (_line.Contains("SELECT"))
+                        {
+                            isSelect = true;
+                            indentLevel++;
+                        }
+                        else if (_line.Contains("FROM") && _line.Contains(CONST.STRING_DBO))
+                        {
+                            isFrom = true;
+                        }
+                        else if (isFrom && (_line.Contains("INNER JOIN") ||
+                            _line.Contains("LEFT JOIN") ||
+                            _line.Contains("RIGHT JOIN")))
+                        {
+                            isJoin = true;
+                            indentLevel++;
+                        }
+                        else if (_line.Contains("WHERE"))
+                        {
+                            isWhere = true;
                             indentLevel++;
                         }
                     }
@@ -354,6 +430,5 @@ namespace ToolWorking.Views
             btnCopyResult.Enabled = false;
         }
         #endregion
-
     }
 }

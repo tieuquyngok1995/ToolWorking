@@ -47,9 +47,9 @@ namespace ToolWorking.Views
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.btnCopyResult = new System.Windows.Forms.Button();
             this.btnClearResult = new System.Windows.Forms.Button();
             this.btnFormat = new System.Windows.Forms.Button();
-            this.btnCopyResult = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             this.panelCenterQuery.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -184,6 +184,7 @@ namespace ToolWorking.Views
             this.txtSource.Size = new System.Drawing.Size(636, 160);
             this.txtSource.TabIndex = 20;
             this.txtSource.Text = "";
+            this.txtSource.Click += new System.EventHandler(this.txtSource_Click);
             this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
             // 
             // groupBox2
@@ -219,6 +220,20 @@ namespace ToolWorking.Views
             this.panelBottom.Size = new System.Drawing.Size(660, 32);
             this.panelBottom.TabIndex = 11;
             // 
+            // btnCopyResult
+            // 
+            this.btnCopyResult.Enabled = false;
+            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
+            this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCopyResult.Location = new System.Drawing.Point(495, 0);
+            this.btnCopyResult.Name = "btnCopyResult";
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 27);
+            this.btnCopyResult.TabIndex = 10;
+            this.btnCopyResult.Text = "    Copy";
+            this.btnCopyResult.UseVisualStyleBackColor = true;
+            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
+            // 
             // btnClearResult
             // 
             this.btnClearResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
@@ -245,20 +260,6 @@ namespace ToolWorking.Views
             this.btnFormat.Text = "    Format";
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
-            // 
-            // btnCopyResult
-            // 
-            this.btnCopyResult.Enabled = false;
-            this.btnCopyResult.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.btnCopyResult.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyResult.Image")));
-            this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCopyResult.Location = new System.Drawing.Point(495, 0);
-            this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 27);
-            this.btnCopyResult.TabIndex = 10;
-            this.btnCopyResult.Text = "    Copy";
-            this.btnCopyResult.UseVisualStyleBackColor = true;
-            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
             // 
             // Format
             // 

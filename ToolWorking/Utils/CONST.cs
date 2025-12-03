@@ -35,8 +35,7 @@ namespace ToolWorking.Utils
         public const string STRING_NULL = "NULL";
         public const string STRING_NOT_NULL = "NOT NULL";
 
-        public const string STRING_BEGIIN = "BEGIN";
-        public const string STRING_END = "END";
+        public const string STRING_DBO = "dbo";
 
         public const string STRING_FLAG = "FLG";
         public const string STRING_JP_FLAG = "フラグ";
@@ -113,7 +112,6 @@ namespace ToolWorking.Utils
         #region 
         public static string STRING_SET_Q = "SET QUOTED_IDENTIFIER ON";
         public static string STRING_SET_A = "SET ANSI_NULLS ON";
-        public static string STRING_IF_E = "IF EXISTS (";
         public static string STRING_SET_N = "SET NOCOUNT ON;";
         public static string STRING_SET_QO = "SET QUOTED_IDENTIFIER OFF";
 
