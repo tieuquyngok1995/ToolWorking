@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ToolWorking.Model;
 using ToolWorking.Utils;
 
 namespace ToolWorking.Views
@@ -270,13 +269,13 @@ namespace ToolWorking.Views
                     {
                         var item = dict[$"row{rowNum}"];
 
-                        string dec = item.dec.PadRight(maxDec + 1);
-                        string var = item.var.PadRight(maxVar + 1);
-                        string type = item.type.PadRight(maxType + 1);
+                        string dec = item.dec.TrimEnd().PadRight(maxDec + 1);
+                        string var = item.var.TrimEnd().PadRight(maxVar + 1);
+                        string type = item.type.TrimEnd().PadRight(maxType + 1);
 
                         string assign = string.IsNullOrEmpty(item.assign)
                             ? ""
-                            : item.assign.PadRight(maxAssign + 1);
+                            : item.assign.TrimEnd().PadRight(maxAssign + 1);
 
                         string comment = string.IsNullOrEmpty(item.comment)
                             ? ""
