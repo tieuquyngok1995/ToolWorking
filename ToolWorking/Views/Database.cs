@@ -759,7 +759,7 @@ namespace ToolWorking.Views
                             int.TryParse(arrRow[idxDigit].Trim(), out int rangeP);
                             int.TryParse(arrRow[idxPrecision].Trim(), out int rangeS);
                             bool isNotNull = string.IsNullOrEmpty(arrRow[idxNotNull]);
-                            primaryKey += !string.IsNullOrEmpty(arrRow[idxPK]) ? arrRow[idxPK].Trim() + "," : "";
+                            primaryKey += !string.IsNullOrEmpty(arrRow[idxPK]) ? arrRow[idxColumnName].Trim() + "," : "";
                             bodyScriptTable += CUtils.TemplateColumnScript(columnName, columnType, rangeP, rangeS, isNotNull);
                             bodyScriptTable += CONST.STRING_NEW_LINE;
                         }
