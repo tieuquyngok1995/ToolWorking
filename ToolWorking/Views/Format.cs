@@ -208,6 +208,8 @@ namespace ToolWorking.Views
                     return;
                 }
 
+                bool isFormatCreateTable = false;
+
                 int maxDec = 0;
                 int maxVar = 0;
                 int maxType = 0;
@@ -220,8 +222,9 @@ namespace ToolWorking.Views
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string line = lines[i].Trim();
-                    if (line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE) &&
-                        !line.ToUpper().Contains("TABLE"))
+
+                    if ((line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE) &&
+                        !line.ToUpper().Contains("TABLE")) || (isFormatCreateTable && !line.Trim().StartsWith("(")))
                     {
                         string comment = "";
                         int commentIdx = line.IndexOf("--");
@@ -267,6 +270,11 @@ namespace ToolWorking.Views
                     else
                     {
                         result.Add(line);
+                    }
+
+                    if (line.ToUpper().Contains("CREATE TABLE"))
+                    {
+                        isFormatCreateTable = true;
                     }
                 }
 
