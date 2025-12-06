@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -215,10 +216,15 @@ namespace ToolWorking.Views
 
                 bool isCreateTable = false;
 
+                string dec = string.Empty;
+                string var = string.Empty;
+                string type = string.Empty;
+                string assign = string.Empty;
+                string comment = string.Empty;
+                string[] lines = setting.Split(CONST.STRING_SEPARATORS_ROWS, StringSplitOptions.None);
+
                 List<string> result = new List<string>();
                 var dict = new Dictionary<string, (string dec, string var, string type, string assign, string comment)>();
-
-                string[] lines = setting.Split(CONST.STRING_SEPARATORS_ROWS, StringSplitOptions.None);
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string line = lines[i].Trim();
@@ -227,10 +233,7 @@ namespace ToolWorking.Views
 
                     if (isCreateTable && !line.Trim().Equals("("))
                     {
-                        string original = line;
-
-                        // --- tách comment
-                        string comment = "";
+                        comment = string.Empty;
                         int commentIdx = line.IndexOf("--");
                         if (commentIdx >= 0)
                         {
@@ -238,35 +241,23 @@ namespace ToolWorking.Views
                             line = line.Substring(0, commentIdx).TrimEnd();
                         }
 
-                        // --- tách dấu , cuối dòng
-                        string tail = "";
-                        if (line.EndsWith(","))
-                        {
-                            tail = ",";
-                            line = line.Substring(0, line.Length - 1).TrimEnd();
-                        }
-
-                        // --- tách column + type + nullable
-                        // ví dụ: [社員番号] CHAR(9) NOT NULL
                         var parts = line.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
 
-                        string col = parts.Length > 0 ? parts[0] : "";
-                        string type = "";
-                        string nullable = "";
-
-                        if (parts.Length > 1)
-                            type = parts[1];
+                        dec = parts.Length > 0 ? parts[0] : "";
+                        var = parts.Length > 1 ? parts[1] : "";
+                        type = string.Empty;
 
                         if (parts.Length > 2)
-                            nullable = string.Join(" ", parts.Skip(2));
+                        {
+                            type = string.Join(" ", parts.Skip(2));
+                        }
 
-                        // --- lưu để align
-                        dict.Add($"row{i}", (col, type, nullable, tail, comment));
+                        dict.Add($"row{i}", (dec, var, type, assign, comment));
                         result.Add($"row{i}");
 
-                        maxDec = Math.Max(maxDec, col.Length);
-                        maxVar = Math.Max(maxVar, type.Length);
-                        maxType = Math.Max(maxType, nullable.Length);
+                        maxDec = Math.Max(maxDec, sjis.GetByteCount(dec));
+                        maxVar = Math.Max(maxVar, var.Length);
+                        maxType = Math.Max(maxType, type.Length);
                         maxAssign = Math.Max(maxAssign, sjis.GetByteCount(comment));
 
                         continue;
@@ -276,7 +267,7 @@ namespace ToolWorking.Views
                         line.ToUpper().Contains("CURSOR") &&
                         !line.ToUpper().Contains("TABLE")))
                     {
-                        string comment = "";
+                        comment = "";
                         int commentIdx = line.IndexOf("--");
                         if (commentIdx >= 0)
                         {
@@ -284,7 +275,7 @@ namespace ToolWorking.Views
                             line = line.Substring(0, commentIdx).TrimEnd();
                         }
 
-                        string assign = "";
+                        assign = string.Empty;
                         int eqIndex = line.IndexOf('=');
                         if (eqIndex >= 0)
                         {
@@ -294,9 +285,9 @@ namespace ToolWorking.Views
 
                         string[] parts = line.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
 
-                        string dec = parts.Length > 0 ? parts[0] : "";
-                        string var = parts.Length > 1 ? parts[1] : "";
-                        string type = "";
+                        dec = parts.Length > 0 ? parts[0] : "";
+                        var = parts.Length > 1 ? parts[1] : "";
+                        type = string.Empty;
 
                         if (parts.Length > 2)
                         {
@@ -330,22 +321,22 @@ namespace ToolWorking.Views
 
                 int rowNum = 0;
                 listContent.Clear();
-                foreach (var line in result)
+                foreach (string line in result)
                 {
                     if (line.Equals($"row{rowNum}"))
                     {
                         var item = dict[$"row{rowNum}"];
 
-                        string dec = item.dec.TrimEnd().PadRight(maxDec + 1);
-                        string var = item.var.TrimEnd().PadRight(maxVar + 1);
-                        string type = item.type.TrimEnd().PadRight(maxType + 1);
+                        dec = item.dec.TrimEnd().PadRight(maxDec + 1);
+                        var = item.var.TrimEnd().PadRight(maxVar + 1);
+                        type = item.type.TrimEnd().PadRight(maxType + 1);
 
-                        string assign = maxAssign == 0
-                            ? ""
+                        assign = maxAssign == 0
+                            ? string.Empty
                             : item.assign.TrimEnd().PadRight(maxAssign + 1);
 
-                        string comment = string.IsNullOrEmpty(item.comment)
-                            ? ""
+                        comment = string.IsNullOrEmpty(item.comment)
+                            ? string.Empty
                             : item.comment;
 
                         listContent.Add((assign.Length > 0
