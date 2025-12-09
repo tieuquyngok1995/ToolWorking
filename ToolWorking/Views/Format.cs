@@ -228,6 +228,7 @@ namespace ToolWorking.Views
                 for (int i = 0; i < lines.Length; i++)
                 {
                     string line = lines[i].Trim();
+                    line = System.Text.RegularExpressions.Regex.Replace(line, @"\s+", " ");
 
                     if (isCreateTable && line.ToUpper().Contains("PRIMARY KEY")) isCreateTable = false;
 
@@ -252,8 +253,8 @@ namespace ToolWorking.Views
                             type = string.Join(" ", parts.Skip(2));
                         }
 
-                        dict.Add($"row{i}", (dec, var, type, assign, comment));
-                        result.Add($"row{i}");
+                        dict.Add($"row2b{i}", (dec, var, type, assign, comment));
+                        result.Add($"row2b{i}");
 
                         maxDec = Math.Max(maxDec, sjis.GetByteCount(dec));
                         maxVar = Math.Max(maxVar, var.Length);
@@ -263,9 +264,7 @@ namespace ToolWorking.Views
                         continue;
                     }
 
-                    if ((line.ToUpper().Contains(CONST.SQL_TYPE_DECLARE) &&
-                        line.ToUpper().Contains("CURSOR") &&
-                        !line.ToUpper().Contains("TABLE")))
+                    if (line.ToUpper().Contains("DECLARE @W"))
                     {
                         comment = "";
                         int commentIdx = line.IndexOf("--");
@@ -329,7 +328,49 @@ namespace ToolWorking.Views
 
                         dec = item.dec.TrimEnd().PadRight(maxDec + 1);
                         var = item.var.TrimEnd().PadRight(maxVar + 1);
-                        type = item.type.TrimEnd().PadRight(maxType + 1);
+                        type = item.type.TrimEnd();
+                        int index = type.IndexOf(';');
+
+                        if (index >= 0)
+                        {
+                            string before = type.Substring(0, index);
+                            string after = type.Substring(index);
+
+                            int needPad = (maxType) - before.Length - 1;
+
+                            if (needPad > 0)
+                                type = before + new string(' ', needPad) + after;
+                        }
+                        else
+                        {
+                            type = type.PadRight(maxType + 1);
+                        }
+
+                        assign = maxAssign == 0
+                            ? string.Empty
+                            : item.assign.TrimEnd().PadRight(maxAssign + 1);
+
+                        comment = string.IsNullOrEmpty(item.comment)
+                            ? string.Empty
+                            : " " + item.comment;
+
+                        listContent.Add((assign.Length > 0
+                            ? $"{dec}{var}{type}{assign}{comment}"
+                            : $"{dec}{var}{type}{comment}").TrimEnd());
+                    }
+                    else if (line.Equals($"row2b{rowNum}"))
+                    {
+                        var item = dict[$"row2b{rowNum}"];
+                        dec = "    " + PadRightByByte(item.dec.TrimEnd(), maxDec + 1);
+
+                        var = item.var.TrimEnd().PadRight(maxVar + 1);
+
+                        type = item.type.TrimEnd();
+                        if (type.Equals("NULL"))
+                        {
+                            type = "    " + type;
+                        }
+                        type = type.PadRight(maxType + 1);
 
                         assign = maxAssign == 0
                             ? string.Empty
@@ -407,7 +448,8 @@ namespace ToolWorking.Views
                                 indentLevel = Math.Max(0, indentLevel - 1);
                             }
                         }
-                        else if (isExec && !_line.Contains("@w"))
+
+                        if (isExec && !_line.Contains("@w"))
                         {
                             isExec = false;
                             indentLevel = Math.Max(0, indentLevel - 1);
@@ -496,7 +538,7 @@ namespace ToolWorking.Views
                             isCreatePr = true;
                             indentLevel++;
                         }
-                        else if (_line.StartsWith("CREATE TABLE #TBL_"))
+                        else if (_line.StartsWith("CREATE TABLE #TBL_") || _line.StartsWith("CREATE TABLE dbo."))
                         {
                             isCreateTBL = true;
                             indentLevel++;
@@ -568,6 +610,19 @@ namespace ToolWorking.Views
             btnFormat.Enabled = false;
             btnCopyResult.Enabled = false;
         }
+
+        private string PadRightByByte(string text, int totalBytes)
+        {
+            int currentBytes = sjis.GetByteCount(text);
+
+            if (currentBytes >= totalBytes)
+                return text;
+
+            int needSpaces = totalBytes - currentBytes;
+
+            return text + new string(' ', needSpaces);
+        }
+
         #endregion
     }
 }
