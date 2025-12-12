@@ -798,7 +798,14 @@ namespace ToolWorking.Views
                                 {
                                     if (type.Contains(CONST.C_TYPE_STRING))
                                     {
-                                        result += $"'{item.Trim()}', ";
+                                        if (CUtils.ContainsJapanese(item))
+                                        {
+                                            result += $"N'{item.Trim()}', ";
+                                        }
+                                        else
+                                        {
+                                            result += $"'{item.Trim()}', ";
+                                        }
                                     }
                                     else if (type.Contains(CONST.C_TYPE_DATE_TIME) || type.Contains(CONST.C_TYPE_TIME))
                                     {

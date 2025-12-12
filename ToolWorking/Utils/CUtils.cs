@@ -74,6 +74,23 @@ namespace ToolWorking.Utils
             if (dic.ContainsKey(key)) return dic[key];
             return string.Empty;
         }
+
+        public static bool IsAllJapanese(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return false;
+
+            var regex = new Regex(@"^[\u3040-\u30FF\u31F0-\u31FF\u4E00-\u9FBF]+$");
+
+            return regex.IsMatch(input);
+        }
+
+        public static bool ContainsJapanese(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return false;
+
+            var regex = new Regex(@"[\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FF\uFF66-\uFF9D\u4E00-\u9FAF]");
+            return regex.IsMatch(input);
+        }
         #endregion
 
         #region Convert 
