@@ -88,7 +88,9 @@ namespace ToolWorking.Views
             this.cbFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFileType.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.cbFileType.Items.AddRange(new object[] {
-            "SQL"});
+            "SQL",
+            "Table",
+            "SET"});
             this.cbFileType.Location = new System.Drawing.Point(358, 6);
             this.cbFileType.Name = "cbFileType";
             this.cbFileType.Size = new System.Drawing.Size(60, 25);

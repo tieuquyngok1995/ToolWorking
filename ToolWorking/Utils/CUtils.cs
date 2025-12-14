@@ -14,6 +14,8 @@ namespace ToolWorking.Utils
 {
     public static class CUtils
     {
+
+        private static Encoding sjis = Encoding.GetEncoding("Shift_JIS");
         private static readonly char[] SPECIAL_CHARS = "!@#$%^&*_+-=;,.<>?".ToCharArray();
         private static readonly char[] ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".Concat(SPECIAL_CHARS).ToArray();
         private static readonly char[] UNICODE_CHARS = Enumerable.Range(0x3040, 0x60).Select(i => (char)i).Concat(SPECIAL_CHARS).ToArray();
@@ -179,6 +181,18 @@ namespace ToolWorking.Utils
             }
 
             return keySQL;
+        }
+
+        public static string PadRightByByte(string text, int totalBytes)
+        {
+            int currentBytes = sjis.GetByteCount(text);
+
+            if (currentBytes >= totalBytes)
+                return text;
+
+            int needSpaces = totalBytes - currentBytes;
+
+            return text + new string(' ', needSpaces);
         }
         #endregion
 
@@ -489,14 +503,14 @@ namespace ToolWorking.Utils
             }
             else if (columnType.ToLower().Contains(CONST.SQL_TYPE_DECIMAL))
             {
-                typeWithRange += $"({rangeP}, {rangeS})";
+                typeWithRange += $"({rangeP},{rangeS})";
             }
             else if (columnType.ToLower().Contains(CONST.SQL_TYPE_NUMERIC))
             {
-                typeWithRange += rangeS > 0 ? $"({rangeP}, {rangeS})" : $"({rangeP})";
+                typeWithRange += rangeS > 0 ? $"({rangeP},{rangeS})" : $"({rangeP})";
             }
 
-            return $"    {columnName} {typeWithRange.ToLower()} {(isNotNull ? "NOT NULL" : "NULL")},";
+            return $"    {columnName} {typeWithRange.ToLower()} {(isNotNull ? "NOT NULL" : "NULL")}";
         }
         #endregion
     }

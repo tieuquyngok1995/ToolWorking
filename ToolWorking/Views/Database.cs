@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ToolWorking.Model;
@@ -38,6 +40,12 @@ namespace ToolWorking.Views
         private List<ColumnModel> lstColumnTable = new List<ColumnModel>();
         // List value input excel
         private List<string> lstInputExcel = new List<string>();
+        private List<string> lstScriptTable;
+        // Max var
+        private int maxVar = 0;
+        private int maxType = 0;
+
+        private Encoding sjis = Encoding.GetEncoding("Shift_JIS");
 
         public Database()
         {
@@ -669,9 +677,13 @@ namespace ToolWorking.Views
         {
             try
             {
+                maxVar = 0;
+                maxType = 0;
+
                 int numItem = lstColumnTable.Count;
                 string columnName = string.Empty;
                 string columnType = string.Empty;
+                string scriptTable = string.Empty;
 
                 string result = string.Empty;
                 string[] arrRow = null;
@@ -682,7 +694,7 @@ namespace ToolWorking.Views
                 {
                     Cursor.Current = Cursors.WaitCursor;
 
-                    bodyScriptTable = string.Empty;
+                    lstScriptTable = new List<string>();
                     primaryKey = string.Empty;
 
                     lstInputExcel = new List<string>();
@@ -748,20 +760,36 @@ namespace ToolWorking.Views
                             {
                                 if (arrRow.Length > 1)
                                 {
-                                    bodyScriptTable += "-- Insufficient parameters, please check the following line: " + row;
-                                    bodyScriptTable += CONST.STRING_NEW_LINE;
+                                    lstScriptTable.Add("-- Insufficient parameters, please check the following line: " + row);
                                 }
                                 continue;
                             }
 
-                            columnName = $"[{arrRow[idxColumnName].Trim()}]";
+                            columnName = columnName == string.Empty ? string.Empty : ",";
+                            columnName += $"[{arrRow[idxColumnName].Trim()}]";
                             columnType = CUtils.ConvertTypeJPToEN(arrRow[idxDataType].Trim().ToLower());
                             int.TryParse(arrRow[idxDigit].Trim(), out int rangeP);
                             int.TryParse(arrRow[idxPrecision].Trim(), out int rangeS);
                             bool isNotNull = string.IsNullOrEmpty(arrRow[idxNotNull]);
                             primaryKey += !string.IsNullOrEmpty(arrRow[idxPK]) ? arrRow[idxColumnName].Trim() + "," : "";
-                            bodyScriptTable += CUtils.TemplateColumnScript(columnName, columnType, rangeP, rangeS, isNotNull);
-                            bodyScriptTable += CONST.STRING_NEW_LINE;
+                            scriptTable = CUtils.TemplateColumnScript(columnName, columnType, rangeP, rangeS, isNotNull);
+
+                            lstScriptTable.Add(scriptTable);
+
+                            arrRow = scriptTable.Trim().Split(' ');
+                            maxVar = Math.Max(maxVar, sjis.GetByteCount(arrRow[0]));
+                            if (!string.IsNullOrEmpty(arrRow[0]) && !arrRow[0].StartsWith(","))
+                            {
+                                maxVar = maxVar + 2;
+                            }
+                            if (!string.IsNullOrEmpty(arrRow[1]) && arrRow[1].Contains(","))
+                            {
+                                maxType = Math.Max(maxType, arrRow[1].Length + 1);
+                            }
+                            else
+                            {
+                                maxType = Math.Max(maxType, arrRow[1].Length);
+                            }
                         }
                     }
                     else
@@ -1117,6 +1145,34 @@ namespace ToolWorking.Views
                     }
                     else if (rbCreateScript.Checked)
                     {
+                        bodyScriptTable = string.Empty;
+                        maxVar = maxVar + 2;
+                        maxType = maxType + 2;
+
+
+                        foreach (string row in lstScriptTable)
+                        {
+                            string[] arrRow = row.Trim().Split(' ');
+                            bodyScriptTable += "    " + CUtils.PadRightByByte(arrRow[0].TrimEnd(), maxVar + 1).Replace(",", ", ");
+                            if (arrRow[1].Contains(","))
+                            {
+                                bodyScriptTable += arrRow[1].TrimEnd().PadRight(maxType).Replace(",", ", ");
+                            }
+                            else
+                            {
+                                bodyScriptTable += arrRow[1].TrimEnd().PadRight(maxType + 1).Replace(",", ", ");
+                            }
+                            if (arrRow[2].Equals("NULL"))
+                            {
+                                bodyScriptTable += "    " + arrRow[2];
+                            }
+                            else
+                            {
+                                bodyScriptTable += arrRow[2] + " " + arrRow[3];
+                            }
+                            bodyScriptTable += CONST.STRING_NEW_LINE;
+                        }
+
                         value = string.Format(CUtils.TemplateCreateScriptTable(nameTable), bodyScriptTable, primaryKey.TrimEnd(','));
                         txtResultQuery.Text = value;
 
@@ -1718,6 +1774,15 @@ namespace ToolWorking.Views
             }
             else
             {
+                if (type.Equals(CONST.C_TYPE_INT) && value.ToUpper().Contains("X"))
+                {
+                    value = value.ToUpper().Replace("X", string.Empty);
+                    if (string.IsNullOrEmpty(value)) return false;
+                }
+                else if (value.Contains("~"))
+                {
+                    value = value.Replace("~", string.Empty);
+                }
                 return !int.TryParse(value, out _);
             }
         }

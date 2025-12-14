@@ -11,8 +11,10 @@ namespace ToolWorking.Views
 {
     public partial class Format : Form
     {
+
         private Encoding sjis = Encoding.GetEncoding("Shift_JIS");
         // Path folder
+        int maxEquals;
         int modeFormatFile;
         string pathFolderFormatFile;
         string fileNameFormat;
@@ -214,8 +216,6 @@ namespace ToolWorking.Views
                 int maxType = 0;
                 int maxAssign = 0;
 
-                bool isCreateTable = false;
-
                 string dec = string.Empty;
                 string var = string.Empty;
                 string type = string.Empty;
@@ -230,9 +230,7 @@ namespace ToolWorking.Views
                     string line = lines[i].Trim();
                     line = System.Text.RegularExpressions.Regex.Replace(line, @"\s+", " ");
 
-                    if (isCreateTable && line.ToUpper().Contains("PRIMARY KEY")) isCreateTable = false;
-
-                    if (isCreateTable && !line.Trim().Equals("("))
+                    if (cbFileType.SelectedIndex == 1 && !line.Trim().Equals("("))
                     {
                         comment = string.Empty;
                         int commentIdx = line.IndexOf("--");
@@ -262,6 +260,11 @@ namespace ToolWorking.Views
                         maxAssign = Math.Max(maxAssign, sjis.GetByteCount(comment));
 
                         continue;
+                    }
+
+                    if (cbFileType.SelectedIndex == 2)
+                    {
+                        maxEquals = Math.Max(maxEquals, line.IndexOf("="));
                     }
 
                     if (line.ToUpper().Contains("DECLARE @W"))
@@ -310,11 +313,6 @@ namespace ToolWorking.Views
                         continue;
                     }
                     result.Add(line);
-
-                    if (line.Contains("CREATE TABLE dbo."))
-                    {
-                        isCreateTable = true;
-                    }
                 }
 
 
@@ -361,7 +359,7 @@ namespace ToolWorking.Views
                     else if (line.Equals($"row2b{rowNum}"))
                     {
                         var item = dict[$"row2b{rowNum}"];
-                        dec = "    " + PadRightByByte(item.dec.TrimEnd(), maxDec + 1);
+                        dec = "    " + CUtils.PadRightByByte(item.dec.TrimEnd(), maxDec + 1);
 
                         var = item.var.TrimEnd().PadRight(maxVar + 1);
 
@@ -585,6 +583,18 @@ namespace ToolWorking.Views
                             indentLevel++;
                         }
                     }
+                    else if (modeFormatFile == 1)
+                    {
+                        result += line + Environment.NewLine;
+                    }
+                    else if (modeFormatFile == 2)
+                    {
+                        var arrLine = line.Split('=', (char)StringSplitOptions.RemoveEmptyEntries);
+                        result += CUtils.PadRightByByte(arrLine[0].TrimEnd(), maxEquals);
+                        result += " = ";
+                        result += arrLine[1];
+                        result += Environment.NewLine;
+                    }
                 }
 
                 txtResult.Text = result;
@@ -609,18 +619,6 @@ namespace ToolWorking.Views
             txtResult.Text = string.Empty;
             btnFormat.Enabled = false;
             btnCopyResult.Enabled = false;
-        }
-
-        private string PadRightByByte(string text, int totalBytes)
-        {
-            int currentBytes = sjis.GetByteCount(text);
-
-            if (currentBytes >= totalBytes)
-                return text;
-
-            int needSpaces = totalBytes - currentBytes;
-
-            return text + new string(' ', needSpaces);
         }
 
         #endregion
