@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -521,7 +520,7 @@ namespace ToolWorking.Views
 
                         result += indentedLine + Environment.NewLine;
 
-                        if ((_line.StartsWith("BEGIN") && !_line.Contains("TRANSACTION")) || _line.StartsWith("IF EXISTS"))
+                        if ((_line.StartsWith("BEGIN") && !_line.Contains("TRAN")) || _line.StartsWith("IF EXISTS"))
                         {
                             isBegin = true;
                             indentLevel++;
@@ -546,7 +545,7 @@ namespace ToolWorking.Views
                             isSelect = true;
                             indentLevel++;
                         }
-                        else if (_line.Contains("FROM") && _line.Contains("dbo"))
+                        else if (_line.Contains("FROM"))
                         {
                             isFrom = true;
                         }
