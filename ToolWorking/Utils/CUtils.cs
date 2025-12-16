@@ -465,22 +465,14 @@ namespace ToolWorking.Utils
         public static string TemplateCreateScriptTable(string tableName)
         {
             return
-                $"IF OBJECT_ID(N'dbo.{tableName}', N'U') IS NOT NULL" + CONST.STRING_NEW_LINE +
-                "BEGIN" + CONST.STRING_NEW_LINE +
-                $"    DROP TABLE dbo.{tableName};" + CONST.STRING_NEW_LINE +
-                "END" + CONST.STRING_NEW_LINE +
+                $"DROP TABLE IF EXISTS dbo.{tableName};" + CONST.STRING_NEW_LINE +
                 "GO" + CONST.STRING_NEW_LINE +
                 "" + CONST.STRING_NEW_LINE +
-                $"CREATE TABLE dbo.{tableName}" + CONST.STRING_NEW_LINE +
-                "(" + CONST.STRING_NEW_LINE +
+                $"CREATE TABLE dbo.{tableName} (" + CONST.STRING_NEW_LINE +
                 "{0}" + CONST.STRING_NEW_LINE +
                 "    CONSTRAINT PK_" + tableName + " PRIMARY KEY ({1})" + CONST.STRING_NEW_LINE +
                 ");" + CONST.STRING_NEW_LINE +
-                "GO" + CONST.STRING_NEW_LINE +
-                "" + CONST.STRING_NEW_LINE +
-                $"CREATE INDEX IX_{tableName}" + CONST.STRING_NEW_LINE +
-                "    ON dbo." + tableName + "({1});" + CONST.STRING_NEW_LINE +
-                "GO";
+                "GO" + CONST.STRING_NEW_LINE;
         }
 
         /// <summary>
