@@ -454,6 +454,42 @@ namespace ToolWorking.Utils
 
             return c;
         }
+
+        public static string[] SplitBySpaceIgnoreBracket(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return Array.Empty<string>();
+
+            var result = new List<string>();
+            var sb = new StringBuilder();
+            bool inBracket = false;
+
+            foreach (char c in input.Trim())
+            {
+                if (c == '[')
+                    inBracket = true;
+                else if (c == ']')
+                    inBracket = false;
+
+                if (c == ' ' && !inBracket)
+                {
+                    if (sb.Length > 0)
+                    {
+                        result.Add(sb.ToString());
+                        sb.Clear();
+                    }
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+
+            if (sb.Length > 0)
+                result.Add(sb.ToString());
+
+            return result.ToArray();
+        }
         #endregion
 
         #region Template 

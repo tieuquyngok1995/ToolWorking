@@ -14,6 +14,7 @@ namespace ToolWorking.Views
         private Encoding sjis = Encoding.GetEncoding("Shift_JIS");
         // Path folder
         int maxEquals;
+        int maxComment;
         int modeFormatFile;
         string pathFolderFormatFile;
         string fileNameFormat;
@@ -40,70 +41,13 @@ namespace ToolWorking.Views
                 modeFormatFile = Properties.Settings.Default.modeFormatFile;
                 fileNameFormat = Properties.Settings.Default.fileNameFormat;
 
-                txtPathFolder.Text = !string.IsNullOrEmpty(pathFolderFormatFile) ? pathFolderFormatFile : string.Empty;
                 cbFileType.SelectedIndex = modeFormatFile;
-                txtFileName.Text = fileNameFormat;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-        }
-
-        /// <summary>
-        /// Event change text path folder create file
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void txtPathFolder_TextChanged(object sender, EventArgs e)
-        {
-            pathFolderFormatFile = txtPathFolder.Text.Trim();
-
-            if (!string.IsNullOrEmpty(pathFolderFormatFile) && !Path.IsPathRooted(pathFolderFormatFile))
-            {
-                MessageBox.Show("Invalid Input Folder Path!!!");
-                txtPathFolder.Text = string.Empty;
-                pathFolderFormatFile = string.Empty;
-            }
-
-            Properties.Settings.Default.pathFolderFormatFile = pathFolderFormatFile;
-            Properties.Settings.Default.Save();
-
-        }
-
-        /// <summary>
-        /// Event select folder create file
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOpenFolder_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                FolderBrowserDialog fbd = new FolderBrowserDialog();
-                if (!string.IsNullOrEmpty(pathFolderFormatFile)) fbd.SelectedPath = pathFolderFormatFile;
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    txtPathFolder.Text = fbd.SelectedPath;
-                    pathFolderFormatFile = fbd.SelectedPath;
-
-                    Properties.Settings.Default.pathFolderFormatFile = fbd.SelectedPath;
-                    Properties.Settings.Default.Save();
-                }
-                else
-                {
-                    txtPathFolder.Text = string.Empty;
-                    pathFolderFormatFile = string.Empty;
-
-                    Properties.Settings.Default.pathFolderFormatFile = string.Empty;
-                    Properties.Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         /// <summary>
@@ -113,37 +57,14 @@ namespace ToolWorking.Views
         /// <param name="e"></param>
         private void cbFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (modeFormatFile != cbFileType.SelectedIndex) txtFileName_Leave(sender, e);
-
+            if (modeFormatFile != cbFileType.SelectedIndex)
+            {
+                txtSource_TextChanged(sender, e);
+            }
             modeFormatFile = cbFileType.SelectedIndex;
 
             Properties.Settings.Default.modeFormatFile = modeFormatFile;
             Properties.Settings.Default.Save();
-        }
-
-        /// <summary>
-        /// Event leave text box File Name
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void txtFileName_Leave(object sender, EventArgs e)
-        {
-            string fileName = txtFileName.Text;
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                string modeFormatFile = "." + cbFileType.SelectedItem.ToString().ToLower();
-                fileName = Path.GetFileNameWithoutExtension(fileName) + modeFormatFile;
-
-                txtFileName.Text = fileName;
-                fileNameFormat = fileName;
-                Properties.Settings.Default.fileNameFormat = fileName;
-                Properties.Settings.Default.Save();
-            }
-            else
-            {
-                Properties.Settings.Default.fileNameFormat = string.Empty;
-                Properties.Settings.Default.Save();
-            }
         }
 
         /// <summary>
@@ -214,6 +135,8 @@ namespace ToolWorking.Views
                 int maxVar = 0;
                 int maxType = 0;
                 int maxAssign = 0;
+                maxEquals = 0;
+                maxComment = 0;
 
                 string dec = string.Empty;
                 string var = string.Empty;
@@ -263,7 +186,21 @@ namespace ToolWorking.Views
 
                     if (cbFileType.SelectedIndex == 2)
                     {
-                        maxEquals = Math.Max(maxEquals, line.IndexOf("="));
+                        int idxEqual = lines[i].IndexOf('=');
+                        int idxAs = lines[i].IndexOf("AS");
+                        int idxComment = lines[i].IndexOf("--");
+
+                        if (idxEqual >= 0 && (idxComment == -1 || idxEqual < idxComment))
+                        {
+                            maxEquals = Math.Max(maxEquals, idxEqual);
+                        }
+                        if (idxAs >= 0 && (idxComment == -1 || idxAs < idxComment))
+                        {
+                            maxEquals = Math.Max(maxEquals, idxAs - 1);
+                        }
+                        maxComment = Math.Max(maxComment, idxComment);
+                        result.Add(lines[i]);
+                        continue;
                     }
 
                     if (line.ToUpper().Contains("DECLARE @W"))
@@ -476,7 +413,7 @@ namespace ToolWorking.Views
                             isValues = false;
                             indentLevel = Math.Max(0, indentLevel - 1);
                         }
-                        else if (isCreatePr && _line.Trim().Equals("AS"))
+                        else if ((isCreatePr && _line.Trim().Equals("AS")) || (isCreatePr && _line.Trim().Equals(") AS")))
                         {
                             indentLevel = Math.Max(0, indentLevel - 1);
                         }
@@ -517,6 +454,8 @@ namespace ToolWorking.Views
                         {
                             indentedLine = new string(' ', indentLevel * 4) + _line;
                         }
+
+                        if ((isSelect || isExec) && !_line.StartsWith(",") && !_line.StartsWith("@")) indentedLine = "  " + indentedLine;
 
                         result += indentedLine + Environment.NewLine;
 
@@ -588,11 +527,46 @@ namespace ToolWorking.Views
                     }
                     else if (modeFormatFile == 2)
                     {
-                        var arrLine = line.Split('=', (char)StringSplitOptions.RemoveEmptyEntries);
-                        result += CUtils.PadRightByByte(arrLine[0].TrimEnd(), maxEquals);
-                        result += " = ";
-                        result += arrLine[1];
-                        result += Environment.NewLine;
+                        if (line.Contains("--") && line.Contains("=") && line.IndexOf("--") < line.IndexOf("="))
+                        {
+                            result += line + Environment.NewLine;
+                        }
+                        else if (line.Contains("<="))
+                        {
+                            var arrLine = line.Split('=', (char)StringSplitOptions.RemoveEmptyEntries);
+                            result += CUtils.PadRightByByte(arrLine[0].TrimEnd('<'), maxEquals);
+                            result += "<= ";
+                            result += arrLine[1];
+                            result += Environment.NewLine;
+                        }
+                        else if (line.Contains(">="))
+                        {
+                            var arrLine = line.Split('=', (char)StringSplitOptions.RemoveEmptyEntries);
+                            result += CUtils.PadRightByByte(arrLine[0].TrimEnd('>'), maxEquals);
+                            result += ">= ";
+                            result += arrLine[1];
+                            result += Environment.NewLine;
+                        }
+                        else if (line.Contains("="))
+                        {
+                            var arrLine = line.Split('=', (char)StringSplitOptions.RemoveEmptyEntries);
+                            result += CUtils.PadRightByByte(arrLine[0].TrimEnd(), maxEquals);
+                            result += " = ";
+                            result += arrLine[1];
+                            result += Environment.NewLine;
+                        }
+                        else if (line.Contains("--"))
+                        {
+                            var arrLine = line.Split('-', (char)StringSplitOptions.RemoveEmptyEntries);
+                            result += CUtils.PadRightByByte(arrLine[0].TrimEnd(), maxComment);
+                            result += " --";
+                            result += arrLine[2];
+                            result += Environment.NewLine;
+                        }
+                        else
+                        {
+                            result += line + Environment.NewLine;
+                        }
                     }
                 }
 

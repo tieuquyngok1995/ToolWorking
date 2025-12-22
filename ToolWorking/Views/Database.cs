@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -1152,7 +1151,7 @@ namespace ToolWorking.Views
 
                         foreach (string row in lstScriptTable)
                         {
-                            string[] arrRow = row.Trim().Split(' ');
+                            string[] arrRow = CUtils.SplitBySpaceIgnoreBracket(row);
                             bodyScriptTable += "    " + CUtils.PadRightByByte(arrRow[0].TrimEnd(), maxVar + 1).Replace(",", ", ");
                             if (arrRow[1].Contains(","))
                             {
