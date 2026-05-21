@@ -33,8 +33,9 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Json));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.btnClearResult = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -62,6 +63,7 @@ namespace ToolWorking.Views
             this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExcludeChars = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCenter.SuspendLayout();
             this.panelCenterBot.SuspendLayout();
             this.panelCenterTop.SuspendLayout();
@@ -143,9 +145,9 @@ namespace ToolWorking.Views
             this.groupInputValue.Controls.Add(this.gridInputValue);
             this.groupInputValue.Dock = System.Windows.Forms.DockStyle.Right;
             this.groupInputValue.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.groupInputValue.Location = new System.Drawing.Point(246, 0);
+            this.groupInputValue.Location = new System.Drawing.Point(206, 0);
             this.groupInputValue.Name = "groupInputValue";
-            this.groupInputValue.Size = new System.Drawing.Size(414, 164);
+            this.groupInputValue.Size = new System.Drawing.Size(454, 164);
             this.groupInputValue.TabIndex = 24;
             this.groupInputValue.TabStop = false;
             this.groupInputValue.Text = "Input Value";
@@ -158,38 +160,39 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
             this.name,
             this.type,
             this.value,
-            this.Range});
+            this.Range,
+            this.ExcludeChars});
             this.gridInputValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridInputValue.EnableHeadersVisualStyles = false;
             this.gridInputValue.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridInputValue.Size = new System.Drawing.Size(408, 142);
+            this.gridInputValue.Size = new System.Drawing.Size(448, 142);
             this.gridInputValue.TabIndex = 12;
             // 
             // groupInputKey
@@ -199,7 +202,7 @@ namespace ToolWorking.Views
             this.groupInputKey.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupInputKey.Location = new System.Drawing.Point(0, 0);
             this.groupInputKey.Name = "groupInputKey";
-            this.groupInputKey.Size = new System.Drawing.Size(240, 164);
+            this.groupInputKey.Size = new System.Drawing.Size(200, 164);
             this.groupInputKey.TabIndex = 23;
             this.groupInputKey.TabStop = false;
             this.groupInputKey.Text = "Input Keys";
@@ -210,7 +213,7 @@ namespace ToolWorking.Views
             this.txtInputKey.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtInputKey.Location = new System.Drawing.Point(3, 19);
             this.txtInputKey.Name = "txtInputKey";
-            this.txtInputKey.Size = new System.Drawing.Size(234, 142);
+            this.txtInputKey.Size = new System.Drawing.Size(194, 142);
             this.txtInputKey.TabIndex = 22;
             this.txtInputKey.Text = "";
             this.txtInputKey.TextChanged += new System.EventHandler(this.txtInputKey_TextChanged);
@@ -258,7 +261,7 @@ namespace ToolWorking.Views
             this.txtIndent.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtIndent.Location = new System.Drawing.Point(80, 36);
             this.txtIndent.Name = "txtIndent";
-            this.txtIndent.Size = new System.Drawing.Size(132, 24);
+            this.txtIndent.Size = new System.Drawing.Size(117, 24);
             this.txtIndent.TabIndex = 18;
             this.txtIndent.TextChanged += new System.EventHandler(this.txtIndent_TextChanged);
             // 
@@ -293,7 +296,7 @@ namespace ToolWorking.Views
             this.rbModeKeys.TabStop = true;
             this.rbModeKeys.Text = "Keys";
             this.rbModeKeys.UseVisualStyleBackColor = true;
-            this.rbModeKeys.CheckedChanged += new System.EventHandler(this.rbModeTree_CheckedChanged);
+            this.rbModeKeys.CheckedChanged += new System.EventHandler(this.rbModeKeys_CheckedChanged);
             // 
             // rbModeJson
             // 
@@ -305,7 +308,7 @@ namespace ToolWorking.Views
             this.rbModeJson.TabIndex = 15;
             this.rbModeJson.Text = "JSON Object";
             this.rbModeJson.UseVisualStyleBackColor = true;
-            this.rbModeJson.CheckedChanged += new System.EventHandler(this.rbModePath_CheckedChanged);
+            this.rbModeJson.CheckedChanged += new System.EventHandler(this.rbModeJson_CheckedChanged);
             // 
             // rbOutput
             // 
@@ -346,10 +349,13 @@ namespace ToolWorking.Views
             // no
             // 
             this.no.DataPropertyName = "No";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.no.DefaultCellStyle = dataGridViewCellStyle11;
             this.no.Frozen = true;
-            this.no.HeaderText = "No.";
+            this.no.HeaderText = "No";
             this.no.Name = "no";
             this.no.ReadOnly = true;
+            this.no.Width = 25;
             // 
             // name
             // 
@@ -367,6 +373,7 @@ namespace ToolWorking.Views
             this.type.HeaderText = "Type";
             this.type.Name = "type";
             this.type.ReadOnly = true;
+            this.type.Width = 65;
             // 
             // value
             // 
@@ -374,7 +381,7 @@ namespace ToolWorking.Views
             this.value.Frozen = true;
             this.value.HeaderText = "Value";
             this.value.Name = "value";
-            this.value.Width = 200;
+            this.value.Width = 190;
             // 
             // Range
             // 
@@ -383,6 +390,15 @@ namespace ToolWorking.Views
             this.Range.HeaderText = "Range";
             this.Range.Name = "Range";
             this.Range.Visible = false;
+            // 
+            // ExcludeChars
+            // 
+            this.ExcludeChars.DataPropertyName = "ExcludeChars";
+            this.ExcludeChars.Frozen = true;
+            this.ExcludeChars.HeaderText = "ExcludeChars";
+            this.ExcludeChars.Name = "ExcludeChars";
+            this.ExcludeChars.ReadOnly = true;
+            this.ExcludeChars.Visible = false;
             // 
             // Json
             // 
@@ -395,6 +411,7 @@ namespace ToolWorking.Views
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Json";
             this.Text = "LinkFolder";
+            this.Load += new System.EventHandler(this.Json_Load);
             this.panelCenter.ResumeLayout(false);
             this.panelCenterBot.ResumeLayout(false);
             this.panelCenterTop.ResumeLayout(false);
@@ -438,5 +455,6 @@ namespace ToolWorking.Views
         private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn value;
         private System.Windows.Forms.DataGridViewTextBoxColumn Range;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExcludeChars;
     }
 }

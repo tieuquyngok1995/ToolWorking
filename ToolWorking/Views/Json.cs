@@ -24,23 +24,45 @@ namespace ToolWorking.Views
         }
 
         #region Event
+        private void Json_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                int mode = Properties.Settings.Default.JsonModel;
+                indentCharacter = Properties.Settings.Default.JsonIndent;
+
+                if (mode == 0) rbInput.Checked = true; else rbModeJson.Checked = true;
+
+                txtIndent.Text = !string.IsNullOrEmpty(indentCharacter) ? indentCharacter : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void rbInput_CheckedChanged(object sender, EventArgs e)
         {
             panelInput.Visible = rbInput.Checked;
+            // Save mode
+            Properties.Settings.Default.JsonModel = 0;
+            Properties.Settings.Default.Save();
         }
 
         private void rbOutput_CheckedChanged(object sender, EventArgs e)
         {
-
+            // Save mode
+            Properties.Settings.Default.JsonModel = 1;
+            Properties.Settings.Default.Save();
         }
 
-        private void rbModeTree_CheckedChanged(object sender, EventArgs e)
+        private void rbModeKeys_CheckedChanged(object sender, EventArgs e)
         {
             isInputKey = true;
             groupInputKey.Text = "Input Keys";
         }
 
-        private void rbModePath_CheckedChanged(object sender, EventArgs e)
+        private void rbModeJson_CheckedChanged(object sender, EventArgs e)
         {
             isInputKey = false;
             groupInputKey.Text = "Input JSON";
@@ -49,6 +71,9 @@ namespace ToolWorking.Views
         private void txtIndent_TextChanged(object sender, EventArgs e)
         {
             indentCharacter = string.IsNullOrEmpty(txtIndent.Text) ? string.Empty : txtIndent.Text.Trim();
+            // Save indent
+            Properties.Settings.Default.JsonIndent = indentCharacter;
+            Properties.Settings.Default.Save();
         }
 
         private void txtInputKey_TextChanged(object sender, EventArgs e)
@@ -61,6 +86,7 @@ namespace ToolWorking.Views
             lstInputKey = new List<ColumnModel>();
             if (arrKeys.Length > 0)
             {
+                int currentLevel = 0;
                 foreach (var _key in arrKeys)
                 {
                     if (rbModeKeys.Checked)
@@ -77,14 +103,39 @@ namespace ToolWorking.Views
 
                         int range = 1;
                         string baseType = type;
-                        if (type.ToUpper().IndexOf(CONST.STRING_ARRAY, StringComparison.OrdinalIgnoreCase) >= 0 && type.Contains(":"))
+                        if (type.ToUpper().IndexOf("ARRAY", StringComparison.OrdinalIgnoreCase) >= 0 && type.Contains(":"))
                         {
                             string rangeText = type.Split(':')[1].Trim();
                             if (int.TryParse(rangeText, out int r) && r > 0) range = r;
                             baseType = "Array";
                         }
+                        else if (type.ToUpper().StartsWith("ARRAY", StringComparison.OrdinalIgnoreCase))
+                        {
+                            baseType = "Array";
+                        }
+                        else if (type.ToUpper().StartsWith("OBJECT", StringComparison.OrdinalIgnoreCase))
+                        {
+                            baseType = "Object";
+                        }
 
-                        lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range));
+                        bool isStructural = baseType == "Array" || baseType == "Object";
+                        if (isStructural)
+                        {
+                            if (type.Contains(":"))
+                            {
+                                string afterColon = type.Split(':')[1].Trim();
+                                if (int.TryParse(afterColon, out int levelAdj) && levelAdj < 0)
+                                    currentLevel = Math.Max(0, currentLevel + levelAdj);
+                                else
+                                    currentLevel++;
+                            }
+                            else
+                            {
+                                currentLevel++;
+                            }
+                        }
+
+                        lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
                     }
                     else if (rbModeJson.Checked)
                     {
@@ -231,6 +282,8 @@ namespace ToolWorking.Views
             }
             return input;
         }
+
         #endregion
+
     }
 }
