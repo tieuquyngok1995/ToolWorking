@@ -23,6 +23,8 @@ namespace ToolWorking.Utils
         public const string STRING_C_O_SQU_BRACKETS_SPACE = "] [";
         public const string STRING_O_SQU_BRACKETS = "[";
         public const string STRING_C_SQU_BRACKETS = "]";
+        public const string STRING_O_CURLY_BRACKETS = "{";
+        public const string STRING_C_CURLY_BRACKETS = "}";
 
         public const string STRING_TEXT1 = "text1";
         public const string STRING_TEXT2 = "text2";
@@ -81,6 +83,9 @@ namespace ToolWorking.Utils
         public const string C_TYPE_DECIMAL = "decimal";
         public const string C_TYPE_DOUBLE = "double";
         public const string C_TYPE_JSON = "JSON";
+        public const string C_TYPE_ARRAY = "Array";
+        public const string C_TYPE_OBJECT = "Object";
+        public const string C_TYPE_BOOLEAN = "boolean";
         #endregion
 
         #region String title

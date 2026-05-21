@@ -80,120 +80,128 @@ namespace ToolWorking.Views
         {
             if (string.IsNullOrEmpty(txtInputKey.Text)) return;
 
-            string rawInput = StripInputChars(txtInputKey.Text);
-            string[] arrKeys = rawInput.Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
+            string[] arrKeys = StripInputChars(txtInputKey.Text).Split(CONST.STRING_SEPARATORS, StringSplitOptions.None);
 
             lstInputKey = new List<ColumnModel>();
-            if (arrKeys.Length > 0)
+            int currentLevel = 0;
+
+            foreach (var _key in arrKeys)
             {
-                int currentLevel = 0;
-                foreach (var _key in arrKeys)
+                if (rbModeKeys.Checked)
                 {
-                    if (rbModeKeys.Checked)
+                    string line = _key.Replace(indentCharacter, string.Empty).Trim();
+                    if (string.IsNullOrEmpty(line)) continue;
+
+                    string[] parts = line.Split(CONST.STRING_SEPARATORS_COLUMN, StringSplitOptions.RemoveEmptyEntries);
+                    string key = parts[0].Trim();
+                    string type = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+                    if (string.IsNullOrEmpty(key)) continue;
+
+                    int range = 1;
+                    string baseType = type;
+
+                    // Format: Array[:range[:-level]]  -- if -level omitted, level increases by 1
+                    if (type.StartsWith(CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
                     {
-                        string line = string.IsNullOrEmpty(indentCharacter) ? _key.Trim() : _key.Replace(indentCharacter, string.Empty).Trim();
-
-                        if (string.IsNullOrEmpty(line)) continue;
-
-                        string[] parts = line.Split(CONST.STRING_SEPARATORS_COLUMN, StringSplitOptions.RemoveEmptyEntries);
-                        string key = parts[0].Trim();
-                        string type = parts.Length > 1 ? parts[1].Trim() : string.Empty;
-
-                        if (string.IsNullOrEmpty(key)) continue;
-
-                        int range = 1;
-                        string baseType = type;
-                        if (type.ToUpper().IndexOf("ARRAY", StringComparison.OrdinalIgnoreCase) >= 0 && type.Contains(":"))
-                        {
-                            string rangeText = type.Split(':')[1].Trim();
-                            if (int.TryParse(rangeText, out int r) && r > 0) range = r;
-                            baseType = "Array";
-                        }
-                        else if (type.ToUpper().StartsWith("ARRAY", StringComparison.OrdinalIgnoreCase))
-                        {
-                            baseType = "Array";
-                        }
-                        else if (type.ToUpper().StartsWith("OBJECT", StringComparison.OrdinalIgnoreCase))
-                        {
-                            baseType = "Object";
-                        }
-
-                        bool isStructural = baseType == "Array" || baseType == "Object";
-                        if (isStructural)
-                        {
-                            if (type.Contains(":"))
-                            {
-                                string afterColon = type.Split(':')[1].Trim();
-                                if (int.TryParse(afterColon, out int levelAdj) && levelAdj < 0)
-                                    currentLevel = Math.Max(0, currentLevel + levelAdj);
-                                else
-                                    currentLevel++;
-                            }
-                            else
-                            {
-                                currentLevel++;
-                            }
-                        }
-
-                        lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                        baseType = CONST.C_TYPE_ARRAY;
+                        string[] typeParts = type.Split(':');
+                        if (typeParts.Length > 1 && int.TryParse(typeParts[1].Trim(), out int r) && r > 0)
+                            range = r;
+                        int levelDelta = typeParts.Length > 2 && int.TryParse(typeParts[2].Trim(), out int lv) ? lv : 1;
+                        currentLevel = Math.Max(0, currentLevel + levelDelta);
                     }
-                    else if (rbModeJson.Checked)
+                    else if (type.StartsWith(CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase))
                     {
-
+                        baseType = CONST.C_TYPE_OBJECT;
+                        currentLevel++;
                     }
 
-                    //    string key = _key.Trim().Replace("  ", string.Empty);
-                    //if (string.IsNullOrEmpty(key) ||
-                    //    (!isInputKey && (key.Equals("[") || key.Equals("{") || key.Equals("}")))) continue;
+                    lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                }
+                else if (rbModeJson.Checked)
+                {
+                    string line = _key.Replace(indentCharacter, string.Empty).Trim().TrimEnd(',');
+                    if (string.IsNullOrEmpty(line)) continue;
 
-                    //if (isInputKey)
-                    //{
-                    //    lstInputKey.Add(key.Replace(indentCharacter, string.Empty));
-                    //}
-                    //else
-                    //{
-                    //    key = key.Replace("\"", "").Replace(",", string.Empty);
-                    //    key = (key.Contains("[") || key.Contains("{")) ? key : key.Replace(":", string.Empty).Trim();
-                    //    lstInputKey.Add(key.Replace(indentCharacter, string.Empty));
-                    //}
+                    // Closing brackets -> decrease level, skip
+                    if (line == CONST.STRING_C_CURLY_BRACKETS || line == CONST.STRING_C_SQU_BRACKETS)
+                    {
+                        currentLevel = Math.Max(0, currentLevel - 1);
+                        continue;
+                    }
+
+                    // Skip opening-only structural lines
+                    if (line == CONST.STRING_O_CURLY_BRACKETS || line == CONST.STRING_O_SQU_BRACKETS) continue;
+
+                    // Extract "key": value -- only key is kept, type inferred from value
+                    int colonIdx = line.IndexOf("\":");
+                    if (colonIdx < 0) continue;
+
+                    int quoteStart = line.IndexOf('"');
+                    string jsonKey = line.Substring(quoteStart + 1, colonIdx - quoteStart - 1).Trim();
+                    string jsonValue = line.Substring(colonIdx + 2).Trim().TrimEnd(',');
+
+                    if (string.IsNullOrEmpty(jsonKey)) continue;
+
+                    int range = 1;
+                    string baseType = CONST.C_TYPE_STRING;
+
+                    if (jsonValue.StartsWith(CONST.STRING_O_SQU_BRACKETS))
+                    {
+                        // Format: [[:range][:-level]] -- if -level omitted, level increases by 1
+                        baseType = CONST.C_TYPE_ARRAY;
+                        int levelDelta = 1;
+                        foreach (var part in jsonValue.Substring(1).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            if (int.TryParse(part.Trim(), out int val))
+                            {
+                                if (val > 0) range = val;
+                                else levelDelta = val;
+                            }
+                        }
+                        currentLevel = Math.Max(0, currentLevel + levelDelta);
+                    }
+                    else if (jsonValue.StartsWith(CONST.STRING_O_CURLY_BRACKETS))
+                    {
+                        baseType = CONST.C_TYPE_OBJECT;
+                        currentLevel++;
+                    }
+                    else if (jsonValue.StartsWith("\""))
+                        baseType = CONST.C_TYPE_STRING;
+                    else if (jsonValue.Equals("true", StringComparison.OrdinalIgnoreCase) ||
+                             jsonValue.Equals("false", StringComparison.OrdinalIgnoreCase))
+                        baseType = CONST.C_TYPE_BOOLEAN;
+                    else if (decimal.TryParse(jsonValue, System.Globalization.NumberStyles.Any,
+                             System.Globalization.CultureInfo.InvariantCulture, out _))
+                        baseType = CONST.C_TYPE_INT;
+
+                    lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, jsonKey, baseType, string.Empty, range, currentLevel.ToString()));
                 }
             }
 
-
-            gridInputValue.DataSource = new List<ColumnModel>();
-            if (lstInputKey.Count > 0)
+            // Expand Array children into flat rows for grid
+            var expanded = new List<ColumnModel>();
+            int no = 1, idx = 0;
+            while (idx < lstInputKey.Count)
             {
-                var expanded = new List<ColumnModel>();
-                int no = 1;
-                int idx = 0;
-                while (idx < lstInputKey.Count)
+                var col = lstInputKey[idx];
+                if (col.Type == CONST.C_TYPE_ARRAY && col.Range > 1)
                 {
-                    var col = lstInputKey[idx];
-                    if (col.Type == "Array" && col.Range > 1)
-                    {
-                        var children = new List<ColumnModel>();
-                        idx++;
-                        while (idx < lstInputKey.Count)
-                        {
-                            var child = lstInputKey[idx];
-                            if (child.Type == "Array") break;
-                            children.Add(child);
-                            idx++;
-                        }
-                        for (int r = 0; r < col.Range; r++)
-                        {
-                            foreach (var child in children)
-                                expanded.Add(new ColumnModel(no++, col.Name + "[" + r + "]." + child.Name, child.Type, string.Empty, 1));
-                        }
-                    }
-                    else
-                    {
-                        expanded.Add(new ColumnModel(no++, col.Name, col.Type, col.Value, col.Range));
-                        idx++;
-                    }
+                    var children = new List<ColumnModel>();
+                    idx++;
+                    while (idx < lstInputKey.Count && lstInputKey[idx].Type != CONST.C_TYPE_ARRAY)
+                        children.Add(lstInputKey[idx++]);
+                    for (int r = 0; r < col.Range; r++)
+                        foreach (var child in children)
+                            expanded.Add(new ColumnModel(no++, col.Name + "[" + r + "]." + child.Name, child.Type, string.Empty, 1));
                 }
-                gridInputValue.DataSource = expanded;
+                else
+                {
+                    expanded.Add(new ColumnModel(no++, col.Name, col.Type, col.Value, col.Range));
+                    idx++;
+                }
             }
+            gridInputValue.DataSource = expanded;
         }
 
         private void txtInputValue_TextChanged(object sender, EventArgs e)
@@ -220,7 +228,7 @@ namespace ToolWorking.Views
 
                 if (string.IsNullOrEmpty(key)) { i++; continue; }
 
-                if (type.StartsWith("Array", StringComparison.OrdinalIgnoreCase))
+                if (type.StartsWith(CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
                 {
                     int range = 1;
                     if (type.Contains(":"))
@@ -243,8 +251,8 @@ namespace ToolWorking.Views
                         string childKey = childParts[0].Trim();
                         string childType = childParts.Length > 1 ? childParts[1].Trim() : string.Empty;
 
-                        if (childType.StartsWith("Array", StringComparison.OrdinalIgnoreCase) ||
-                            childType.StartsWith("Object", StringComparison.OrdinalIgnoreCase))
+                        if (childType.StartsWith(CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase) ||
+                            childType.StartsWith(CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase))
                             break;
 
                         if (!string.IsNullOrEmpty(childKey))
