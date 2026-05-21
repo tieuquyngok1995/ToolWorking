@@ -33,9 +33,9 @@ namespace ToolWorking.Views
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Json));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnCopyResult = new System.Windows.Forms.Button();
             this.btnClearResult = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -45,6 +45,12 @@ namespace ToolWorking.Views
             this.panelCenterTop = new System.Windows.Forms.Panel();
             this.groupInputValue = new System.Windows.Forms.GroupBox();
             this.gridInputValue = new System.Windows.Forms.DataGridView();
+            this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExcludeChars = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupInputKey = new System.Windows.Forms.GroupBox();
             this.txtInputKey = new System.Windows.Forms.RichTextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
@@ -58,12 +64,6 @@ namespace ToolWorking.Views
             this.rbOutput = new System.Windows.Forms.RadioButton();
             this.rbInput = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
-            this.no = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Range = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExcludeChars = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCenter.SuspendLayout();
             this.panelCenterBot.SuspendLayout();
             this.panelCenterTop.SuspendLayout();
@@ -160,14 +160,14 @@ namespace ToolWorking.Views
             this.gridInputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridInputValue.CausesValidation = false;
             this.gridInputValue.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gridInputValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridInputValue.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.no,
@@ -182,18 +182,72 @@ namespace ToolWorking.Views
             this.gridInputValue.Location = new System.Drawing.Point(3, 19);
             this.gridInputValue.Name = "gridInputValue";
             this.gridInputValue.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridInputValue.Size = new System.Drawing.Size(448, 142);
             this.gridInputValue.TabIndex = 12;
+            // 
+            // no
+            // 
+            this.no.DataPropertyName = "No";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.no.DefaultCellStyle = dataGridViewCellStyle2;
+            this.no.Frozen = true;
+            this.no.HeaderText = "No";
+            this.no.Name = "no";
+            this.no.ReadOnly = true;
+            this.no.Width = 25;
+            // 
+            // name
+            // 
+            this.name.DataPropertyName = "Name";
+            this.name.Frozen = true;
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Width = 150;
+            // 
+            // type
+            // 
+            this.type.DataPropertyName = "Type";
+            this.type.Frozen = true;
+            this.type.HeaderText = "Type";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
+            this.type.Width = 65;
+            // 
+            // value
+            // 
+            this.value.DataPropertyName = "Value";
+            this.value.Frozen = true;
+            this.value.HeaderText = "Value";
+            this.value.Name = "value";
+            this.value.Width = 190;
+            // 
+            // Range
+            // 
+            this.Range.DataPropertyName = "Range";
+            this.Range.Frozen = true;
+            this.Range.HeaderText = "Range";
+            this.Range.Name = "Range";
+            this.Range.Visible = false;
+            // 
+            // ExcludeChars
+            // 
+            this.ExcludeChars.DataPropertyName = "ExcludeChars";
+            this.ExcludeChars.Frozen = true;
+            this.ExcludeChars.HeaderText = "ExcludeChars";
+            this.ExcludeChars.Name = "ExcludeChars";
+            this.ExcludeChars.ReadOnly = true;
+            this.ExcludeChars.Visible = false;
             // 
             // groupInputKey
             // 
@@ -241,6 +295,7 @@ namespace ToolWorking.Views
             this.btnCount.Text = "    Count";
             this.btnCount.UseVisualStyleBackColor = true;
             this.btnCount.Visible = false;
+            this.btnCount.Click += new System.EventHandler(this.btnCount_Click);
             // 
             // panelTop
             // 
@@ -345,60 +400,6 @@ namespace ToolWorking.Views
             this.label4.Size = new System.Drawing.Size(45, 17);
             this.label4.TabIndex = 9;
             this.label4.Text = "Mode";
-            // 
-            // no
-            // 
-            this.no.DataPropertyName = "No";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.no.DefaultCellStyle = dataGridViewCellStyle11;
-            this.no.Frozen = true;
-            this.no.HeaderText = "No";
-            this.no.Name = "no";
-            this.no.ReadOnly = true;
-            this.no.Width = 25;
-            // 
-            // name
-            // 
-            this.name.DataPropertyName = "Name";
-            this.name.Frozen = true;
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Width = 150;
-            // 
-            // type
-            // 
-            this.type.DataPropertyName = "Type";
-            this.type.Frozen = true;
-            this.type.HeaderText = "Type";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
-            this.type.Width = 65;
-            // 
-            // value
-            // 
-            this.value.DataPropertyName = "Value";
-            this.value.Frozen = true;
-            this.value.HeaderText = "Value";
-            this.value.Name = "value";
-            this.value.Width = 190;
-            // 
-            // Range
-            // 
-            this.Range.DataPropertyName = "Range";
-            this.Range.Frozen = true;
-            this.Range.HeaderText = "Range";
-            this.Range.Name = "Range";
-            this.Range.Visible = false;
-            // 
-            // ExcludeChars
-            // 
-            this.ExcludeChars.DataPropertyName = "ExcludeChars";
-            this.ExcludeChars.Frozen = true;
-            this.ExcludeChars.HeaderText = "ExcludeChars";
-            this.ExcludeChars.Name = "ExcludeChars";
-            this.ExcludeChars.ReadOnly = true;
-            this.ExcludeChars.Visible = false;
             // 
             // Json
             // 

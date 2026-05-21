@@ -277,6 +277,119 @@ namespace ToolWorking.Views
             return result;
         }
 
+        private string BuildJsonObject(List<ColumnModel> items, Dictionary<string, string> valueMap,
+            ref int index, int minLevel, int indent, string parentPath)
+        {
+            string pad = new string(' ', indent * 2);
+            string padChild = new string(' ', (indent + 1) * 2);
+            var parts = new List<string>();
+
+            while (index < items.Count)
+            {
+                var item = items[index];
+                int level = int.TryParse(item.ExcludeChars, out int lv) ? lv : 0;
+                if (level <= minLevel) break;
+
+                string childPath = string.IsNullOrEmpty(parentPath)
+                    ? item.Name : parentPath + "." + item.Name;
+
+                if (item.Type == CONST.C_TYPE_OBJECT)
+                {
+                    index++;
+                    string inner = BuildJsonObject(items, valueMap, ref index, level - 1, indent + 1, childPath);
+                    parts.Add(padChild + "\"" + item.Name + "\": " + inner);
+                }
+                else if (item.Type == CONST.C_TYPE_ARRAY)
+                {
+                    index++;
+                    string inner = BuildJsonArray(items, valueMap, ref index, level - 1, item.Range, item.Name, indent + 1, parentPath);
+                    parts.Add(padChild + "\"" + item.Name + "\": " + inner);
+                }
+                else
+                {
+                    // Leaf: get value from grid, apply type rules
+                    string raw = valueMap.ContainsKey(childPath) ? valueMap[childPath]
+                               : valueMap.ContainsKey(item.Name) ? valueMap[item.Name]
+                               : string.Empty;
+                    bool isComment = raw.TrimStart().StartsWith("//");
+                    string jsonVal = isComment ? GetDefaultJsonValue(item.Type) : FormatLeafValue(item.Type, raw);
+                    string line = padChild + "\"" + item.Name + "\": " + jsonVal;
+                    parts.Add(isComment ? "// " + line.TrimStart() : line);
+                    index++;
+                }
+            }
+
+            if (parts.Count == 0) return "{}";
+            return "{\n" + string.Join(",\n", parts) + "\n" + pad + "}";
+        }
+
+        private string BuildJsonArray(List<ColumnModel> items, Dictionary<string, string> valueMap,
+            ref int index, int minLevel, int range, string arrayKey, int indent, string parentPath)
+        {
+            string pad = new string(' ', indent * 2);
+
+            // Collect element-template items (direct children of this array)
+            var childItems = new List<ColumnModel>();
+            while (index < items.Count)
+            {
+                int childLevel = int.TryParse(items[index].ExcludeChars, out int lv) ? lv : 0;
+                if (childLevel <= minLevel) break;
+                childItems.Add(items[index++]);
+            }
+
+            if (childItems.Count == 0) return "[]";
+
+            var elements = new List<string>();
+            string arrayBase = string.IsNullOrEmpty(parentPath) ? arrayKey : parentPath + "." + arrayKey;
+            for (int r = 0; r < Math.Max(range, 1); r++)
+            {
+                string elemPath = arrayBase + "[" + r + "]";
+                int tempIdx = 0;
+                elements.Add(BuildJsonObject(childItems, valueMap, ref tempIdx, -1, indent + 1, elemPath));
+            }
+
+            return "[\n" + string.Join(",\n", elements) + "\n" + pad + "]";
+        }
+
+        private string FormatLeafValue(string type, string raw)
+        {
+            string v = raw?.Trim() ?? string.Empty;
+            if (string.IsNullOrEmpty(v)) return GetDefaultJsonValue(type);
+
+            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+                return decimal.TryParse(v, System.Globalization.NumberStyles.Any,
+                       System.Globalization.CultureInfo.InvariantCulture, out _) ? v : "0";
+
+            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
+                return (v.Equals("true", StringComparison.OrdinalIgnoreCase) || v == "1") ? "true" : "false";
+
+            // string (default) 窶・escape JSON special characters
+            return "\"" + v.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
+        }
+
+        private string GetDefaultJsonValue(string type)
+        {
+            if (string.Equals(type, CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase)) return "[]";
+            if (string.Equals(type, CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase)) return "{}";
+            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+                return "0";
+            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
+                return "false";
+            return "\"\"";
+        }
+
         private string StripInputChars(string input)
         {
             if (string.IsNullOrEmpty(txtIndent.Text)) return input;
@@ -293,5 +406,21 @@ namespace ToolWorking.Views
 
         #endregion
 
+
+        private void btnCount_Click(object sender, EventArgs e)
+        {
+            if (lstInputKey == null || lstInputKey.Count == 0) return;
+
+            // Build value lookup from grid (user-entered values)
+            var gridData = gridInputValue.DataSource as List<ColumnModel>;
+            var valueMap = new Dictionary<string, string>();
+            if (gridData != null)
+                foreach (var row in gridData)
+                    if (!string.IsNullOrEmpty(row.Name))
+                        valueMap[row.Name] = row.Value ?? string.Empty;
+
+            int index = 0;
+            txtResult.Text = BuildJsonObject(lstInputKey, valueMap, ref index, -1, 0, string.Empty);
+        }
     }
 }
