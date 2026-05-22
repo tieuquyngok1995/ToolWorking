@@ -100,14 +100,30 @@ namespace ToolWorking.Views
                     int range = 1;
                     string baseType = type;
 
-                    // Format: Array[:range[:-level]]  -- if -level omitted, level increases by 1
+                    // Format: Array[:positive][:negative]
+                    //   :positive         -> range only (level +1)
+                    //   :positive:negative -> range + level delta
+                    //   :negative         -> level delta only (range stays 1)
                     if (type.StartsWith(CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
                     {
                         baseType = CONST.C_TYPE_ARRAY;
                         string[] typeParts = type.Split(':');
-                        if (typeParts.Length > 1 && int.TryParse(typeParts[1].Trim(), out int r) && r > 0)
-                            range = r;
-                        int levelDelta = typeParts.Length > 2 && int.TryParse(typeParts[2].Trim(), out int lv) ? lv : 1;
+                        int levelDelta = 1;
+
+                        if (typeParts.Length > 1 && int.TryParse(typeParts[1].Trim(), out int val1))
+                        {
+                            if (val1 > 0)
+                            {
+                                range = val1;
+                                if (typeParts.Length > 2 && int.TryParse(typeParts[2].Trim(), out int lv2))
+                                    levelDelta = lv2;
+                            }
+                            else if (val1 < 0)
+                            {
+                                levelDelta = val1;
+                            }
+                        }
+
                         currentLevel = Math.Max(0, currentLevel + levelDelta);
                     }
                     else if (type.StartsWith(CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase))
@@ -404,20 +420,163 @@ namespace ToolWorking.Views
             return input;
         }
 
+        private bool ValidateAndNormalizeValue(string type, string value, out string normalized, out string error)
+        {
+            normalized = value;
+            error = string.Empty;
+
+            // Numeric
+            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+            {
+                if (!decimal.TryParse(value, System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out _))
+                {
+                    error = "Phải là số hợp lệ (không chứa chữ hoặc ký tự đặc biệt)";
+                    return false;
+                }
+                return true;
+            }
+
+            // Boolean / Bit
+            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
+            {
+                string v = value.ToLower();
+                if (v != "true" && v != "false" && v != "1" && v != "0")
+                {
+                    error = "Phải là true hoặc false";
+                    return false;
+                }
+                normalized = (v == "true" || v == "1") ? "true" : "false";
+                return true;
+            }
+
+            // Date
+            if (string.Equals(type, "date", StringComparison.OrdinalIgnoreCase))
+            {
+                string[] formats = { "yyyy/MM/dd", "yyyy-MM-dd" };
+                if (!DateTime.TryParseExact(value, formats,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out DateTime dt))
+                {
+                    error = "Ngày phải có định dạng yyyy/mm/dd hoặc yyyy-mm-dd";
+                    return false;
+                }
+                normalized = dt.ToString("yyyy-MM-dd");
+                return true;
+            }
+
+            // DateTime / Timestamp
+            if (string.Equals(type, CONST.C_TYPE_DATE_TIME, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.SQL_TYPE_DATE_TIME, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_TIME_STAMP, StringComparison.OrdinalIgnoreCase))
+            {
+                string[] formats = { "yyyy/MM/dd", "yyyy-MM-dd", "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss" };
+                if (!DateTime.TryParseExact(value, formats,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out DateTime dt))
+                {
+                    error = "Phải là dạng yyyy/mm/dd hoặc yyyy-mm-dd (có thể kèm hh:mm:ss)";
+                    return false;
+                }
+                normalized = dt.ToString("yyyy-MM-ddTHH:mm:ss") + "+09:00";
+                return true;
+            }
+
+            // Array
+            if (string.Equals(type, CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
+            {
+                string v = value.Trim();
+                if (v.StartsWith("["))
+                {
+                    if (!v.EndsWith("]"))
+                    {
+                        error = "Mảng phải có định dạng [\"v1\",\"v2\"] hoặc \"v1\",\"v2\"";
+                        return false;
+                    }
+                    normalized = v;
+                }
+                else
+                {
+                    normalized = "[" + v + "]";
+                }
+                return true;
+            }
+
+            // String (default) -- không cho phép chứa ký tự "
+            if (value.Contains("\""))
+            {
+                error = "Không được chứa ký tự \"";
+                return false;
+            }
+            return true;
+        }
+
+        private string GetDefaultGridValue(string type)
+        {
+            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+                return "0";
+
+            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
+                return "false";
+
+            if (string.Equals(type, CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
+                return "[]";
+
+            return string.Empty;
+        }
+
         #endregion
 
 
-        private void btnCount_Click(object sender, EventArgs e)
+        private void btnCreate_Click(object sender, EventArgs e)
         {
             if (lstInputKey == null || lstInputKey.Count == 0) return;
 
-            // Build value lookup from grid (user-entered values)
             var gridData = gridInputValue.DataSource as List<ColumnModel>;
+            if (gridData == null || gridData.Count == 0) return;
+
+            var errors = new List<string>();
+            foreach (var row in gridData)
+            {
+                if (string.IsNullOrEmpty(row.Name)) continue;
+
+                string val = row.Value?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(val))
+                {
+                    row.Value = GetDefaultGridValue(row.Type);
+                    continue;
+                }
+
+                if (!ValidateAndNormalizeValue(row.Type, val, out string normalized, out string error))
+                    errors.Add("no:" + row.No + " - " + row.Name + " - " + error);
+                else
+                    row.Value = normalized;
+            }
+
+            gridInputValue.Refresh();
+
+            if (errors.Count > 0)
+            {
+                MessageBox.Show(string.Join("\r\n", errors), "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var valueMap = new Dictionary<string, string>();
-            if (gridData != null)
-                foreach (var row in gridData)
-                    if (!string.IsNullOrEmpty(row.Name))
-                        valueMap[row.Name] = row.Value ?? string.Empty;
+            foreach (var row in gridData)
+                if (!string.IsNullOrEmpty(row.Name))
+                    valueMap[row.Name] = row.Value ?? string.Empty;
 
             int index = 0;
             txtResult.Text = BuildJsonObject(lstInputKey, valueMap, ref index, -1, 0, string.Empty);
