@@ -15,6 +15,8 @@ namespace ToolWorking.Views
 
         string indentCharacter = string.Empty;
 
+        static readonly Random _rnd = new Random();
+
         List<ColumnModel> lstInputKey;
         List<string> lstInputValue;
 
@@ -85,8 +87,9 @@ namespace ToolWorking.Views
             lstInputKey = new List<ColumnModel>();
             int currentLevel = 0;
 
-            foreach (var _key in arrKeys)
+            for (int ki = 0; ki < arrKeys.Length; ki++)
             {
+                var _key = arrKeys[ki];
                 if (rbModeKeys.Checked)
                 {
                     string line = _key.Replace(indentCharacter, string.Empty).Trim();
@@ -121,6 +124,25 @@ namespace ToolWorking.Views
                             else if (val1 < 0)
                             {
                                 levelDelta = val1;
+                            }
+                        }
+                        else if (typeParts.Length > 1)
+                        {
+                            // String Array (e.g. Array:string) -- no children, don't increase level
+                            levelDelta = 0;
+                        }
+                        else
+                        {
+                            // Check if next non-empty item is also an Array -> no children, don't increase level
+                            for (int ni = ki + 1; ni < arrKeys.Length; ni++)
+                            {
+                                string nextLine = arrKeys[ni].Replace(indentCharacter, string.Empty).Trim();
+                                if (string.IsNullOrEmpty(nextLine)) continue;
+                                string[] nextParts = nextLine.Split(CONST.STRING_SEPARATORS_COLUMN, StringSplitOptions.RemoveEmptyEntries);
+                                string nextType = nextParts.Length > 1 ? nextParts[1].Trim() : string.Empty;
+                                if (nextType.StartsWith(CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase))
+                                    levelDelta = 0;
+                                break;
                             }
                         }
 
@@ -317,9 +339,26 @@ namespace ToolWorking.Views
                 }
                 else if (item.Type == CONST.C_TYPE_ARRAY)
                 {
-                    index++;
-                    string inner = BuildJsonArray(items, valueMap, ref index, level - 1, item.Range, item.Name, indent + 1, parentPath);
-                    parts.Add(padChild + "\"" + item.Name + "\": " + inner);
+                    // Check if next item is a child (higher level) -> object array
+                    // If not -> String Array (leaf array), use valueMap directly
+                    bool hasChildren = (index + 1 < items.Count) &&
+                        (int.TryParse(items[index + 1].ExcludeChars, out int nextLv) && nextLv > level);
+
+                    if (!hasChildren)
+                    {
+                        string raw = valueMap.ContainsKey(childPath) ? valueMap[childPath]
+                                   : valueMap.ContainsKey(item.Name) ? valueMap[item.Name]
+                                   : string.Empty;
+                        string jsonVal = string.IsNullOrEmpty(raw) ? "[]" : raw;
+                        parts.Add(padChild + "\"" + item.Name + "\": " + jsonVal);
+                        index++;
+                    }
+                    else
+                    {
+                        index++;
+                        string inner = BuildJsonArray(items, valueMap, ref index, level - 1, item.Range, item.Name, indent + 1, parentPath);
+                        parts.Add(padChild + "\"" + item.Name + "\": " + inner);
+                    }
                 }
                 else
                 {
@@ -517,6 +556,47 @@ namespace ToolWorking.Views
             return true;
         }
 
+        private string ResolveRandomValue(string val)
+        {
+            if (string.IsNullOrEmpty(val)) return val;
+
+            // Pipe: randomly pick one of the options separated by |
+            if (val.Contains("|"))
+            {
+                string[] options = val.Split('|');
+                val = options[_rnd.Next(options.Length)].Trim();
+                return ResolveRandomValue(val);
+            }
+
+            // XXX[~N]: random alphanumeric string of N chars (default 8)
+            if (val.StartsWith("XXX", StringComparison.OrdinalIgnoreCase))
+            {
+                int length = 8;
+                if (val.Length > 3 && val[3] == '~'
+                    && int.TryParse(val.Substring(4), out int n) && n > 0)
+                    length = n;
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var sb = new StringBuilder(length);
+                for (int i = 0; i < length; i++)
+                    sb.Append(chars[_rnd.Next(chars.Length)]);
+                return sb.ToString();
+            }
+
+            // YYY[~N]: random N-digit number (default 5 digits)
+            if (val.StartsWith("YYY", StringComparison.OrdinalIgnoreCase))
+            {
+                int digits = 5;
+                if (val.Length > 3 && val[3] == '~'
+                    && int.TryParse(val.Substring(4), out int n) && n > 0)
+                    digits = n;
+                int minVal = digits == 1 ? 0 : (int)Math.Pow(10, digits - 1);
+                int maxVal = (int)Math.Pow(10, digits) - 1;
+                return _rnd.Next(minVal, maxVal + 1).ToString();
+            }
+
+            return val;
+        }
+
         private string GetDefaultGridValue(string type)
         {
             if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
@@ -558,6 +638,8 @@ namespace ToolWorking.Views
                     row.Value = GetDefaultGridValue(row.Type);
                     continue;
                 }
+
+                val = ResolveRandomValue(val);
 
                 if (!ValidateAndNormalizeValue(row.Type, val, out string normalized, out string error))
                     errors.Add("no:" + row.No + " - " + row.Name + " - " + error);
