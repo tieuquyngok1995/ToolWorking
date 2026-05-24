@@ -83,10 +83,11 @@ namespace ToolWorking.Views
             this.btnCopyResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCopyResult.Location = new System.Drawing.Point(498, 0);
             this.btnCopyResult.Name = "btnCopyResult";
-            this.btnCopyResult.Size = new System.Drawing.Size(75, 25);
+            this.btnCopyResult.Size = new System.Drawing.Size(75, 27);
             this.btnCopyResult.TabIndex = 8;
             this.btnCopyResult.Text = "    Copy";
             this.btnCopyResult.UseVisualStyleBackColor = true;
+            this.btnCopyResult.Click += new System.EventHandler(this.btnCopyResult_Click);
             // 
             // btnClearResult
             // 
@@ -95,28 +96,29 @@ namespace ToolWorking.Views
             this.btnClearResult.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnClearResult.Location = new System.Drawing.Point(577, 0);
             this.btnClearResult.Name = "btnClearResult";
-            this.btnClearResult.Size = new System.Drawing.Size(75, 25);
+            this.btnClearResult.Size = new System.Drawing.Size(75, 27);
             this.btnClearResult.TabIndex = 9;
             this.btnClearResult.Text = "    Clear";
             this.btnClearResult.UseVisualStyleBackColor = true;
+            this.btnClearResult.Click += new System.EventHandler(this.btnClearResult_Click);
             // 
             // panelCenter
             // 
             this.panelCenter.Controls.Add(this.panelCenterBot);
             this.panelCenter.Controls.Add(this.panelCenterTop);
             this.panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCenter.Location = new System.Drawing.Point(0, 63);
+            this.panelCenter.Location = new System.Drawing.Point(0, 68);
             this.panelCenter.Name = "panelCenter";
-            this.panelCenter.Size = new System.Drawing.Size(660, 318);
+            this.panelCenter.Size = new System.Drawing.Size(660, 345);
             this.panelCenter.TabIndex = 14;
             // 
             // panelCenterBot
             // 
             this.panelCenterBot.Controls.Add(this.txtResult);
             this.panelCenterBot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelCenterBot.Location = new System.Drawing.Point(0, 169);
+            this.panelCenterBot.Location = new System.Drawing.Point(0, 184);
             this.panelCenterBot.Name = "panelCenterBot";
-            this.panelCenterBot.Size = new System.Drawing.Size(660, 149);
+            this.panelCenterBot.Size = new System.Drawing.Size(660, 161);
             this.panelCenterBot.TabIndex = 24;
             // 
             // txtResult
@@ -126,7 +128,7 @@ namespace ToolWorking.Views
             this.txtResult.Location = new System.Drawing.Point(0, 0);
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
-            this.txtResult.Size = new System.Drawing.Size(660, 149);
+            this.txtResult.Size = new System.Drawing.Size(660, 161);
             this.txtResult.TabIndex = 22;
             this.txtResult.Text = "";
             // 
@@ -137,7 +139,7 @@ namespace ToolWorking.Views
             this.panelCenterTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCenterTop.Location = new System.Drawing.Point(0, 0);
             this.panelCenterTop.Name = "panelCenterTop";
-            this.panelCenterTop.Size = new System.Drawing.Size(660, 164);
+            this.panelCenterTop.Size = new System.Drawing.Size(660, 178);
             this.panelCenterTop.TabIndex = 23;
             // 
             // groupInputValue
@@ -147,7 +149,7 @@ namespace ToolWorking.Views
             this.groupInputValue.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupInputValue.Location = new System.Drawing.Point(206, 0);
             this.groupInputValue.Name = "groupInputValue";
-            this.groupInputValue.Size = new System.Drawing.Size(454, 164);
+            this.groupInputValue.Size = new System.Drawing.Size(454, 178);
             this.groupInputValue.TabIndex = 24;
             this.groupInputValue.TabStop = false;
             this.groupInputValue.Text = "Input Value";
@@ -192,8 +194,10 @@ namespace ToolWorking.Views
             this.gridInputValue.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridInputValue.RowHeadersVisible = false;
             this.gridInputValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridInputValue.Size = new System.Drawing.Size(448, 142);
+            this.gridInputValue.Size = new System.Drawing.Size(448, 156);
             this.gridInputValue.TabIndex = 12;
+            this.gridInputValue.CellToolTipTextNeeded += new System.Windows.Forms.DataGridViewCellToolTipTextNeededEventHandler(this.gridInputValue_CellToolTipTextNeeded);
+            this.gridInputValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridInputValue_DataBindingComplete);
             // 
             // no
             // 
@@ -256,7 +260,7 @@ namespace ToolWorking.Views
             this.groupInputKey.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.groupInputKey.Location = new System.Drawing.Point(0, 0);
             this.groupInputKey.Name = "groupInputKey";
-            this.groupInputKey.Size = new System.Drawing.Size(200, 164);
+            this.groupInputKey.Size = new System.Drawing.Size(200, 178);
             this.groupInputKey.TabIndex = 23;
             this.groupInputKey.TabStop = false;
             this.groupInputKey.Text = "Input Keys";
@@ -267,9 +271,10 @@ namespace ToolWorking.Views
             this.txtInputKey.Font = new System.Drawing.Font("MS Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtInputKey.Location = new System.Drawing.Point(3, 19);
             this.txtInputKey.Name = "txtInputKey";
-            this.txtInputKey.Size = new System.Drawing.Size(194, 142);
+            this.txtInputKey.Size = new System.Drawing.Size(194, 156);
             this.txtInputKey.TabIndex = 22;
             this.txtInputKey.Text = "";
+            this.txtInputKey.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtInputKey_MouseClick);
             this.txtInputKey.TextChanged += new System.EventHandler(this.txtInputKey_TextChanged);
             // 
             // panelBottom
@@ -278,9 +283,9 @@ namespace ToolWorking.Views
             this.panelBottom.Controls.Add(this.btnCopyResult);
             this.panelBottom.Controls.Add(this.btnClearResult);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 381);
+            this.panelBottom.Location = new System.Drawing.Point(0, 413);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(660, 30);
+            this.panelBottom.Size = new System.Drawing.Size(660, 32);
             this.panelBottom.TabIndex = 15;
             // 
             // btnCreate
@@ -288,9 +293,9 @@ namespace ToolWorking.Views
             this.btnCreate.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.btnCreate.Image = ((System.Drawing.Image)(resources.GetObject("btnCreate.Image")));
             this.btnCreate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCreate.Location = new System.Drawing.Point(419, 0);
+            this.btnCreate.Location = new System.Drawing.Point(415, 0);
             this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(75, 25);
+            this.btnCreate.Size = new System.Drawing.Size(80, 27);
             this.btnCreate.TabIndex = 21;
             this.btnCreate.Text = "    Create";
             this.btnCreate.UseVisualStyleBackColor = true;
@@ -307,23 +312,24 @@ namespace ToolWorking.Views
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(660, 63);
+            this.panelTop.Size = new System.Drawing.Size(660, 68);
             this.panelTop.TabIndex = 12;
             // 
             // txtIndent
             // 
             this.txtIndent.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.txtIndent.Location = new System.Drawing.Point(80, 36);
+            this.txtIndent.Location = new System.Drawing.Point(80, 39);
             this.txtIndent.Name = "txtIndent";
             this.txtIndent.Size = new System.Drawing.Size(117, 24);
             this.txtIndent.TabIndex = 18;
+            this.txtIndent.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtIndent_MouseClick);
             this.txtIndent.TextChanged += new System.EventHandler(this.txtIndent_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label1.Location = new System.Drawing.Point(6, 39);
+            this.label1.Location = new System.Drawing.Point(6, 42);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(49, 17);
             this.label1.TabIndex = 17;
@@ -335,7 +341,7 @@ namespace ToolWorking.Views
             this.panelInput.Controls.Add(this.rbModeJson);
             this.panelInput.Location = new System.Drawing.Point(213, 0);
             this.panelInput.Name = "panelInput";
-            this.panelInput.Size = new System.Drawing.Size(191, 27);
+            this.panelInput.Size = new System.Drawing.Size(191, 29);
             this.panelInput.TabIndex = 16;
             // 
             // rbModeKeys
@@ -343,7 +349,7 @@ namespace ToolWorking.Views
             this.rbModeKeys.AutoSize = true;
             this.rbModeKeys.Checked = true;
             this.rbModeKeys.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbModeKeys.Location = new System.Drawing.Point(0, 7);
+            this.rbModeKeys.Location = new System.Drawing.Point(0, 8);
             this.rbModeKeys.Name = "rbModeKeys";
             this.rbModeKeys.Size = new System.Drawing.Size(53, 21);
             this.rbModeKeys.TabIndex = 14;
@@ -356,7 +362,7 @@ namespace ToolWorking.Views
             // 
             this.rbModeJson.AutoSize = true;
             this.rbModeJson.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbModeJson.Location = new System.Drawing.Point(55, 7);
+            this.rbModeJson.Location = new System.Drawing.Point(55, 8);
             this.rbModeJson.Name = "rbModeJson";
             this.rbModeJson.Size = new System.Drawing.Size(107, 21);
             this.rbModeJson.TabIndex = 15;
@@ -368,7 +374,7 @@ namespace ToolWorking.Views
             // 
             this.rbOutput.AutoSize = true;
             this.rbOutput.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbOutput.Location = new System.Drawing.Point(140, 7);
+            this.rbOutput.Location = new System.Drawing.Point(140, 8);
             this.rbOutput.Name = "rbOutput";
             this.rbOutput.Size = new System.Drawing.Size(72, 21);
             this.rbOutput.TabIndex = 2;
@@ -381,7 +387,7 @@ namespace ToolWorking.Views
             this.rbInput.AutoSize = true;
             this.rbInput.Checked = true;
             this.rbInput.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.rbInput.Location = new System.Drawing.Point(80, 7);
+            this.rbInput.Location = new System.Drawing.Point(80, 8);
             this.rbInput.Name = "rbInput";
             this.rbInput.Size = new System.Drawing.Size(59, 21);
             this.rbInput.TabIndex = 1;
@@ -394,7 +400,7 @@ namespace ToolWorking.Views
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.label4.Location = new System.Drawing.Point(6, 10);
+            this.label4.Location = new System.Drawing.Point(6, 11);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 17);
             this.label4.TabIndex = 9;
@@ -402,9 +408,9 @@ namespace ToolWorking.Views
             // 
             // Json
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 411);
+            this.ClientSize = new System.Drawing.Size(660, 445);
             this.Controls.Add(this.panelCenter);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);

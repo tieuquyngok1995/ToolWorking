@@ -7,8 +7,13 @@ namespace ToolWorking.Utils
     {
         public static string[] STRING_SEPARATORS = new string[] { STRING_NEW_LINE };
         public static string[] STRING_SEPARATORS_ROWS = new string[] { "\r\n", "\r", "\n" };
+        public static string[] STRING_SEPARATORS_COLON = new string[] { STRING_COLON };
         public static string[] STRING_SEPARATORS_COLUMN = new string[] { STRING_TAB };
         public static string[] STRING_SEPARATORS_TABLE = new string[] { STRING_C_SQU_BRACKETS_SPACE, STRING_SPACE };
+
+        #region Char
+        public const char CHAR_COLON = ':';
+        #endregion
 
         #region String 
         public const string STRING_NEW_LINE = "\n";
@@ -17,6 +22,7 @@ namespace ToolWorking.Utils
         public const string STRING_SEMICOLON = ";";
         public const string STRING_DOT = ".";
         public const string STRING_SPACE = " ";
+        public const string STRING_COLON = ":";
         public const string STRING_O_BRACKETS = "(";
         public const string STRING_C_BRACKETS = ")";
         public const string STRING_C_SQU_BRACKETS_SPACE = "] ";
@@ -38,6 +44,9 @@ namespace ToolWorking.Utils
         public const string STRING_NOT_NULL = "NOT NULL";
 
         public const string STRING_DBO = "dbo";
+
+        public const string STRING_TRUE = "true";
+        public const string STRING_FALSE = "false";
 
         public const string STRING_FLAG = "FLG";
         public const string STRING_JP_FLAG = "フラグ";
@@ -71,11 +80,13 @@ namespace ToolWorking.Utils
         #endregion
 
         #region String C Type 
-        public const string C_TYPE_STRING = "string";
+        public const string C_TYPE_STRING = "String";
+        public const string C_TYPE_STRING_ARRAY = "String Array";
         public const string C_TYPE_BIT = "bit";
+        public const string C_TYPE_DATE = "Date";
         public const string C_TYPE_DATE_TIME = "DateTime";
         public const string C_TYPE_TIME = "Time";
-        public const string C_TYPE_TIME_STAMP = "timestamp";
+        public const string C_TYPE_TIME_STAMP = "Timestamp";
         public const string C_TYPE_SHORT = "short";
         public const string C_TYPE_INT = "int";
         public const string C_TYPE_LONG = "long";
@@ -124,7 +135,6 @@ namespace ToolWorking.Utils
         public static string STRING_SET_A = "SET ANSI_NULLS ON";
         public static string STRING_SET_N = "SET NOCOUNT ON;";
         public static string STRING_SET_QO = "SET QUOTED_IDENTIFIER OFF";
-
         #endregion
     }
 }
