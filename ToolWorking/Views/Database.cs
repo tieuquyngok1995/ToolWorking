@@ -916,8 +916,8 @@ namespace ToolWorking.Views
                 return;
 
             string toolTipText =
-@"XXX = Random letters (e.g. 000XXX -> 000ABC)
-YYY = Random numbers (e.g. ABCYYY -> ABC123)
+@"XXX = Random letters (e.g. TESTXXX -> TESTABC)
+YYY = Random numbers (e.g. 999YYY -> ABC123)
 A|B|C = Random value from list (e.g. -> B)";
 
             if (gridInputValue.Columns[e.ColumnIndex].Name == "value")
