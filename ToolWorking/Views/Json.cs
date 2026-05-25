@@ -63,7 +63,7 @@ namespace ToolWorking.Views
         {
             isInputKey = true;
             groupInputKey.Text = "Input Keys";
-            // Reset grid 
+            // Reset grid
             txtInputKey_TextChanged(sender, e);
         }
 
@@ -71,7 +71,7 @@ namespace ToolWorking.Views
         {
             isInputKey = false;
             groupInputKey.Text = "Input JSON";
-            // Reset grid 
+            // Reset grid
             txtInputKey_TextChanged(sender, e);
         }
 
@@ -247,35 +247,10 @@ namespace ToolWorking.Views
                     }
                 }
 
-                // Expand Array children into flat rows for grid
+                // Expand Array children into flat rows for grid (recursive, multi-level)
                 int no = 1, idx = 0;
                 List<ColumnModel> dataGrid = new List<ColumnModel>();
-                while (idx < lstInputKey.Count)
-                {
-                    var col = lstInputKey[idx++];
-                    // Collect children until next ARRAY column
-                    if (col.Type != CONST.C_TYPE_ARRAY || col.Range <= 1)
-                    {
-                        dataGrid.Add(new ColumnModel(no++, col.Name, col.Type, col.Value, col.Range, col.ExcludeChars));
-                        continue;
-                    }
-
-                    dataGrid.Add(new ColumnModel(no++, col.Name, col.Type, col.Value, col.Range, col.ExcludeChars));
-
-                    var childStart = idx;
-                    var lv = lstInputKey[idx].ExcludeChars;
-                    while (idx < lstInputKey.Count && lstInputKey[idx].Type != CONST.C_TYPE_ARRAY && lstInputKey[idx].ExcludeChars == lv)
-                        idx++;
-
-                    var children = lstInputKey.GetRange(childStart, idx - childStart);
-
-                    // Pre-allocate capacity to avoid resizing
-                    dataGrid.Capacity = dataGrid.Count + col.Range * children.Count;
-
-                    for (int row = 0; row < col.Range; row++)
-                        foreach (var child in children)
-                            dataGrid.Add(new ColumnModel(no++, $"{col.Name}[{row}].{child.Name}", child.Type, string.Empty, 1, child.ExcludeChars));
-                }
+                ExpandToGrid(lstInputKey, ref idx, -1, ref no, dataGrid, string.Empty);
                 gridInputValue.DataSource = dataGrid;
                 btnCreate.Enabled = true;
             }
@@ -385,6 +360,90 @@ A|B|C = Random value from list (e.g. -> B)";
         #endregion
 
         #region Function
+        /// <summary>
+        /// Đệ quy expand lstInputKey (dựa vào level lưu trong ExcludeChars) thành flat rows cho grid.
+        /// minLevel: level cha (chỉ xử lý các item có level > minLevel).
+        /// prefix: chuỗi tiền tố tên cột (VD: "arr[0]").
+        /// </summary>
+        private void ExpandToGrid(List<ColumnModel> src, ref int idx, int minLevel, ref int no,
+            List<ColumnModel> dest, string prefix)
+        {
+            while (idx < src.Count)
+            {
+                var col = src[idx];
+                int level = int.TryParse(col.ExcludeChars, out int lv) ? lv : 0;
+
+                // Nếu level <= minLevel thì item này thuộc về cha (caller sẽ xử lý)
+                if (level <= minLevel) break;
+
+                idx++;
+                string fullName = string.IsNullOrEmpty(prefix) ? col.Name : prefix + "." + col.Name;
+
+                if (col.Type == CONST.C_TYPE_ARRAY)
+                {
+                    // Kiểm tra có child không (item tiếp theo có level cao hơn)
+                    bool hasChildren = idx < src.Count &&
+                        (int.TryParse(src[idx].ExcludeChars, out int nextLv) && nextLv > level);
+
+                    if (!hasChildren || col.Type == CONST.C_TYPE_STRING_ARRAY)
+                    {
+                        // Leaf array (string array)
+                        dest.Add(new ColumnModel(no++, fullName, col.Type, col.Value, col.Range, col.ExcludeChars));
+                    }
+                    else
+                    {
+                        // Object array: thêm header row
+                        dest.Add(new ColumnModel(no++, fullName, col.Type, col.Value, col.Range, col.ExcludeChars));
+
+                        // Snapshot children vào list tạm
+                        int childStart = idx;
+                        var childItems = new List<ColumnModel>();
+                        // Thu thập tất cả children trực tiếp (level == level+1) và con cháu
+                        CollectChildren(src, ref idx, level, childItems);
+
+                        // Expand theo range
+                        int range = col.Range > 0 ? col.Range : 1;
+                        for (int r = 0; r < range; r++)
+                        {
+                            int tempIdx = 0;
+                            ExpandToGrid(childItems, ref tempIdx, -1, ref no, dest, fullName + "[" + r + "]");
+                        }
+                    }
+                }
+                else if (col.Type == CONST.C_TYPE_OBJECT)
+                {
+                    dest.Add(new ColumnModel(no++, fullName, col.Type, col.Value, col.Range, col.ExcludeChars));
+                    // Object: đệ quy expand children với cùng prefix
+                    ExpandToGrid(src, ref idx, level - 1, ref no, dest, prefix);
+                }
+                else
+                {
+                    dest.Add(new ColumnModel(no++, fullName, col.Type, col.Value, col.Range, col.ExcludeChars));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Thu thập tất cả items trong src có level > parentLevel vào childItems,
+        /// đồng thời advance idx. Level được re-map về gốc (trừ đi parentLevel+1) để dùng lại đệ quy.
+        /// </summary>
+        private void CollectChildren(List<ColumnModel> src, ref int idx, int parentLevel, List<ColumnModel> childItems)
+        {
+            int baseLevel = parentLevel + 1;
+            while (idx < src.Count)
+            {
+                int level = int.TryParse(src[idx].ExcludeChars, out int lv) ? lv : 0;
+                if (level <= parentLevel) break;
+
+                // Re-map level: child trực tiếp -> 0, cháu -> 1, ...
+                int remapped = level - baseLevel;
+                var item = src[idx++];
+                childItems.Add(new ColumnModel(item.No, item.Name, item.Type, item.Value, item.Range,
+                    remapped.ToString()));
+            }
+        }
+
+
         private string StripInputChars(string input)
         {
             if (string.IsNullOrEmpty(txtIndent.Text)) return input;
@@ -570,6 +629,9 @@ A|B|C = Random value from list (e.g. -> B)";
             string padChild = new string(' ', (indent + 1) * 2);
             var parts = new List<string>();
 
+            // prefix used to filter rows that belong to this context
+            string prefix = string.IsNullOrEmpty(parentPath) ? string.Empty : parentPath + ".";
+
             while (rowNo < gridData.Count)
             {
                 var row = gridData[rowNo];
@@ -577,48 +639,53 @@ A|B|C = Random value from list (e.g. -> B)";
 
                 if (level <= minLevel) break;
 
-                string childPath = string.IsNullOrEmpty(parentPath)
-                    ? row.Name : parentPath + "." + row.Name;
+                // Filter by parentPath:
+                // - prefix set  → only rows whose name starts with "parentPath."
+                // - prefix empty → skip expanded array element rows (they have "[r]." in name)
+                if (!string.IsNullOrEmpty(prefix))
+                {
+                    if (!row.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) break;
+                }
+                else if (row.Name.Contains("[") && row.Type != CONST.C_TYPE_ARRAY)
+                {
+                    break;
+                }
+
+                rowNo++;
+
+                // Extract local field name (strip prefix)
+                string localName = prefix.Length > 0 ? row.Name.Substring(prefix.Length) : row.Name;
 
                 if (row.Type == CONST.C_TYPE_OBJECT)
                 {
-                    rowNo++;
-                    string inner = BuildJsonObject(gridData, ref rowNo, level - 1, indent + 1, childPath);
-                    parts.Add(padChild + "\"" + row.Name + "\": " + inner);
+                    // Object children share the same parentPath (ExpandToGrid keeps same prefix);
+                    // use level-based minLevel to distinguish children from siblings.
+                    string inner = BuildJsonObject(gridData, ref rowNo, level, indent + 1, parentPath);
+                    parts.Add(padChild + "\"" + localName + "\": " + inner);
                 }
                 else if (row.Type == CONST.C_TYPE_ARRAY)
                 {
-                    // Check if next item is a child (higher level) -> object array
-                    // If not -> String Array (leaf array), use valueMap directly
-                    bool hasChildren = (rowNo + 1 < gridData.Count) &&
-                        (int.TryParse(gridData[rowNo + 1].ExcludeChars, out int nextLv) && nextLv > level);
+                    // In the flat grid, array elements are named "arrayFullName[r].*"
+                    string arrayFullName = prefix.Length > 0 ? parentPath + "." + localName : localName;
+                    bool hasExpandedElements = rowNo < gridData.Count &&
+                        gridData[rowNo].Name.StartsWith(arrayFullName + "[", StringComparison.OrdinalIgnoreCase);
 
-                    if (!hasChildren)
+                    if (!hasExpandedElements)
                     {
                         string jsonVal = string.IsNullOrEmpty(row.Value) ? "[]" : row.Value;
-                        parts.Add(padChild + "\"" + row.Name + "\": " + jsonVal);
-                        rowNo++;
+                        parts.Add(padChild + "\"" + localName + "\": " + jsonVal);
                     }
                     else
                     {
-                        rowNo++;
-                        string inner = BuildJsonArray(gridData, ref rowNo, level, row.Range, row.Name, indent + 1, parentPath);
-                        parts.Add(padChild + "\"" + row.Name + "\": " + inner);
+                        string inner = BuildFlatArray(gridData, ref rowNo, arrayFullName, row.Range, indent + 1);
+                        parts.Add(padChild + "\"" + localName + "\": " + inner);
                     }
                 }
                 else
                 {
-                    rowNo++;
-
-                    string parentLast = parentPath.Contains('.') ? parentPath.Split('.').Last() : parentPath;
-                    string rowFirst = row.Name.Contains('.') ? row.Name.Split('.').First() : row.Name;
-                    if (row.Name.Contains('.') && !string.Equals(parentLast, rowFirst, StringComparison.OrdinalIgnoreCase)) continue;
-
-                    // Leaf: get value from grid, apply type rules
-                    bool isComment = row.Value.TrimStart().StartsWith("//");
+                    bool isComment = (row.Value ?? string.Empty).TrimStart().StartsWith("//");
                     string jsonVal = isComment ? GetDefaultJsonValue(row.Type) : FormatLeafValue(row.Type, row.Value);
-                    string name = row.Name.Contains('.') ? row.Name.Split('.').Last() : row.Name;
-                    string line = padChild + "\"" + name + "\": " + jsonVal;
+                    string line = padChild + "\"" + localName + "\": " + jsonVal;
                     parts.Add(isComment ? "// " + line.TrimStart() : line);
                 }
             }
@@ -627,29 +694,24 @@ A|B|C = Random value from list (e.g. -> B)";
             return "{\n" + string.Join(",\n", parts) + "\n" + pad + "}";
         }
 
-        private string BuildJsonArray(List<ColumnModel> gridData,
-            ref int index, int minLevel, int range, string arrayKey, int indent, string parentPath)
+        private string BuildFlatArray(List<ColumnModel> gridData, ref int rowNo, string arrayPrefix, int range, int indent)
         {
             string pad = new string(' ', indent * 2);
-
-            // Collect element-template items (direct children of this array)
-            var childItems = new List<ColumnModel>();
-            while (index < gridData.Count)
-            {
-                int childLevel = int.TryParse(gridData[index].ExcludeChars, out int lv) ? lv : 0;
-                if (childLevel <= minLevel) break;
-                childItems.Add(gridData[index++]);
-            }
-
-            if (childItems.Count == 0) return "[]";
-
             var elements = new List<string>();
-            string arrayBase = string.IsNullOrEmpty(parentPath) ? arrayKey : parentPath + "." + arrayKey;
-            for (int r = 0; r < Math.Max(range, 1); r++)
+            int count = Math.Max(range, 1);
+
+            for (int r = 0; r < count; r++)
             {
-                string elemPath = arrayBase + "[" + r + "]";
-                int tempIdx = 0;
-                elements.Add(BuildJsonObject(childItems, ref tempIdx, minLevel, indent + 1, elemPath));
+                string elementPrefix = arrayPrefix + "[" + r + "]";
+                if (rowNo < gridData.Count &&
+                    gridData[rowNo].Name.StartsWith(elementPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    elements.Add(BuildJsonObject(gridData, ref rowNo, -1, indent + 1, elementPrefix));
+                }
+                else
+                {
+                    elements.Add("{}");
+                }
             }
 
             return "[\n" + string.Join(",\n", elements) + "\n" + pad + "]";
