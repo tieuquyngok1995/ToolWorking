@@ -31,12 +31,19 @@ namespace ToolWorking.Views
                 {
                     rbInput.Checked = true;
                     isInputKey = true;
+
+                    gridInputValue.Visible = true;
+                    txtInputJsonFilter.Visible = false;
                 }
                 else
                 {
                     rbModeJson.Checked = true;
+                    isInputKey = false;
+
+                    gridInputValue.Visible = false;
+                    txtInputJsonFilter.Visible = false;
                 }
-                txtIndent.Text = !string.IsNullOrEmpty(indentCharacter) ? indentCharacter : string.Empty;
+                txtIndent.Text = indentCharacter;
             }
             catch (Exception ex)
             {
@@ -46,7 +53,13 @@ namespace ToolWorking.Views
 
         private void rbInput_CheckedChanged(object sender, EventArgs e)
         {
+            groupInputValue.Text = "Input Value";
+            groupInputKey.Text = rbModeKeys.Checked ? "Input Keys" : "Input JSON";
+
             panelInput.Visible = rbInput.Checked;
+            gridInputValue.Visible = rbInput.Checked;
+            txtInputKey.Clear();
+            txtInputJsonFilter.Visible = !rbInput.Checked;
             // Save mode
             Properties.Settings.Default.JsonModel = 0;
             Properties.Settings.Default.Save();
@@ -54,6 +67,12 @@ namespace ToolWorking.Views
 
         private void rbOutput_CheckedChanged(object sender, EventArgs e)
         {
+            groupInputKey.Text = "Input Keys Filter";
+            groupInputValue.Text = "Input JSON Filter";
+
+            gridInputValue.Visible = !rbOutput.Checked;
+            txtInputKey.Clear();
+            txtInputJsonFilter.Visible = rbOutput.Checked;
             // Save mode
             Properties.Settings.Default.JsonModel = 1;
             Properties.Settings.Default.Save();
@@ -98,9 +117,16 @@ namespace ToolWorking.Views
         {
             try
             {
+                if (rbOutput.Checked)
+                {
+                    btnCreate.Enabled = !string.IsNullOrEmpty(txtInputKey.Text) && !string.IsNullOrEmpty(txtInputJsonFilter.Text);
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(txtInputKey.Text))
                 {
                     gridInputValue.DataSource = new List<ColumnModel>();
+                    txtResult.Text = string.Empty;
                     btnCreate.Enabled = false;
                     return;
                 }
@@ -111,6 +137,7 @@ namespace ToolWorking.Views
                 string line, key, type, baseType, value;
                 string[] arrLine, arrType;
                 List<ColumnModel> lstInputKey = new List<ColumnModel>();
+                void AddKey() => lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
 
                 for (int i = 0; i < arrKeys.Length; i++)
                 {
@@ -163,19 +190,19 @@ namespace ToolWorking.Views
                             }
 
                             if (levelDelta < 0) currentLevel = Math.Max(0, currentLevel + levelDelta);
-                            lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                            AddKey();
                             currentLevel = Math.Max(0, currentLevel + 1);
                         }
                         else if (type.StartsWith(CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase))
                         {
                             baseType = CONST.C_TYPE_OBJECT;
-                            lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                            AddKey();
                             currentLevel++;
                         }
                         else if (type.StartsWith(CONST.C_TYPE_STRING_ARRAY, StringComparison.OrdinalIgnoreCase))
                         {
                             baseType = CONST.C_TYPE_STRING_ARRAY;
-                            lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                            AddKey();
                         }
                         else
                         {
@@ -185,7 +212,7 @@ namespace ToolWorking.Views
                                 baseType = arrType[0].Trim();
                                 if (inRange < 0) currentLevel = Math.Max(0, currentLevel + inRange);
                             }
-                            lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                            AddKey();
                         }
                     }
                     else
@@ -242,7 +269,7 @@ namespace ToolWorking.Views
                             baseType = CONST.C_TYPE_INT;
                         }
 
-                        lstInputKey.Add(new ColumnModel(lstInputKey.Count + 1, key, baseType, string.Empty, range, currentLevel.ToString()));
+                        AddKey();
                         currentLevel = currentLevel + levelDelta;
                     }
                 }
@@ -293,8 +320,51 @@ A|B|C = Random value from list (e.g. -> B)";
             }
         }
 
+        private void txtInputJsonFilter_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtInputJsonFilter.Text))
+                {
+                    txtResult.Text = string.Empty;
+                    btnCreate.Enabled = false;
+                    return;
+                }
+                btnCreate.Enabled = !string.IsNullOrEmpty(txtInputKey.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            if (rbOutput.Checked)
+            {
+                if (string.IsNullOrEmpty(txtInputKey.Text) || string.IsNullOrEmpty(txtInputJsonFilter.Text)) return;
+
+                string[] keys = txtInputKey.Text
+                    .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(k => k.Trim())
+                    .Where(k => !string.IsNullOrEmpty(k))
+                    .ToArray();
+
+                if (keys.Length == 0) return;
+
+                try
+                {
+                    string result = FilterJsonByKeys(txtInputJsonFilter.Text.Trim(), keys);
+                    txtResult.Text = result;
+                    btnCopyResult.Enabled = !string.IsNullOrEmpty(result);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There was an error during processing.\r\nError detail: " + ex.Message, "Error Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return;
+            }
+
             if (!(gridInputValue.DataSource is List<ColumnModel> gridData) || gridData.Count == 0) return;
 
             gridInputValue.CommitEdit(DataGridViewDataErrorContexts.Commit);
@@ -329,15 +399,7 @@ A|B|C = Random value from list (e.g. -> B)";
             int index = 0;
             gridInputValue.Refresh();
             txtResult.Text = BuildJsonObject(gridData, ref index, -1, 0, string.Empty);
-
-            if (string.IsNullOrEmpty(txtResult.Text))
-            {
-                btnCopyResult.Enabled = false;
-            }
-            else
-            {
-                btnCopyResult.Enabled = true;
-            }
+            btnCopyResult.Enabled = !string.IsNullOrEmpty(txtResult.Text);
         }
 
         private void btnCopyResult_Click(object sender, EventArgs e)
@@ -351,6 +413,7 @@ A|B|C = Random value from list (e.g. -> B)";
         {
             txtInputKey.Text = string.Empty;
             txtResult.Text = string.Empty;
+            txtInputJsonFilter.Text = string.Empty;
 
             btnCreate.Enabled = false;
             btnCopyResult.Enabled = false;
@@ -371,7 +434,7 @@ A|B|C = Random value from list (e.g. -> B)";
             while (idx < src.Count)
             {
                 var col = src[idx];
-                int level = int.TryParse(col.ExcludeChars, out int lv) ? lv : 0;
+                int level = ParseLevel(col.ExcludeChars);
 
                 // Nếu level <= minLevel thì item này thuộc về cha (caller sẽ xử lý)
                 if (level <= minLevel) break;
@@ -382,8 +445,7 @@ A|B|C = Random value from list (e.g. -> B)";
                 if (col.Type == CONST.C_TYPE_ARRAY)
                 {
                     // Kiểm tra có child không (item tiếp theo có level cao hơn)
-                    bool hasChildren = idx < src.Count &&
-                        (int.TryParse(src[idx].ExcludeChars, out int nextLv) && nextLv > level);
+                    bool hasChildren = idx < src.Count && ParseLevel(src[idx].ExcludeChars) > level;
 
                     if (!hasChildren || col.Type == CONST.C_TYPE_STRING_ARRAY)
                     {
@@ -396,7 +458,6 @@ A|B|C = Random value from list (e.g. -> B)";
                         dest.Add(new ColumnModel(no++, fullName, col.Type, col.Value, col.Range, col.ExcludeChars));
 
                         // Snapshot children vào list tạm
-                        int childStart = idx;
                         var childItems = new List<ColumnModel>();
                         // Thu thập tất cả children trực tiếp (level == level+1) và con cháu
                         CollectChildren(src, ref idx, level, childItems);
@@ -432,7 +493,7 @@ A|B|C = Random value from list (e.g. -> B)";
             int baseLevel = parentLevel + 1;
             while (idx < src.Count)
             {
-                int level = int.TryParse(src[idx].ExcludeChars, out int lv) ? lv : 0;
+                int level = ParseLevel(src[idx].ExcludeChars);
                 if (level <= parentLevel) break;
 
                 // Re-map level: child trực tiếp -> 0, cháu -> 1, ...
@@ -460,21 +521,9 @@ A|B|C = Random value from list (e.g. -> B)";
 
         private string GetDefaultGridValue(string type)
         {
-            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
-                return "0";
-
-            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
-                return "false";
-
-            if (string.Equals(type, CONST.C_TYPE_STRING_ARRAY, StringComparison.OrdinalIgnoreCase))
-                return "[]";
-
+            if (IsNumericType(type)) return "0";
+            if (IsBooleanType(type)) return "false";
+            if (string.Equals(type, CONST.C_TYPE_STRING_ARRAY, StringComparison.OrdinalIgnoreCase)) return "[]";
             return string.Empty;
         }
 
@@ -514,12 +563,7 @@ A|B|C = Random value from list (e.g. -> B)";
             string _value = value.Trim();
 
             // Numeric
-            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+            if (IsNumericType(type))
             {
                 if (!decimal.TryParse(value, System.Globalization.NumberStyles.Any,
                     System.Globalization.CultureInfo.InvariantCulture, out _))
@@ -531,8 +575,7 @@ A|B|C = Random value from list (e.g. -> B)";
             }
 
             // Boolean / Bit
-            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase))
+            if (IsBooleanType(type))
             {
                 _value = value.ToLower();
                 if (_value != "true" && _value != "false" && _value != "1" && _value != "0")
@@ -635,7 +678,7 @@ A|B|C = Random value from list (e.g. -> B)";
             while (rowNo < gridData.Count)
             {
                 var row = gridData[rowNo];
-                int level = int.TryParse(row.ExcludeChars, out int lv) ? lv : 0;
+                int level = ParseLevel(row.ExcludeChars);
 
                 if (level <= minLevel) break;
 
@@ -721,15 +764,8 @@ A|B|C = Random value from list (e.g. -> B)";
         {
             if (string.Equals(type, CONST.C_TYPE_ARRAY, StringComparison.OrdinalIgnoreCase)) return "[]";
             if (string.Equals(type, CONST.C_TYPE_OBJECT, StringComparison.OrdinalIgnoreCase)) return "{}";
-            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
-                return "0";
-            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase))
-                return "false";
+            if (IsNumericType(type)) return "0";
+            if (string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)) return "false";
             return "\"\"";
         }
 
@@ -738,12 +774,7 @@ A|B|C = Random value from list (e.g. -> B)";
             string value = raw?.Trim() ?? string.Empty;
             if (string.IsNullOrEmpty(value)) return GetDefaultJsonValue(type);
 
-            if (string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase))
+            if (IsNumericType(type))
                 return decimal.TryParse(value, System.Globalization.NumberStyles.Any,
                        System.Globalization.CultureInfo.InvariantCulture, out _) ? value : "0";
 
@@ -755,6 +786,221 @@ A|B|C = Random value from list (e.g. -> B)";
             return "\"" + value.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
         }
 
+        private static bool IsNumericType(string type) =>
+            string.Equals(type, CONST.C_TYPE_INT, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_LONG, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_SHORT, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_DECIMAL, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_DOUBLE, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_NUMERIC, StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsBooleanType(string type) =>
+            string.Equals(type, CONST.C_TYPE_BOOLEAN, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, CONST.C_TYPE_BIT, StringComparison.OrdinalIgnoreCase);
+
+        private static int ParseLevel(string s) => int.TryParse(s, out int lv) ? lv : 0;
+
+        private string FilterJsonByKeys(string jsonInput, string[] keys)
+        {
+            int i = 0;
+            SkipJsonWhitespace(jsonInput, ref i);
+
+            var items = new List<Dictionary<string, object>>();
+
+            if (i < jsonInput.Length && jsonInput[i] == '[')
+            {
+                i++; // skip [
+                SkipJsonWhitespace(jsonInput, ref i);
+                while (i < jsonInput.Length && jsonInput[i] != ']')
+                {
+                    SkipJsonWhitespace(jsonInput, ref i);
+                    if (i < jsonInput.Length && jsonInput[i] == '{')
+                        items.Add(ParseJsonObject(jsonInput, ref i));
+                    else
+                        ParseJsonValue(jsonInput, ref i); // skip non-object items
+                    SkipJsonWhitespace(jsonInput, ref i);
+                    if (i < jsonInput.Length && jsonInput[i] == ',') i++;
+                }
+            }
+            else if (i < jsonInput.Length && jsonInput[i] == '{')
+            {
+                items.Add(ParseJsonObject(jsonInput, ref i));
+            }
+
+            if (items.Count == 0) return string.Empty;
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("[");
+
+            if (keys.Length == 1)
+            {
+                string key = keys[0];
+                for (int j = 0; j < items.Count; j++)
+                {
+                    sb.Append("  " + SerializeJsonValue(FindJsonValue(items[j], key)));
+                    if (j < items.Count - 1) sb.Append(",");
+                    sb.AppendLine();
+                }
+            }
+            else
+            {
+                for (int j = 0; j < items.Count; j++)
+                {
+                    sb.AppendLine("  {");
+                    for (int k = 0; k < keys.Length; k++)
+                    {
+                        sb.Append("    \"" + keys[k] + "\": " + SerializeJsonValue(FindJsonValue(items[j], keys[k])));
+                        if (k < keys.Length - 1) sb.Append(",");
+                        sb.AppendLine();
+                    }
+                    sb.Append("  }");
+                    if (j < items.Count - 1) sb.Append(",");
+                    sb.AppendLine();
+                }
+            }
+
+            sb.Append("]");
+            return sb.ToString();
+        }
+
+        private object FindJsonValue(Dictionary<string, object> obj, string key)
+        {
+            if (obj == null) return null;
+            if (obj.TryGetValue(key, out object val)) return val;
+            foreach (var kv in obj.Values)
+            {
+                if (kv is Dictionary<string, object> nested)
+                {
+                    object found = FindJsonValue(nested, key);
+                    if (found != null) return found;
+                }
+            }
+            return null;
+        }
+
+        private string SerializeJsonValue(object val)
+        {
+            if (val == null) return "null";
+            if (val is bool b) return b ? "true" : "false";
+            if (val is decimal d) return d.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if (val is Dictionary<string, object> dict)
+            {
+                var parts = dict.Select(kv => "\"" + kv.Key + "\": " + SerializeJsonValue(kv.Value));
+                return "{" + string.Join(", ", parts) + "}";
+            }
+            if (val is List<object> list)
+                return "[" + string.Join(", ", list.Select(v => SerializeJsonValue(v))) + "]";
+            return "\"" + val.ToString().Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
+        }
+
+        private Dictionary<string, object> ParseJsonObject(string json, ref int i)
+        {
+            var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            i++; // skip {
+            SkipJsonWhitespace(json, ref i);
+            while (i < json.Length && json[i] != '}')
+            {
+                SkipJsonWhitespace(json, ref i);
+                if (i >= json.Length || json[i] == '}') break;
+                if (json[i] != '"') { i++; continue; }
+                string key = ParseJsonString(json, ref i);
+                SkipJsonWhitespace(json, ref i);
+                if (i < json.Length && json[i] == ':') i++;
+                SkipJsonWhitespace(json, ref i);
+                object value = ParseJsonValue(json, ref i);
+                if (!dict.ContainsKey(key)) dict[key] = value;
+                SkipJsonWhitespace(json, ref i);
+                if (i < json.Length && json[i] == ',') i++;
+                SkipJsonWhitespace(json, ref i);
+            }
+            if (i < json.Length) i++; // skip }
+            return dict;
+        }
+
+        private List<object> ParseJsonArray(string json, ref int i)
+        {
+            var list = new List<object>();
+            i++; // skip [
+            SkipJsonWhitespace(json, ref i);
+            while (i < json.Length && json[i] != ']')
+            {
+                list.Add(ParseJsonValue(json, ref i));
+                SkipJsonWhitespace(json, ref i);
+                if (i < json.Length && json[i] == ',') i++;
+                SkipJsonWhitespace(json, ref i);
+            }
+            if (i < json.Length) i++; // skip ]
+            return list;
+        }
+
+        private object ParseJsonValue(string json, ref int i)
+        {
+            SkipJsonWhitespace(json, ref i);
+            if (i >= json.Length) return null;
+            char c = json[i];
+            if (c == '"') return ParseJsonString(json, ref i);
+            if (c == '{') return ParseJsonObject(json, ref i);
+            if (c == '[') return ParseJsonArray(json, ref i);
+            if (i + 4 <= json.Length && json.Substring(i, 4) == "true") { i += 4; return true; }
+            if (i + 5 <= json.Length && json.Substring(i, 5) == "false") { i += 5; return false; }
+            if (i + 4 <= json.Length && json.Substring(i, 4) == "null") { i += 4; return null; }
+            // Number
+            int start = i;
+            while (i < json.Length && (char.IsDigit(json[i]) || json[i] == '.' || json[i] == 'e' || json[i] == 'E' || json[i] == '+' || json[i] == '-'))
+                i++;
+            string numStr = json.Substring(start, i - start);
+            if (decimal.TryParse(numStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal dec))
+                return dec;
+            return numStr;
+        }
+
+        private string ParseJsonString(string json, ref int i)
+        {
+            i++; // skip opening "
+            var sb = new System.Text.StringBuilder();
+            while (i < json.Length && json[i] != '"')
+            {
+                if (json[i] == '\\' && i + 1 < json.Length)
+                {
+                    i++;
+                    switch (json[i])
+                    {
+                        case '"': sb.Append('"'); break;
+                        case '\\': sb.Append('\\'); break;
+                        case '/': sb.Append('/'); break;
+                        case 'n': sb.Append('\n'); break;
+                        case 'r': sb.Append('\r'); break;
+                        case 't': sb.Append('\t'); break;
+                        case 'b': sb.Append('\b'); break;
+                        case 'f': sb.Append('\f'); break;
+                        case 'u':
+                            if (i + 4 < json.Length)
+                            {
+                                string hex = json.Substring(i + 1, 4);
+                                if (int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int code))
+                                    sb.Append((char)code);
+                                i += 4;
+                            }
+                            break;
+                        default: sb.Append(json[i]); break;
+                    }
+                }
+                else
+                {
+                    sb.Append(json[i]);
+                }
+                i++;
+            }
+            if (i < json.Length) i++; // skip closing "
+            return sb.ToString();
+        }
+
+        private void SkipJsonWhitespace(string json, ref int i)
+        {
+            while (i < json.Length && char.IsWhiteSpace(json[i])) i++;
+        }
+
         #endregion
+
     }
 }
