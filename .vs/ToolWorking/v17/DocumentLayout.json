@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\GitClone\\ToolWorking\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0033CBC5-F1C5-4594-941B-7B8158FDBC3B}|ToolWorking\\ToolWorking.csproj|d:\\gitclone\\toolworking\\toolworking\\views\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0033CBC5-F1C5-4594-941B-7B8158FDBC3B}|ToolWorking\\ToolWorking.csproj|solutionrelative:toolworking\\views\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0033CBC5-F1C5-4594-941B-7B8158FDBC3B}|ToolWorking\\ToolWorking.csproj|d:\\gitclone\\toolworking\\toolworking\\views\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{0033CBC5-F1C5-4594-941B-7B8158FDBC3B}|ToolWorking\\ToolWorking.csproj|solutionrelative:toolworking\\views\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 341,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Database.cs [Design]",
+              "DocumentMoniker": "D:\\GitClone\\ToolWorking\\ToolWorking\\Views\\Database.cs",
+              "RelativeDocumentMoniker": "ToolWorking\\Views\\Database.cs",
+              "ToolTip": "D:\\GitClone\\ToolWorking\\ToolWorking\\Views\\Database.cs [Design]",
+              "RelativeToolTip": "ToolWorking\\Views\\Database.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-24T08:50:27.362Z",
+              "IsPinned": true,
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Database.cs",
+              "DocumentMoniker": "D:\\GitClone\\ToolWorking\\ToolWorking\\Views\\Database.cs",
+              "RelativeDocumentMoniker": "ToolWorking\\Views\\Database.cs",
+              "ToolTip": "D:\\GitClone\\ToolWorking\\ToolWorking\\Views\\Database.cs",
+              "RelativeToolTip": "ToolWorking\\Views\\Database.cs",
+              "ViewState": "AgIAACUDAAAAAAAAAAD4v0YDAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-12T11:54:41.463Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
