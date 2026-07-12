@@ -817,7 +817,7 @@ namespace ToolWorking.Views
 
                             for (int i = 0; i < arrRow.Length; i++)
                             {
-                                string item = arrRow[i];
+                                string item = arrRow[i].Replace("« NULL »", "NULL");
                                 string type = string.Empty;
                                 if (dicTypeInput.Count >= i + 1)
                                 {
@@ -1582,7 +1582,7 @@ A|B|C = Random value from list (e.g. -> B)";
 
                 if (type.Contains(CONST.C_TYPE_STRING))
                 {
-                    if (value.ToUpper().Equals(CONST.STRING_NULL))
+                    if (value.ToUpper().Equals(CONST.STRING_NULL) || value.ToUpper().Equals("« NULL »"))
                     {
                         result += "NULL, ";
                         continue;
