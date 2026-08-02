@@ -1,4 +1,6 @@
-﻿namespace WorkBuddy;
+﻿using WorkBuddy.Forms;
+
+namespace WorkBuddy;
 
 internal static class Program
 {
