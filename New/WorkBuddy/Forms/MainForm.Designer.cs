@@ -45,7 +45,7 @@
             panelRoundedBotCorners = new WorkBuddy.Extensions.InvertedCornerPanel();
             lblVersion = new Sunny.UI.UILabel();
             panelCenterMain = new Panel();
-            uiUserControl = new Sunny.UI.UIUserControl();
+            chillForm = new Sunny.UI.UIPanel();
             panelTop = new Panel();
             pctLogo = new PictureBox();
             btMinimize = new Sunny.UI.UIButton();
@@ -133,7 +133,7 @@
             btnJson.RectSelectedColor = Color.White;
             btnJson.Size = new Size(130, 40);
             btnJson.TabIndex = 8;
-            btnJson.Tag = "UcJSON";
+            btnJson.Tag = "JSONForm";
             btnJson.Text = "JSON";
             btnJson.TipsFont = new Font("Consolas", 10F);
             btnJson.Click += MenuButton_Click;
@@ -162,7 +162,7 @@
             btnDatabase.RectSelectedColor = Color.White;
             btnDatabase.Size = new Size(130, 40);
             btnDatabase.TabIndex = 6;
-            btnDatabase.Tag = "UcDatabase";
+            btnDatabase.Tag = "DatabaseForm";
             btnDatabase.Text = "Database";
             btnDatabase.TipsFont = new Font("Consolas", 10F);
             btnDatabase.Click += MenuButton_Click;
@@ -193,7 +193,7 @@
             btnSearch.RectSelectedColor = Color.White;
             btnSearch.Size = new Size(130, 40);
             btnSearch.TabIndex = 2;
-            btnSearch.Tag = "UcSearch";
+            btnSearch.Tag = "SearchForm";
             btnSearch.Text = "Search";
             btnSearch.TipsFont = new Font("Microsoft Sans Serif", 9F);
             btnSearch.Click += MenuButton_Click;
@@ -222,7 +222,7 @@
             btnSetting.RectSelectedColor = Color.White;
             btnSetting.Size = new Size(130, 40);
             btnSetting.TabIndex = 14;
-            btnSetting.Tag = "UcSetting";
+            btnSetting.Tag = "SettingForm";
             btnSetting.Text = "Setting";
             btnSetting.TipsFont = new Font("Consolas", 10F);
             btnSetting.Click += MenuButton_Click;
@@ -385,30 +385,26 @@
             // panelCenterMain
             // 
             panelCenterMain.BackColor = Color.FromArgb(32, 57, 133);
-            panelCenterMain.Controls.Add(uiUserControl);
+            panelCenterMain.Controls.Add(chillForm);
             panelCenterMain.ForeColor = Color.Transparent;
             panelCenterMain.Location = new Point(139, 0);
             panelCenterMain.Name = "panelCenterMain";
             panelCenterMain.Size = new Size(802, 602);
             panelCenterMain.TabIndex = 2;
             // 
-            // uiUserControl
+            // chillForm
             // 
-            uiUserControl.BackColor = Color.Transparent;
-            uiUserControl.Dock = DockStyle.Fill;
-            uiUserControl.FillColor = Color.White;
-            uiUserControl.FillColor2 = Color.White;
-            uiUserControl.Font = new Font("Microsoft Sans Serif", 12F);
-            uiUserControl.Location = new Point(0, 0);
-            uiUserControl.MinimumSize = new Size(1, 1);
-            uiUserControl.Name = "uiUserControl";
-            uiUserControl.Radius = 25;
-            uiUserControl.RectColor = Color.Transparent;
-            uiUserControl.RectDisableColor = Color.Transparent;
-            uiUserControl.Size = new Size(802, 602);
-            uiUserControl.TabIndex = 4;
-            uiUserControl.Text = null;
-            uiUserControl.TextAlignment = ContentAlignment.MiddleCenter;
+            chillForm.Dock = DockStyle.Fill;
+            chillForm.Font = new Font("Microsoft Sans Serif", 12F);
+            chillForm.Location = new Point(0, 0);
+            chillForm.Margin = new Padding(4, 5, 4, 5);
+            chillForm.MinimumSize = new Size(1, 1);
+            chillForm.Name = "chillForm";
+            chillForm.Radius = 25;
+            chillForm.Size = new Size(802, 602);
+            chillForm.TabIndex = 0;
+            chillForm.Text = null;
+            chillForm.TextAlignment = ContentAlignment.MiddleCenter;
             // 
             // panelTop
             // 
@@ -540,8 +536,8 @@
         private Sunny.UI.UILabel lblVersion;
         private Panel panelCenterMain;
         private Panel panelBottom;
-        private Sunny.UI.UIUserControl uiUserControl;
         private Extensions.InvertedCornerPanel panelRoundedTopCorners;
         private Extensions.InvertedCornerPanel panelRoundedBotCorners;
+        private Sunny.UI.UIPanel chillForm;
     }
 }

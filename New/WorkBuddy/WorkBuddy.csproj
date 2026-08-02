@@ -61,6 +61,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Forms\JSONForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Forms\DatabaseForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Forms\SearchForm.cs" />
       <Compile Update="Properties\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>

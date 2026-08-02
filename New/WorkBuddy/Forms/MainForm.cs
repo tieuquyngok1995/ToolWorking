@@ -13,8 +13,8 @@ public partial class MainForm : UIForm
     [DllImport("user32.DLL", EntryPoint = "SendMessage")]
     private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
+    private Form? _currentForm;
     private UIButton? _activeButton;
-    private UserControl? _currentControl;
 
     public MainForm()
     {
@@ -78,23 +78,31 @@ public partial class MainForm : UIForm
 
         Type? type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == controlName);
 
-        if (type == null || Activator.CreateInstance(type) is not UserControl control) return;
+        if (type == null || Activator.CreateInstance(type) is not Form form) return;
 
-        OpenChildUserControl(control);
+        OpenChildForm(form);
         SetActive((UIButton)sender);
     }
 
     /// <summary>
-    /// Opens and displays a child <see cref="UserControl"/> inside the container view.
+    /// Opens and displays a child Form inside the container panel.
     /// </summary>
-    /// <param name="control">The child <see cref="UserControl"/> to be displayed.</param>
-    private void OpenChildUserControl(UserControl control)
+    /// <param name="form">The child Form to display.</param>
+    private void OpenChildForm(Form form)
     {
-        _currentControl?.Dispose();
-        uiUserControl.Controls.Clear();
+        _currentForm?.Close();
 
-        _currentControl = control;
-        uiUserControl.Controls.Add(_currentControl);
+        chillForm.Controls.Clear();
+
+        _currentForm = form;
+        _currentForm.TopLevel = false;
+        _currentForm.FormBorderStyle = FormBorderStyle.None;
+        _currentForm.Dock = DockStyle.Fill;
+
+        chillForm.Controls.Add(_currentForm);
+        chillForm.Tag = _currentForm;
+
+        _currentForm.Show();
     }
 
     /// <summary>
