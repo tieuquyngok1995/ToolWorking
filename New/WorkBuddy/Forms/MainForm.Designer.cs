@@ -29,63 +29,55 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            panelBottom = new Panel();
             panelCenter = new Panel();
-            panelCenterMain = new Panel();
+            panelBottom = new Panel();
             panelCenterRight = new Panel();
             panelCenterLeft = new Panel();
+            btnJson = new Sunny.UI.UIButton();
+            btnDatabase = new Sunny.UI.UIButton();
+            btnSearch = new Sunny.UI.UIButton();
             btnSetting = new Sunny.UI.UIButton();
-            uiButton5 = new Sunny.UI.UIButton();
             uiButton4 = new Sunny.UI.UIButton();
             uiButton3 = new Sunny.UI.UIButton();
             uiButton2 = new Sunny.UI.UIButton();
             uiButton1 = new Sunny.UI.UIButton();
-            btnDatabase = new Sunny.UI.UIButton();
-            btnJson = new Sunny.UI.UIButton();
-            btnSearch = new Sunny.UI.UIButton();
-            btnBorderTop = new WorkBuddy.Extensions.InvertedCornerPanel();
-            btnBorderBot = new WorkBuddy.Extensions.InvertedCornerPanel();
+            panelRoundedTopCorners = new WorkBuddy.Extensions.InvertedCornerPanel();
+            panelRoundedBotCorners = new WorkBuddy.Extensions.InvertedCornerPanel();
             lblVersion = new Sunny.UI.UILabel();
+            panelCenterMain = new Panel();
+            uiUserControl = new Sunny.UI.UIUserControl();
             panelTop = new Panel();
             pctLogo = new PictureBox();
             btMinimize = new Sunny.UI.UIButton();
             btnClose = new Sunny.UI.UIButton();
             panelCenter.SuspendLayout();
-            panelCenterMain.SuspendLayout();
             panelCenterLeft.SuspendLayout();
+            panelCenterMain.SuspendLayout();
             panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pctLogo).BeginInit();
             SuspendLayout();
+            // 
+            // panelCenter
+            // 
+            panelCenter.BackColor = Color.FromArgb(32, 57, 133);
+            panelCenter.Controls.Add(panelBottom);
+            panelCenter.Controls.Add(panelCenterRight);
+            panelCenter.Controls.Add(panelCenterLeft);
+            panelCenter.Controls.Add(panelCenterMain);
+            panelCenter.Dock = DockStyle.Fill;
+            panelCenter.Location = new Point(0, 42);
+            panelCenter.Name = "panelCenter";
+            panelCenter.Size = new Size(952, 613);
+            panelCenter.TabIndex = 2;
             // 
             // panelBottom
             // 
             panelBottom.BackColor = Color.FromArgb(32, 57, 133);
             panelBottom.Dock = DockStyle.Bottom;
-            panelBottom.Location = new Point(0, 600);
+            panelBottom.Location = new Point(140, 601);
             panelBottom.Name = "panelBottom";
             panelBottom.Size = new Size(800, 12);
             panelBottom.TabIndex = 3;
-            // 
-            // panelCenter
-            // 
-            panelCenter.Controls.Add(panelCenterMain);
-            panelCenter.Controls.Add(panelCenterRight);
-            panelCenter.Controls.Add(panelCenterLeft);
-            panelCenter.Dock = DockStyle.Fill;
-            panelCenter.Location = new Point(0, 42);
-            panelCenter.Name = "panelCenter";
-            panelCenter.Size = new Size(952, 612);
-            panelCenter.TabIndex = 2;
-            // 
-            // panelCenterMain
-            // 
-            panelCenterMain.BackColor = Color.Transparent;
-            panelCenterMain.Controls.Add(panelBottom);
-            panelCenterMain.Dock = DockStyle.Fill;
-            panelCenterMain.Location = new Point(140, 0);
-            panelCenterMain.Name = "panelCenterMain";
-            panelCenterMain.Size = new Size(800, 612);
-            panelCenterMain.TabIndex = 2;
             // 
             // panelCenterRight
             // 
@@ -93,29 +85,118 @@
             panelCenterRight.Dock = DockStyle.Right;
             panelCenterRight.Location = new Point(940, 0);
             panelCenterRight.Name = "panelCenterRight";
-            panelCenterRight.Size = new Size(12, 612);
+            panelCenterRight.Size = new Size(12, 613);
             panelCenterRight.TabIndex = 1;
             // 
             // panelCenterLeft
             // 
             panelCenterLeft.BackColor = Color.FromArgb(32, 57, 133);
+            panelCenterLeft.Controls.Add(btnJson);
+            panelCenterLeft.Controls.Add(btnDatabase);
+            panelCenterLeft.Controls.Add(btnSearch);
             panelCenterLeft.Controls.Add(btnSetting);
-            panelCenterLeft.Controls.Add(uiButton5);
             panelCenterLeft.Controls.Add(uiButton4);
             panelCenterLeft.Controls.Add(uiButton3);
             panelCenterLeft.Controls.Add(uiButton2);
             panelCenterLeft.Controls.Add(uiButton1);
-            panelCenterLeft.Controls.Add(btnDatabase);
-            panelCenterLeft.Controls.Add(btnJson);
-            panelCenterLeft.Controls.Add(btnSearch);
-            panelCenterLeft.Controls.Add(btnBorderTop);
-            panelCenterLeft.Controls.Add(btnBorderBot);
+            panelCenterLeft.Controls.Add(panelRoundedTopCorners);
+            panelCenterLeft.Controls.Add(panelRoundedBotCorners);
             panelCenterLeft.Controls.Add(lblVersion);
             panelCenterLeft.Dock = DockStyle.Left;
+            panelCenterLeft.ForeColor = Color.Transparent;
             panelCenterLeft.Location = new Point(0, 0);
             panelCenterLeft.Name = "panelCenterLeft";
-            panelCenterLeft.Size = new Size(140, 612);
+            panelCenterLeft.Size = new Size(140, 613);
             panelCenterLeft.TabIndex = 0;
+            // 
+            // btnJson
+            // 
+            btnJson.FillColor = Color.FromArgb(32, 57, 133);
+            btnJson.FillColor2 = Color.FromArgb(32, 57, 133);
+            btnJson.FillDisableColor = Color.White;
+            btnJson.FillHoverColor = Color.White;
+            btnJson.FillPressColor = Color.White;
+            btnJson.FillSelectedColor = Color.White;
+            btnJson.Font = new Font("Consolas", 12F);
+            btnJson.ForeDisableColor = Color.Gray;
+            btnJson.ForeHoverColor = Color.Black;
+            btnJson.ForePressColor = Color.Gray;
+            btnJson.Location = new Point(12, 170);
+            btnJson.MinimumSize = new Size(1, 1);
+            btnJson.Name = "btnJson";
+            btnJson.Radius = 35;
+            btnJson.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
+            btnJson.RectColor = Color.FromArgb(32, 57, 133);
+            btnJson.RectDisableColor = Color.White;
+            btnJson.RectHoverColor = Color.White;
+            btnJson.RectPressColor = Color.White;
+            btnJson.RectSelectedColor = Color.White;
+            btnJson.Size = new Size(130, 40);
+            btnJson.TabIndex = 8;
+            btnJson.Tag = "UcJSON";
+            btnJson.Text = "JSON";
+            btnJson.TipsFont = new Font("Consolas", 10F);
+            btnJson.Click += MenuButton_Click;
+            // 
+            // btnDatabase
+            // 
+            btnDatabase.FillColor = Color.FromArgb(32, 57, 133);
+            btnDatabase.FillColor2 = Color.FromArgb(32, 57, 133);
+            btnDatabase.FillDisableColor = Color.White;
+            btnDatabase.FillHoverColor = Color.White;
+            btnDatabase.FillPressColor = Color.White;
+            btnDatabase.FillSelectedColor = Color.White;
+            btnDatabase.Font = new Font("Consolas", 12F);
+            btnDatabase.ForeDisableColor = Color.Gray;
+            btnDatabase.ForeHoverColor = Color.Black;
+            btnDatabase.ForePressColor = Color.Gray;
+            btnDatabase.Location = new Point(12, 100);
+            btnDatabase.MinimumSize = new Size(1, 1);
+            btnDatabase.Name = "btnDatabase";
+            btnDatabase.Radius = 35;
+            btnDatabase.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
+            btnDatabase.RectColor = Color.FromArgb(32, 57, 133);
+            btnDatabase.RectDisableColor = Color.White;
+            btnDatabase.RectHoverColor = Color.White;
+            btnDatabase.RectPressColor = Color.White;
+            btnDatabase.RectSelectedColor = Color.White;
+            btnDatabase.Size = new Size(130, 40);
+            btnDatabase.TabIndex = 6;
+            btnDatabase.Tag = "UcDatabase";
+            btnDatabase.Text = "Database";
+            btnDatabase.TipsFont = new Font("Consolas", 10F);
+            btnDatabase.Click += MenuButton_Click;
+            // 
+            // btnSearch
+            // 
+            btnSearch.BackgroundImageLayout = ImageLayout.Center;
+            btnSearch.FillColor = Color.White;
+            btnSearch.FillColor2 = Color.White;
+            btnSearch.FillDisableColor = Color.White;
+            btnSearch.FillHoverColor = Color.White;
+            btnSearch.FillPressColor = Color.White;
+            btnSearch.FillSelectedColor = Color.White;
+            btnSearch.Font = new Font("Consolas", 12F);
+            btnSearch.ForeColor = Color.Black;
+            btnSearch.ForeDisableColor = Color.Gray;
+            btnSearch.ForeHoverColor = Color.Black;
+            btnSearch.ForePressColor = Color.Gray;
+            btnSearch.Location = new Point(12, 30);
+            btnSearch.MinimumSize = new Size(1, 1);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Radius = 35;
+            btnSearch.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
+            btnSearch.RectColor = Color.White;
+            btnSearch.RectDisableColor = Color.White;
+            btnSearch.RectHoverColor = Color.White;
+            btnSearch.RectPressColor = Color.White;
+            btnSearch.RectSelectedColor = Color.White;
+            btnSearch.Size = new Size(130, 40);
+            btnSearch.TabIndex = 2;
+            btnSearch.Tag = "UcSearch";
+            btnSearch.Text = "Search";
+            btnSearch.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            btnSearch.Click += MenuButton_Click;
             // 
             // btnSetting
             // 
@@ -141,37 +222,10 @@
             btnSetting.RectSelectedColor = Color.White;
             btnSetting.Size = new Size(130, 40);
             btnSetting.TabIndex = 14;
+            btnSetting.Tag = "UcSetting";
             btnSetting.Text = "Setting";
             btnSetting.TipsFont = new Font("Consolas", 10F);
-            btnSetting.Click += btnSetting_Click;
-            // 
-            // uiButton5
-            // 
-            uiButton5.FillColor = Color.FromArgb(32, 57, 133);
-            uiButton5.FillColor2 = Color.FromArgb(32, 57, 133);
-            uiButton5.FillDisableColor = Color.White;
-            uiButton5.FillHoverColor = Color.White;
-            uiButton5.FillPressColor = Color.White;
-            uiButton5.FillSelectedColor = Color.White;
-            uiButton5.Font = new Font("Consolas", 12F);
-            uiButton5.ForeDisableColor = Color.Gray;
-            uiButton5.ForeHoverColor = Color.Black;
-            uiButton5.ForePressColor = Color.Gray;
-            uiButton5.Location = new Point(12, 460);
-            uiButton5.MinimumSize = new Size(1, 1);
-            uiButton5.Name = "uiButton5";
-            uiButton5.Radius = 35;
-            uiButton5.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
-            uiButton5.RectColor = Color.FromArgb(32, 57, 133);
-            uiButton5.RectDisableColor = Color.White;
-            uiButton5.RectHoverColor = Color.White;
-            uiButton5.RectPressColor = Color.White;
-            uiButton5.RectSelectedColor = Color.White;
-            uiButton5.Size = new Size(130, 40);
-            uiButton5.TabIndex = 13;
-            uiButton5.Text = "Coming soon";
-            uiButton5.TipsFont = new Font("Consolas", 10F);
-            uiButton5.Visible = false;
+            btnSetting.Click += MenuButton_Click;
             // 
             // uiButton4
             // 
@@ -185,7 +239,7 @@
             uiButton4.ForeDisableColor = Color.Gray;
             uiButton4.ForeHoverColor = Color.Black;
             uiButton4.ForePressColor = Color.Gray;
-            uiButton4.Location = new Point(12, 380);
+            uiButton4.Location = new Point(12, 450);
             uiButton4.MinimumSize = new Size(1, 1);
             uiButton4.Name = "uiButton4";
             uiButton4.Radius = 35;
@@ -213,7 +267,7 @@
             uiButton3.ForeDisableColor = Color.Gray;
             uiButton3.ForeHoverColor = Color.Black;
             uiButton3.ForePressColor = Color.Gray;
-            uiButton3.Location = new Point(12, 320);
+            uiButton3.Location = new Point(12, 380);
             uiButton3.MinimumSize = new Size(1, 1);
             uiButton3.Name = "uiButton3";
             uiButton3.Radius = 35;
@@ -241,7 +295,7 @@
             uiButton2.ForeDisableColor = Color.Gray;
             uiButton2.ForeHoverColor = Color.Black;
             uiButton2.ForePressColor = Color.Gray;
-            uiButton2.Location = new Point(12, 260);
+            uiButton2.Location = new Point(12, 310);
             uiButton2.MinimumSize = new Size(1, 1);
             uiButton2.Name = "uiButton2";
             uiButton2.Radius = 35;
@@ -269,7 +323,7 @@
             uiButton1.ForeDisableColor = Color.Gray;
             uiButton1.ForeHoverColor = Color.Black;
             uiButton1.ForePressColor = Color.Gray;
-            uiButton1.Location = new Point(12, 200);
+            uiButton1.Location = new Point(12, 240);
             uiButton1.MinimumSize = new Size(1, 1);
             uiButton1.Name = "uiButton1";
             uiButton1.Radius = 35;
@@ -285,134 +339,76 @@
             uiButton1.TipsFont = new Font("Consolas", 10F);
             uiButton1.Visible = false;
             // 
-            // btnDatabase
+            // panelRoundedTopCorners
             // 
-            btnDatabase.FillColor = Color.FromArgb(32, 57, 133);
-            btnDatabase.FillColor2 = Color.FromArgb(32, 57, 133);
-            btnDatabase.FillDisableColor = Color.White;
-            btnDatabase.FillHoverColor = Color.White;
-            btnDatabase.FillPressColor = Color.White;
-            btnDatabase.FillSelectedColor = Color.White;
-            btnDatabase.Font = new Font("Consolas", 12F);
-            btnDatabase.ForeDisableColor = Color.Gray;
-            btnDatabase.ForeHoverColor = Color.Black;
-            btnDatabase.ForePressColor = Color.Gray;
-            btnDatabase.Location = new Point(12, 80);
-            btnDatabase.MinimumSize = new Size(1, 1);
-            btnDatabase.Name = "btnDatabase";
-            btnDatabase.Radius = 35;
-            btnDatabase.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
-            btnDatabase.RectColor = Color.FromArgb(32, 57, 133);
-            btnDatabase.RectDisableColor = Color.White;
-            btnDatabase.RectHoverColor = Color.White;
-            btnDatabase.RectPressColor = Color.White;
-            btnDatabase.RectSelectedColor = Color.White;
-            btnDatabase.Size = new Size(130, 40);
-            btnDatabase.TabIndex = 6;
-            btnDatabase.Text = "Database";
-            btnDatabase.TipsFont = new Font("Consolas", 10F);
-            btnDatabase.Click += btnDatabase_Click;
+            panelRoundedTopCorners.BackColor = Color.White;
+            panelRoundedTopCorners.BackgroundColor = Color.White;
+            panelRoundedTopCorners.BorderColor = Color.White;
+            panelRoundedTopCorners.BorderSize = 0;
+            panelRoundedTopCorners.BottomLeftStyle = Extensions.CornerStyle.Square;
+            panelRoundedTopCorners.BottomRightStyle = Extensions.CornerStyle.Square;
+            panelRoundedTopCorners.CornerRadius = 18;
+            panelRoundedTopCorners.Location = new Point(120, 10);
+            panelRoundedTopCorners.Name = "panelRoundedTopCorners";
+            panelRoundedTopCorners.Size = new Size(24, 24);
+            panelRoundedTopCorners.TabIndex = 0;
+            panelRoundedTopCorners.TopLeftStyle = Extensions.CornerStyle.Inverted;
+            panelRoundedTopCorners.TopRightStyle = Extensions.CornerStyle.Square;
             // 
-            // btnJson
+            // panelRoundedBotCorners
             // 
-            btnJson.FillColor = Color.FromArgb(32, 57, 133);
-            btnJson.FillColor2 = Color.FromArgb(32, 57, 133);
-            btnJson.FillDisableColor = Color.White;
-            btnJson.FillHoverColor = Color.White;
-            btnJson.FillPressColor = Color.White;
-            btnJson.FillSelectedColor = Color.White;
-            btnJson.Font = new Font("Consolas", 12F);
-            btnJson.ForeDisableColor = Color.Gray;
-            btnJson.ForeHoverColor = Color.Black;
-            btnJson.ForePressColor = Color.Gray;
-            btnJson.Location = new Point(12, 140);
-            btnJson.MinimumSize = new Size(1, 1);
-            btnJson.Name = "btnJson";
-            btnJson.Radius = 35;
-            btnJson.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
-            btnJson.RectColor = Color.FromArgb(32, 57, 133);
-            btnJson.RectDisableColor = Color.White;
-            btnJson.RectHoverColor = Color.White;
-            btnJson.RectPressColor = Color.White;
-            btnJson.RectSelectedColor = Color.White;
-            btnJson.Size = new Size(130, 40);
-            btnJson.TabIndex = 8;
-            btnJson.Text = "JSON";
-            btnJson.TipsFont = new Font("Consolas", 10F);
-            btnJson.Click += btnJson_Click;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackgroundImageLayout = ImageLayout.Center;
-            btnSearch.FillColor = Color.White;
-            btnSearch.FillColor2 = Color.White;
-            btnSearch.FillDisableColor = Color.White;
-            btnSearch.FillHoverColor = Color.White;
-            btnSearch.FillPressColor = Color.White;
-            btnSearch.FillSelectedColor = Color.White;
-            btnSearch.Font = new Font("Consolas", 12F);
-            btnSearch.ForeColor = Color.Black;
-            btnSearch.ForeDisableColor = Color.Gray;
-            btnSearch.ForeHoverColor = Color.Black;
-            btnSearch.ForePressColor = Color.Gray;
-            btnSearch.Location = new Point(12, 20);
-            btnSearch.MinimumSize = new Size(1, 1);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Radius = 35;
-            btnSearch.RadiusSides = Sunny.UI.UICornerRadiusSides.LeftTop | Sunny.UI.UICornerRadiusSides.LeftBottom;
-            btnSearch.RectColor = Color.White;
-            btnSearch.RectDisableColor = Color.White;
-            btnSearch.RectHoverColor = Color.White;
-            btnSearch.RectPressColor = Color.White;
-            btnSearch.RectSelectedColor = Color.White;
-            btnSearch.Size = new Size(130, 40);
-            btnSearch.TabIndex = 2;
-            btnSearch.Text = "Search";
-            btnSearch.TipsFont = new Font("Microsoft Sans Serif", 9F);
-            btnSearch.Click += btnSearch_Click;
-            // 
-            // btnBorderTop
-            // 
-            btnBorderTop.BackColor = Color.White;
-            btnBorderTop.BackgroundColor = Color.White;
-            btnBorderTop.BorderColor = Color.White;
-            btnBorderTop.BorderSize = 0;
-            btnBorderTop.BottomLeftStyle = Extensions.CornerStyle.Square;
-            btnBorderTop.BottomRightStyle = Extensions.CornerStyle.Square;
-            btnBorderTop.CornerRadius = 18;
-            btnBorderTop.Location = new Point(120, 0);
-            btnBorderTop.Name = "btnBorderTop";
-            btnBorderTop.Size = new Size(24, 24);
-            btnBorderTop.TabIndex = 0;
-            btnBorderTop.TopLeftStyle = Extensions.CornerStyle.Inverted;
-            btnBorderTop.TopRightStyle = Extensions.CornerStyle.Square;
-            // 
-            // btnBorderBot
-            // 
-            btnBorderBot.BackColor = Color.White;
-            btnBorderBot.BackgroundColor = Color.White;
-            btnBorderBot.BorderColor = Color.White;
-            btnBorderBot.BorderSize = 0;
-            btnBorderBot.BottomLeftStyle = Extensions.CornerStyle.Inverted;
-            btnBorderBot.BottomRightStyle = Extensions.CornerStyle.Square;
-            btnBorderBot.CornerRadius = 18;
-            btnBorderBot.Location = new Point(120, 55);
-            btnBorderBot.Name = "btnBorderBot";
-            btnBorderBot.Size = new Size(24, 24);
-            btnBorderBot.TabIndex = 1;
-            btnBorderBot.TopLeftStyle = Extensions.CornerStyle.Square;
-            btnBorderBot.TopRightStyle = Extensions.CornerStyle.Square;
+            panelRoundedBotCorners.BackColor = Color.White;
+            panelRoundedBotCorners.BackgroundColor = Color.White;
+            panelRoundedBotCorners.BorderColor = Color.White;
+            panelRoundedBotCorners.BorderSize = 0;
+            panelRoundedBotCorners.BottomLeftStyle = Extensions.CornerStyle.Inverted;
+            panelRoundedBotCorners.BottomRightStyle = Extensions.CornerStyle.Square;
+            panelRoundedBotCorners.CornerRadius = 18;
+            panelRoundedBotCorners.Location = new Point(120, 65);
+            panelRoundedBotCorners.Name = "panelRoundedBotCorners";
+            panelRoundedBotCorners.Size = new Size(24, 24);
+            panelRoundedBotCorners.TabIndex = 15;
+            panelRoundedBotCorners.TopLeftStyle = Extensions.CornerStyle.Square;
+            panelRoundedBotCorners.TopRightStyle = Extensions.CornerStyle.Square;
             // 
             // lblVersion
             // 
             lblVersion.BackColor = Color.Transparent;
             lblVersion.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblVersion.ForeColor = Color.Transparent;
+            lblVersion.ForeColor = Color.White;
             lblVersion.Location = new Point(40, 574);
             lblVersion.Name = "lblVersion";
             lblVersion.Size = new Size(140, 24);
             lblVersion.TabIndex = 0;
             lblVersion.Text = "Version 1.1";
+            // 
+            // panelCenterMain
+            // 
+            panelCenterMain.BackColor = Color.FromArgb(32, 57, 133);
+            panelCenterMain.Controls.Add(uiUserControl);
+            panelCenterMain.ForeColor = Color.Transparent;
+            panelCenterMain.Location = new Point(139, 0);
+            panelCenterMain.Name = "panelCenterMain";
+            panelCenterMain.Size = new Size(802, 602);
+            panelCenterMain.TabIndex = 2;
+            // 
+            // uiUserControl
+            // 
+            uiUserControl.BackColor = Color.Transparent;
+            uiUserControl.Dock = DockStyle.Fill;
+            uiUserControl.FillColor = Color.White;
+            uiUserControl.FillColor2 = Color.White;
+            uiUserControl.Font = new Font("Microsoft Sans Serif", 12F);
+            uiUserControl.Location = new Point(0, 0);
+            uiUserControl.MinimumSize = new Size(1, 1);
+            uiUserControl.Name = "uiUserControl";
+            uiUserControl.Radius = 25;
+            uiUserControl.RectColor = Color.Transparent;
+            uiUserControl.RectDisableColor = Color.Transparent;
+            uiUserControl.Size = new Size(802, 602);
+            uiUserControl.TabIndex = 4;
+            uiUserControl.Text = null;
+            uiUserControl.TextAlignment = ContentAlignment.MiddleCenter;
             // 
             // panelTop
             // 
@@ -429,7 +425,7 @@
             // 
             // pctLogo
             // 
-            pctLogo.BackgroundImage = (Image)resources.GetObject("pctLogo.BackgroundImage");
+            pctLogo.BackgroundImage = Properties.Resources.Image_Logo;
             pctLogo.BackgroundImageLayout = ImageLayout.Center;
             pctLogo.ErrorImage = null;
             pctLogo.Location = new Point(3, 1);
@@ -442,7 +438,7 @@
             // btMinimize
             // 
             btMinimize.BackColor = Color.Transparent;
-            btMinimize.BackgroundImage = (Image)resources.GetObject("btMinimize.BackgroundImage");
+            btMinimize.BackgroundImage = Properties.Resources.Icon_Minimize_Write;
             btMinimize.BackgroundImageLayout = ImageLayout.Center;
             btMinimize.FillColor = Color.Transparent;
             btMinimize.FillColor2 = Color.Transparent;
@@ -474,7 +470,7 @@
             // btnClose
             // 
             btnClose.BackColor = Color.Transparent;
-            btnClose.BackgroundImage = (Image)resources.GetObject("btnClose.BackgroundImage");
+            btnClose.BackgroundImage = Properties.Resources.icon_Close_Write;
             btnClose.BackgroundImageLayout = ImageLayout.Center;
             btnClose.FillColor = Color.Transparent;
             btnClose.FillColor2 = Color.Transparent;
@@ -507,7 +503,7 @@
             // 
             AllowShowTitle = false;
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(952, 654);
+            ClientSize = new Size(952, 655);
             Controls.Add(panelCenter);
             Controls.Add(panelTop);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -518,35 +514,34 @@
             ZoomScaleRect = new Rectangle(15, 15, 800, 450);
             Load += MainForm_Load;
             panelCenter.ResumeLayout(false);
-            panelCenterMain.ResumeLayout(false);
             panelCenterLeft.ResumeLayout(false);
+            panelCenterMain.ResumeLayout(false);
             panelTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pctLogo).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Panel panelBottom;
         private Panel panelCenter;
         private Panel panelCenterLeft;
         private Panel panelTop;
         private Panel panelCenterRight;
         private Sunny.UI.UIButton btnSearch;
         private Sunny.UI.UIButton btnDatabase;
-        private Extensions.InvertedCornerPanel btnBorderTop;
         private Sunny.UI.UIButton btnJson;
         private Sunny.UI.UIButton btnSetting;
-        private Sunny.UI.UIButton uiButton5;
         private Sunny.UI.UIButton uiButton4;
         private Sunny.UI.UIButton uiButton3;
         private Sunny.UI.UIButton uiButton2;
         private Sunny.UI.UIButton uiButton1;
-        private Panel panelCenterMain;
         private Sunny.UI.UIButton btnClose;
         private Sunny.UI.UIButton btMinimize;
         private PictureBox pctLogo;
-        private Extensions.InvertedCornerPanel btnBorderBot;
         private Sunny.UI.UILabel lblVersion;
+        private Panel panelCenterMain;
+        private Panel panelBottom;
+        private Sunny.UI.UIUserControl uiUserControl;
+        private Extensions.InvertedCornerPanel panelRoundedTopCorners;
+        private Extensions.InvertedCornerPanel panelRoundedBotCorners;
     }
 }
