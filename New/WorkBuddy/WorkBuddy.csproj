@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <PublishTrimmed>false</PublishTrimmed>
+        <ApplicationIcon>Assets\icon-logo.ico</ApplicationIcon>
+        <Copyright>No Copyright</Copyright>
+        <PackageIcon>icon-logo.png</PackageIcon>
+        
+        <Version>1.1</Version>
+        <AssemblyVersion>1.1</AssemblyVersion>
+        <FileVersion>1.1</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\Icons\icon-close-b.png" />
+      <None Remove="Assets\Icons\icon-close-w.png" />
+      <None Remove="Assets\Icons\icon-minimize-b.png" />
+      <None Remove="Assets\Icons\icon-minimize-w.png" />
+      <None Remove="Assets\Icons\logo.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Assets\icon-logo.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Icons\icon-close-b.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Icons\icon-close-w.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Icons\icon-minimize-b.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Icons\icon-minimize-w.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Assets\Icons\logo.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SunnyUI" Version="3.9.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Images\" />
+      <Folder Include="Models\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Forms\JSONForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Forms\DatabaseForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Forms\SearchForm.cs" />
+      <Compile Update="Properties\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Properties\Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Assets\Icons\icon-logo.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+
+</Project>
