@@ -45,11 +45,13 @@
             btnSearch = new Sunny.UI.UIButton();
             btnBorderTop = new WorkBuddy.Extensions.InvertedCornerPanel();
             btnBorderBot = new WorkBuddy.Extensions.InvertedCornerPanel();
+            lblVersion = new Sunny.UI.UILabel();
             panelTop = new Panel();
             pctLogo = new PictureBox();
             btMinimize = new Sunny.UI.UIButton();
             btnClose = new Sunny.UI.UIButton();
             panelCenter.SuspendLayout();
+            panelCenterMain.SuspendLayout();
             panelCenterLeft.SuspendLayout();
             panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pctLogo).BeginInit();
@@ -59,9 +61,9 @@
             // 
             panelBottom.BackColor = Color.FromArgb(32, 57, 133);
             panelBottom.Dock = DockStyle.Bottom;
-            panelBottom.Location = new Point(0, 642);
+            panelBottom.Location = new Point(0, 600);
             panelBottom.Name = "panelBottom";
-            panelBottom.Size = new Size(952, 12);
+            panelBottom.Size = new Size(800, 12);
             panelBottom.TabIndex = 3;
             // 
             // panelCenter
@@ -78,6 +80,7 @@
             // panelCenterMain
             // 
             panelCenterMain.BackColor = Color.Transparent;
+            panelCenterMain.Controls.Add(panelBottom);
             panelCenterMain.Dock = DockStyle.Fill;
             panelCenterMain.Location = new Point(140, 0);
             panelCenterMain.Name = "panelCenterMain";
@@ -107,6 +110,7 @@
             panelCenterLeft.Controls.Add(btnSearch);
             panelCenterLeft.Controls.Add(btnBorderTop);
             panelCenterLeft.Controls.Add(btnBorderBot);
+            panelCenterLeft.Controls.Add(lblVersion);
             panelCenterLeft.Dock = DockStyle.Left;
             panelCenterLeft.Location = new Point(0, 0);
             panelCenterLeft.Name = "panelCenterLeft";
@@ -125,7 +129,7 @@
             btnSetting.ForeDisableColor = Color.Gray;
             btnSetting.ForeHoverColor = Color.Black;
             btnSetting.ForePressColor = Color.Gray;
-            btnSetting.Location = new Point(12, 540);
+            btnSetting.Location = new Point(12, 520);
             btnSetting.MinimumSize = new Size(1, 1);
             btnSetting.Name = "btnSetting";
             btnSetting.Radius = 35;
@@ -153,7 +157,7 @@
             uiButton5.ForeDisableColor = Color.Gray;
             uiButton5.ForeHoverColor = Color.Black;
             uiButton5.ForePressColor = Color.Gray;
-            uiButton5.Location = new Point(12, 475);
+            uiButton5.Location = new Point(12, 460);
             uiButton5.MinimumSize = new Size(1, 1);
             uiButton5.Name = "uiButton5";
             uiButton5.Radius = 35;
@@ -181,7 +185,7 @@
             uiButton4.ForeDisableColor = Color.Gray;
             uiButton4.ForeHoverColor = Color.Black;
             uiButton4.ForePressColor = Color.Gray;
-            uiButton4.Location = new Point(12, 410);
+            uiButton4.Location = new Point(12, 380);
             uiButton4.MinimumSize = new Size(1, 1);
             uiButton4.Name = "uiButton4";
             uiButton4.Radius = 35;
@@ -209,7 +213,7 @@
             uiButton3.ForeDisableColor = Color.Gray;
             uiButton3.ForeHoverColor = Color.Black;
             uiButton3.ForePressColor = Color.Gray;
-            uiButton3.Location = new Point(12, 345);
+            uiButton3.Location = new Point(12, 320);
             uiButton3.MinimumSize = new Size(1, 1);
             uiButton3.Name = "uiButton3";
             uiButton3.Radius = 35;
@@ -237,7 +241,7 @@
             uiButton2.ForeDisableColor = Color.Gray;
             uiButton2.ForeHoverColor = Color.Black;
             uiButton2.ForePressColor = Color.Gray;
-            uiButton2.Location = new Point(12, 280);
+            uiButton2.Location = new Point(12, 260);
             uiButton2.MinimumSize = new Size(1, 1);
             uiButton2.Name = "uiButton2";
             uiButton2.Radius = 35;
@@ -265,7 +269,7 @@
             uiButton1.ForeDisableColor = Color.Gray;
             uiButton1.ForeHoverColor = Color.Black;
             uiButton1.ForePressColor = Color.Gray;
-            uiButton1.Location = new Point(12, 215);
+            uiButton1.Location = new Point(12, 200);
             uiButton1.MinimumSize = new Size(1, 1);
             uiButton1.Name = "uiButton1";
             uiButton1.Radius = 35;
@@ -293,7 +297,7 @@
             btnDatabase.ForeDisableColor = Color.Gray;
             btnDatabase.ForeHoverColor = Color.Black;
             btnDatabase.ForePressColor = Color.Gray;
-            btnDatabase.Location = new Point(12, 85);
+            btnDatabase.Location = new Point(12, 80);
             btnDatabase.MinimumSize = new Size(1, 1);
             btnDatabase.Name = "btnDatabase";
             btnDatabase.Radius = 35;
@@ -321,7 +325,7 @@
             btnJson.ForeDisableColor = Color.Gray;
             btnJson.ForeHoverColor = Color.Black;
             btnJson.ForePressColor = Color.Gray;
-            btnJson.Location = new Point(12, 150);
+            btnJson.Location = new Point(12, 140);
             btnJson.MinimumSize = new Size(1, 1);
             btnJson.Name = "btnJson";
             btnJson.Radius = 35;
@@ -398,6 +402,17 @@
             btnBorderBot.TabIndex = 1;
             btnBorderBot.TopLeftStyle = Extensions.CornerStyle.Square;
             btnBorderBot.TopRightStyle = Extensions.CornerStyle.Square;
+            // 
+            // lblVersion
+            // 
+            lblVersion.BackColor = Color.Transparent;
+            lblVersion.Font = new Font("Consolas", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblVersion.ForeColor = Color.Transparent;
+            lblVersion.Location = new Point(40, 574);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(140, 24);
+            lblVersion.TabIndex = 0;
+            lblVersion.Text = "Version 1.1";
             // 
             // panelTop
             // 
@@ -493,7 +508,6 @@
             AllowShowTitle = false;
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(952, 654);
-            Controls.Add(panelBottom);
             Controls.Add(panelCenter);
             Controls.Add(panelTop);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -504,6 +518,7 @@
             ZoomScaleRect = new Rectangle(15, 15, 800, 450);
             Load += MainForm_Load;
             panelCenter.ResumeLayout(false);
+            panelCenterMain.ResumeLayout(false);
             panelCenterLeft.ResumeLayout(false);
             panelTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pctLogo).EndInit();
@@ -532,5 +547,6 @@
         private Sunny.UI.UIButton btMinimize;
         private PictureBox pctLogo;
         private Extensions.InvertedCornerPanel btnBorderBot;
+        private Sunny.UI.UILabel lblVersion;
     }
 }

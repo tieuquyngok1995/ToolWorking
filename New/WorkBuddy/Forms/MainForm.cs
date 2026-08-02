@@ -1,6 +1,6 @@
 ﻿using Sunny.UI;
+using System.Reflection;
 using System.Runtime.InteropServices;
-
 using static WorkBuddy.Helpers.UIHelper;
 
 namespace WorkBuddy.Forms
@@ -24,7 +24,7 @@ namespace WorkBuddy.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            lblVersion.Text = $"Version {GetCurrentVersion()}";
         }
 
         /// <summary>
@@ -149,6 +149,17 @@ namespace WorkBuddy.Forms
             panelCenterLeft.BackColor = bColor;
             panelCenterRight.BackColor = bColor;
             panelBottom.BackColor = bColor;
+        }
+
+        /// <summary>
+        /// Get the current version of the app.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetCurrentVersion()
+        {
+            var version = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            return version?.Split('+')[0] ?? "0.0.0";
         }
         #endregion
 
